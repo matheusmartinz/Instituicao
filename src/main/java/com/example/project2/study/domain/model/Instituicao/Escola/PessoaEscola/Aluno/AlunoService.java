@@ -96,6 +96,7 @@ public class AlunoService extends EntidadeService<Aluno> {
         return alunoRepository.findAll().stream().
                 map(AlunoDataGridDTO::new)
                 .toList();
+
     }
 
     public AlunoDataGridDTO updateByUuid(AlunoDTO alunoDTO) {
