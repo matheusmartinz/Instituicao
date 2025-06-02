@@ -12,7 +12,6 @@ import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.Sal
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaValidator;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.MatriculaGenerator;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.PessoaEmEscola.PessoaTelefoneService;
-import com.example.project2.study.domain.model.Instituicao.Escola.UF;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -96,7 +95,6 @@ public class AlunoService extends EntidadeService<Aluno> {
         return alunoRepository.findAll().stream().
                 map(AlunoDataGridDTO::new)
                 .toList();
-
     }
 
     public AlunoDataGridDTO updateByUuid(AlunoDTO alunoDTO) {
