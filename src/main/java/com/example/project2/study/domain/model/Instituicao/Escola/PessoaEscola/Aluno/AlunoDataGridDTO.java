@@ -1,7 +1,9 @@
 package com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno;
 
+import com.example.project2.study.domain.model.Instituicao.Escola.Escola;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.PessoaTelefone;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.UtilsFormatter;
+import com.example.project2.study.domain.model.Instituicao.GenericTO;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -12,6 +14,7 @@ public class AlunoDataGridDTO extends PessoaDataGridDTO {
     public Integer tarefas;
     public Integer disciplinas;
     public UUID uuid;
+    public GenericTO<Escola> escola;
 
     public AlunoDataGridDTO(Aluno aluno) {
         this.matricula = aluno.getMatricula();
@@ -26,5 +29,6 @@ public class AlunoDataGridDTO extends PessoaDataGridDTO {
         this.cidadeEstado = String.format("%s - %s", aluno.getEndereco().getCidade(), aluno.getEndereco().getEstado());
         this.cep = UtilsFormatter.formatCep(aluno.getEndereco().getCep());
         this.uuid = aluno.getUuid();
+//        this.escola = new GenericTO<Escola>()
     }
 }
