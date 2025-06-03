@@ -4,6 +4,7 @@ import com.example.project2.study.Api.SuperRestController;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaDataGridDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

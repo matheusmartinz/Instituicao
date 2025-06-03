@@ -2,6 +2,7 @@ package com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa;
 
 import com.example.project2.study.domain.model.EntidadeUUID.EntidadeIdUUID;
 import com.example.project2.study.domain.model.Instituicao.Endereco;
+import com.example.project2.study.domain.model.Instituicao.Escola.Escola;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -27,6 +28,9 @@ public class Pessoa extends EntidadeIdUUID {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco", nullable = false)
     private Endereco endereco;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "escola_fk")  // deve bater com o nome da chave estrangeira
+    private Escola escola;
 
 
     protected Pessoa() { }
