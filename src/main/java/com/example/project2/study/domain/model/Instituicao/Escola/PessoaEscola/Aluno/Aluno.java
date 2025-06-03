@@ -2,6 +2,7 @@ package com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.
 
 import com.example.project2.study.domain.model.Instituicao.Disciplina;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
+import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.PessoaTelefone;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
 import com.example.project2.study.domain.model.Instituicao.Tarefa;
@@ -43,5 +44,10 @@ public class Aluno extends Pessoa {
     public void initialize() {
         Hibernate.initialize(tarefas);
         Hibernate.initialize(disciplinas);
+    }
+
+    public void updateDados(AlunoDTO alunoDTO) {
+        this.setNome(alunoDTO.nome);
+        this.setTelefone(new PessoaTelefone(alunoDTO.telefone));
     }
 }

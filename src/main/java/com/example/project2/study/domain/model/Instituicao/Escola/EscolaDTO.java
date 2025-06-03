@@ -20,7 +20,7 @@ public class EscolaDTO {
     public UUID uuid;
 
     public EscolaDTO(Escola escola) {
-        this.nome = escola.getNome().toUpperCase();
+        this.nome = escola.getNome().toLowerCase();
         this.endereco = new EnderecoDTO(escola.getEndereco());
         this.pessoas = PessoaDTO.listOfPessoaDTO(escola.getPessoas());
         this.salas = SalaDTO.listOf(escola.getSalas());

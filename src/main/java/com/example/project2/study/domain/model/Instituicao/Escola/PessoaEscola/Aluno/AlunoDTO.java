@@ -34,7 +34,7 @@ public class AlunoDTO extends PessoaDTO {
         this.serieAno = aluno.getSerie().getValor();
         this.nome = aluno.getNome();
         this.cpf = UtilsFormatter.formatCpf(aluno.getCpf());
-        this.email = aluno.getEmail();
+        this.email = aluno.getEmail().toLowerCase();
         this.telefone = ofNullable(aluno.getTelefone())
                 .map(PessoaTelefoneDTO::new)
                 .orElse(null);

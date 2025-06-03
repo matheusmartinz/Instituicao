@@ -101,6 +101,7 @@ public class AlunoService extends EntidadeService<Aluno> {
         alunoValidation.validateAluno(alunoDTO);
         Aluno aluno = alunoRepository.findByUuid(alunoDTO.uuid);
         alunoValidation.validateUuidAluno(aluno);
+        aluno.updateDados(alunoDTO);
         Aluno alunoSave = save(aluno);
         return new AlunoDataGridDTO(alunoSave);
     }
