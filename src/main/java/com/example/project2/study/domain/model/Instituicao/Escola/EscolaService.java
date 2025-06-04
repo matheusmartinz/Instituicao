@@ -87,7 +87,7 @@ public class EscolaService extends EntidadeService<Escola> {
     }
 
     public List<GenericTO<Escola>> findAllBySerie(String serie) {
-        if (serie == null) {
+        if (serie.isBlank()) {
             return escolaRepository.findAll().stream().map(e -> new GenericTO<Escola>(e.getUuid().toString(), e.getNome()) )
                     .toList();
         }
