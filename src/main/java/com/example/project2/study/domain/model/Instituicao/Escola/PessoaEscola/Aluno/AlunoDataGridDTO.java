@@ -14,7 +14,8 @@ public class AlunoDataGridDTO extends PessoaDataGridDTO {
     public Integer tarefas;
     public Integer disciplinas;
     public UUID uuid;
-    public GenericTO<Escola> escola;
+    public String escolaUUID;
+    public String escolaDescricao;
 
     public AlunoDataGridDTO(Aluno aluno) {
         this.matricula = aluno.getMatricula();
@@ -29,6 +30,9 @@ public class AlunoDataGridDTO extends PessoaDataGridDTO {
         this.cidadeEstado = String.format("%s - %s", aluno.getEndereco().getCidade(), aluno.getEndereco().getEstado());
         this.cep = UtilsFormatter.formatCep(aluno.getEndereco().getCep());
         this.uuid = aluno.getUuid();
-        this.escola = new GenericTO<Escola>(aluno.getEscola().getUuid().toString(), aluno.getEscola().getNome());
+
+        Escola escola = aluno.getEscola();
+        this.escolaUUID = escola.getUuid().toString();
+        this.escolaDescricao = escola.getNome();
     }
 }
