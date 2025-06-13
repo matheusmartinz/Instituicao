@@ -9,13 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class SalaService extends EntidadeService<Sala> {
 
     @Autowired
-    SalaRepository  salaRepository;
+    SalaRepository salaRepository;
 
     @Autowired
     EscolaRepository escolaRepository;
@@ -44,5 +47,12 @@ public class SalaService extends EntidadeService<Sala> {
 
     public void update(Sala sala) {
         super.save(sala);
+    }
+
+    public List<SalaDataGridDTO> getSalas() {
+       return repository().findAll().stream()
+                .map(SalaDataGridDTO::new)
+                .sorted(Comparator.comparing(e -> e.numeroSala))
+               .toList();
     }
 }

@@ -29,7 +29,7 @@ public class Pessoa extends EntidadeIdUUID {
     @JoinColumn(name = "endereco", nullable = false)
     private Endereco endereco;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "escola_fk")  // deve bater com o nome da chave estrangeira
+    @JoinColumn(name = "escola_fk")
     private Escola escola;
 
 

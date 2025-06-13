@@ -1,6 +1,7 @@
 package com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno;
 
 import com.example.project2.study.domain.model.Instituicao.Disciplina;
+import com.example.project2.study.domain.model.Instituicao.Escola.Escola;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.PessoaTelefone;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaDTO;

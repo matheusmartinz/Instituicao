@@ -18,10 +18,12 @@ import static java.util.Optional.ofNullable;
 @Getter
 @Setter
 public class Sala extends EntidadeIdUUID {
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String numeroSala;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private SerieAno serieAno;
+    @Column(nullable = false)
     private Integer capacidadeAlunos = 30;
 
     @OneToMany
