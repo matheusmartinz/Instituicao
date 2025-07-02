@@ -1,10 +1,6 @@
 package com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala;
 
-import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
-import lombok.Getter;
-
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Optional.ofNullable;

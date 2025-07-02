@@ -40,7 +40,7 @@ public class AlunoService extends EntidadeService<Aluno> {
         alunoDTO.matricula = MatriculaGenerator.gerarMatricula();
         alunoDTO.disciplinas = List.of(Disciplina.PORTUGUES, Disciplina.MATEMATICA, Disciplina.GEOGRAFIA);
         Aluno ofAluno = new Aluno(alunoDTO);
-        Aluno aluno = customSave(ofAluno);
+        Aluno aluno = customSave(ofAluno, uuidEscola);
         escola.addAluno(aluno);
 
         List<Sala> salasComMesmaSerie = escola.getSalas().stream()
@@ -54,7 +54,7 @@ public class AlunoService extends EntidadeService<Aluno> {
         return new AlunoDTO(aluno);
     }
 
-    private Aluno customSave(Aluno aluno) {
+    private Aluno customSave(Aluno aluno, UUID uuidEscola) {
         aluno.setUuid(UUID.randomUUID());
         PessoaTelefone telefone = aluno.getTelefone();
 
@@ -70,6 +70,8 @@ public class AlunoService extends EntidadeService<Aluno> {
         } else {
             aluno.setEndereco(endereco);
         }
+        Escola escola = escolaRepository.findByUuid(uuidEscola);
+        aluno.setEscola(escola);
         return super.save(aluno);
     }
 

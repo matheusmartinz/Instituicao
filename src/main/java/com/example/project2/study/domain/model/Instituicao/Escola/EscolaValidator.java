@@ -14,7 +14,7 @@ public class EscolaValidator {
     }
 
     public void validaEscola(Escola escola) {
-        if (escola.getUuid() == null) {
+        if (escola.getUuid() == null || escola.getUuid().toString().isBlank()) {
             throw new RuntimeException("Escola não encontrada.");
         }
     }
