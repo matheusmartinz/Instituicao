@@ -1,5 +1,6 @@
 package com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno;
 
+import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.Sala;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.PessoaEmEscola.PessoaValidation;
 import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
@@ -29,8 +30,8 @@ public class AlunoValidation {
         }
     }
 
-    public void validateUuidAluno(Aluno aluno) {
-        if(aluno == null) {
+    public void validateAluno(Pessoa pessoa) {
+        if(pessoa == null) {
             throw new RuntimeException("Aluno não encontrado");
         }
     }

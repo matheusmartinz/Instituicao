@@ -1,7 +1,6 @@
 package com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno;
 
 import com.example.project2.study.domain.model.Instituicao.Disciplina;
-import com.example.project2.study.domain.model.Instituicao.Escola.Escola;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.PessoaTelefone;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaDTO;
@@ -17,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@DiscriminatorValue("Aluno")
 public class Aluno extends Pessoa {
     @Column(unique = true, nullable = false)
     private String matricula;
@@ -32,7 +32,8 @@ public class Aluno extends Pessoa {
         return alunoDTOS.stream().map(Aluno::new).toList();
     }
 
-    protected Aluno() {}
+    protected Aluno() {
+    }
 
     public Aluno(AlunoDTO alunoDTO) {
         super(PessoaDTO.of(alunoDTO));

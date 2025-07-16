@@ -1,13 +1,9 @@
 package com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno;
 
 import com.example.project2.study.Api.SuperRestController;
-import com.example.project2.study.domain.model.Instituicao.Escola.EscolaDataGridDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,14 +29,14 @@ public class AlunoRestController extends SuperRestController {
     }
 
     @PutMapping
-    public ResponseEntity<AlunoDataGridDTO> updateAluno(@RequestBody AlunoDTO alunoDTO){
+    public ResponseEntity<AlunoDataGridDTO> updateAluno(@RequestBody AlunoDTO alunoDTO) {
         AlunoDataGridDTO updateAlunos = alunoService.updateByUuid(alunoDTO);
         return ResponseEntity.ok(updateAlunos);
     }
 
     @DeleteMapping("/{uuid}")
     public ResponseEntity<Void> deleteAluno(@PathVariable UUID uuid) {
-         alunoService.deleteAluno(uuid);
+        alunoService.deleteAluno(uuid);
         return ResponseEntity.noContent().build();
     }
 }

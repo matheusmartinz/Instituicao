@@ -29,7 +29,7 @@ public class TarefaService extends EntidadeService<Tarefa> {
     public TarefaDTO createTarefa(TarefaDTO tarefaDTO, UUID uuidAluno){
         tarefaValidator.validateTarefas(tarefaDTO);
         Aluno aluno = alunoRepository.findByUuid(uuidAluno);
-        alunoValidation.validateUuidAluno(aluno);
+        alunoValidation.validateAluno(aluno);
         Tarefa tarefa = new Tarefa(tarefaDTO);
         Tarefa saved = super.save(tarefa);
         return new TarefaDTO(saved);

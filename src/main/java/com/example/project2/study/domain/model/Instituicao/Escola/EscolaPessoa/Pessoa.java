@@ -1,9 +1,12 @@
 package com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa;
 
 import com.example.project2.study.domain.model.EntidadeUUID.EntidadeIdUUID;
+import com.example.project2.study.domain.model.Instituicao.Disciplina;
 import com.example.project2.study.domain.model.Instituicao.Endereco;
 import com.example.project2.study.domain.model.Instituicao.Escola.Escola;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaDTO;
+import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
+import com.example.project2.study.domain.model.Instituicao.Tarefa;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +18,8 @@ import static java.util.Optional.ofNullable;
 @Entity
 @Getter
 @Setter
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 public class Pessoa extends EntidadeIdUUID {
     @Column(nullable = false)
     private String nome;
@@ -31,7 +36,6 @@ public class Pessoa extends EntidadeIdUUID {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "escola_fk")
     private Escola escola;
-
 
     protected Pessoa() { }
 
