@@ -6,7 +6,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/login")
@@ -25,7 +24,26 @@ public class LoginRestController extends SuperRestController {
         }
     }
 
- 
+//    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<LoginDTO> createLogin(
+//            @RequestPart("login") String loginJson,
+//            @RequestPart(value = "imagemFile", required = false) MultipartFile imagemFile
+//    ) {
+//        try {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            LoginDTO loginDTO = objectMapper.readValue(loginJson, LoginDTO.class);
+//
+//            LoginDTO toReturn = loginService.createLogin(loginDTO, imagemFile);
+//            return ResponseEntity.status(HttpStatus.CREATED).body(toReturn);
+//        } catch (JsonProcessingException e) {
+//            return ResponseEntity.badRequest().build();
+//        } catch (DataIntegrityViolationException e) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+//        } catch (IOException e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
+
 
 //    @PostMapping("/authentic2")
 //    public ResponseEntity<String> autenticarLogin(@RequestBody LoginDTO loginDTO) {
@@ -42,8 +60,8 @@ public class LoginRestController extends SuperRestController {
 
     @PostMapping("/authentic")
     public ResponseEntity<LoginDTO> autenticarLogin2(@RequestBody LoginDTO loginDTO) {
-       Login login = loginService.authenticLogin(loginDTO);
-       LoginDTO toReturn = LoginDTO.of(login);
-       return ResponseEntity.ok(toReturn);
+        Login login = loginService.authenticLogin(loginDTO);
+        LoginDTO toReturn = LoginDTO.of(login);
+        return ResponseEntity.ok(toReturn);
     }
 }
