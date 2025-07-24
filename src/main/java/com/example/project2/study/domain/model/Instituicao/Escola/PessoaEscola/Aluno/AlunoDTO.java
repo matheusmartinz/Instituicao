@@ -2,6 +2,7 @@ package com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.
 
 import com.example.project2.study.domain.model.Instituicao.Disciplina;
 import com.example.project2.study.domain.model.Instituicao.Escola.Endereco.EnderecoDTO;
+import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.SalaTarefa.TarefaDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.UtilsFormatter;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaDTO;
@@ -22,11 +23,11 @@ public class AlunoDTO extends PessoaDTO {
     public String serieAno;
 
 
-    public static List<AlunoDTO> listOf(List<Aluno> alunos) {
+    public static List<AlunoDTO> listOf(List<Pessoa> alunos) {
         return alunos.stream().map(AlunoDTO::new).toList();
     }
 
-    public AlunoDTO(Aluno aluno) {
+    public AlunoDTO(Pessoa aluno) {
         this.uuid = aluno.getUuid();
         this.matricula = aluno.getMatricula();
         this.tarefas = TarefaDTO.listOf(aluno.getTarefas());

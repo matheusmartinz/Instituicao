@@ -5,12 +5,14 @@ import com.example.project2.study.domain.model.Instituicao.Disciplina;
 import com.example.project2.study.domain.model.Instituicao.Endereco;
 import com.example.project2.study.domain.model.Instituicao.Escola.Escola;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaDTO;
+import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
 import com.example.project2.study.domain.model.Instituicao.Tarefa;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static java.util.Optional.ofNullable;
@@ -18,8 +20,6 @@ import static java.util.Optional.ofNullable;
 @Entity
 @Getter
 @Setter
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 public class Pessoa extends EntidadeIdUUID {
     @Column(nullable = false)
     private String nome;
@@ -36,6 +36,24 @@ public class Pessoa extends EntidadeIdUUID {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "escola_fk")
     private Escola escola;
+    @Enumerated(EnumType.STRING)
+    private TipoPessoa tipoPessoa;
+    @ElementCollection
+    private List<Disciplina> disciplinas = new LinkedList<>();
+
+
+    // Dados aluno
+    @Column(unique = true, nullable = false)
+    private String matricula;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SerieAno serie;
+    @OneToMany
+    private List<Tarefa> tarefas = new LinkedList<>();
+
+
+    //Dados Professor
+    private String quantidadeAulas;
 
     protected Pessoa() { }
 
@@ -49,6 +67,17 @@ public class Pessoa extends EntidadeIdUUID {
         this.setEmail(pessoaDTO.email);
         this.setTelefone(getTelefone(pessoaDTO));
         this.setEndereco(getEndereco(pessoaDTO));
+    }
+
+    public Pessoa(AlunoDTO pessoaDTO) {
+        this.setNome(pessoaDTO.nome);
+        this.setCpf(pessoaDTO.cpf);
+        this.setEmail(pessoaDTO.email);
+        this.setTelefone(getTelefone(pessoaDTO));
+        this.setEndereco(getEndereco(pessoaDTO));
+        this.setMatricula(pessoaDTO.matricula);
+        this.setTipoPessoa(TipoPessoa.ALUNO);
+        this.setSerie(SerieAno.from(pessoaDTO.serieAno));
     }
 
     private static Endereco getEndereco(PessoaDTO pessoaDTO) {
@@ -66,5 +95,10 @@ public class Pessoa extends EntidadeIdUUID {
     @Override
     public boolean equals(Object o) {
         return false;
+    }
+
+    public void updateDados(AlunoDTO alunoDTO) {
+        this.setNome(alunoDTO.nome);
+        this.setTelefone(new PessoaTelefone(alunoDTO.telefone));
     }
 }

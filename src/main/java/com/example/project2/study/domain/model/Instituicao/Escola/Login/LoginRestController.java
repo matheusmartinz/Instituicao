@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/login")
-public class LoginRestController extends SuperRestController {
+public class LoginRestController extends SuperRestController{
 
     @Autowired
     LoginService loginService;
 
-    @PostMapping
+
+
+    @PostMapping("/cadastro")
     public ResponseEntity<LoginDTO> createLogin(@RequestBody LoginDTO loginDTO) {
         try {
             LoginDTO toReturn = loginService.createLogin(loginDTO);
@@ -59,7 +61,7 @@ public class LoginRestController extends SuperRestController {
 //    }
 
     @PostMapping("/authentic")
-    public ResponseEntity<LoginDTO> autenticarLogin2(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<LoginDTO> autenticarLogin(@RequestBody LoginDTO loginDTO) {
         Login login = loginService.authenticLogin(loginDTO);
         LoginDTO toReturn = LoginDTO.of(login);
         return ResponseEntity.ok(toReturn);

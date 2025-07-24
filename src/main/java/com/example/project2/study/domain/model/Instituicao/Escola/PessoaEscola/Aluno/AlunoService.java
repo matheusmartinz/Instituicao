@@ -14,6 +14,7 @@ import com.example.project2.study.domain.model.Instituicao.Escola.EscolaValidato
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.MatriculaGenerator;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.PessoaEmEscola.PessoaTelefoneService;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.PessoaRepository;
+import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
-public class AlunoService extends EntidadeService<Aluno> {
+public class AlunoService extends EntidadeService<Pessoa> {
 
     private final AlunoRepository alunoRepository;
     private final EscolaRepository escolaRepository;
@@ -42,8 +43,8 @@ public class AlunoService extends EntidadeService<Aluno> {
 
         alunoDTO.matricula = MatriculaGenerator.gerarMatricula();
         alunoDTO.disciplinas = List.of(Disciplina.PORTUGUES, Disciplina.MATEMATICA, Disciplina.GEOGRAFIA);
-        Aluno ofAluno = new Aluno(alunoDTO);
-        Aluno aluno = customSave(ofAluno, uuidEscola);
+        Pessoa ofAluno = new Pessoa(alunoDTO);
+        Pessoa aluno = customSave(ofAluno, escola);
         escola.addAluno(aluno);
 
         List<Sala> salasComMesmaSerie = escola.getSalas().stream()
@@ -57,7 +58,7 @@ public class AlunoService extends EntidadeService<Aluno> {
         return new AlunoDTO(aluno);
     }
 
-    private Aluno customSave(Aluno aluno, UUID uuidEscola) {
+    private Pessoa customSave(Pessoa aluno, Escola escola) {
         UUID uuid = UUID.randomUUID();
         aluno.setUuid(uuid);
         PessoaTelefone telefone = aluno.getTelefone();
@@ -67,14 +68,17 @@ public class AlunoService extends EntidadeService<Aluno> {
             telefoneService.create(telefone);
         }
         Endereco enderecoDTO = aluno.getEndereco();
-        Endereco endereco = enderecoService.findByCidadeAndCepAndEstado(enderecoDTO.getCidade(), enderecoDTO.getCep(), enderecoDTO.getEstado());
+        Endereco endereco = enderecoService.findByCidadeAndCepAndEstado(
+                enderecoDTO.getCidade(),
+                enderecoDTO.getCep(),
+                enderecoDTO.getEstado()
+        );
 
         if (endereco == null) {
             enderecoService.saveEndereco(enderecoDTO);
         } else {
             aluno.setEndereco(endereco);
         }
-        Escola escola = escolaRepository.findByUuid(uuidEscola);
         aluno.setEscola(escola);
         return super.save(aluno);
     }
@@ -93,7 +97,7 @@ public class AlunoService extends EntidadeService<Aluno> {
 
 
     @Override
-    protected JpaRepository<Aluno, Long> repository() {
+    protected JpaRepository<Pessoa, Long> repository() {
         return alunoRepository;
     }
 
@@ -103,10 +107,10 @@ public class AlunoService extends EntidadeService<Aluno> {
 
     public AlunoDataGridDTO updateByUuid(AlunoDTO alunoDTO) {
         alunoValidation.validateAluno(alunoDTO);
-        Aluno aluno = alunoRepository.findByUuid(alunoDTO.uuid);
+        Pessoa aluno = alunoRepository.findByUuid(alunoDTO.uuid);
         alunoValidation.validateAluno(aluno);
         aluno.updateDados(alunoDTO);
-        Aluno alunoSave = save(aluno);
+        Pessoa alunoSave = save(aluno);
         return new AlunoDataGridDTO(alunoSave);
     }
 

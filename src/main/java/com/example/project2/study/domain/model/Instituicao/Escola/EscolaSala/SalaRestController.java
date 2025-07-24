@@ -17,7 +17,7 @@ import java.util.UUID;
 public class SalaRestController extends SuperRestController {
     private final SalaService salaService;
 
-    @PostMapping
+    @PostMapping("/{escolaUUID}")
     public ResponseEntity<SalaDTO> createSala(@RequestBody SalaDTO salaDTO, @PathVariable UUID escolaUUID) {
         SalaDTO toReturn = salaService.createSala(salaDTO, escolaUUID);
         return ResponseEntity.status(HttpStatus.CREATED).body(toReturn);

@@ -1,6 +1,7 @@
 package com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala;
 
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.SalaTarefa.TarefaDTO;
+import com.example.project2.study.domain.model.Instituicao.Escola.PessoaDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Professor.ProfessorDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
@@ -20,17 +21,17 @@ public class SalaDTO {
     public SerieAno serieAno;
     public Integer capacidadeAlunos;
 
-    public List<AlunoDTO> alunos = new LinkedList<>();
-    public List<ProfessorDTO> professores = new LinkedList<>();
+    public List<PessoaDTO> alunos = new LinkedList<>();
+    public List<PessoaDTO> professores = new LinkedList<>();
     public List<TarefaDTO> tarefas = new LinkedList<>();
 
     public static SalaDTO of(Sala sala) {
         SalaDTO toReturn = new SalaDTO();
         toReturn.serieAno = sala.getSerieAno();
         toReturn.numeroSala = sala.getNumeroSala();
-        toReturn.alunos = AlunoDTO.listOf(sala.getAlunos());
+        toReturn.alunos = PessoaDTO.listOfPessoaDTO(sala.getAlunos());
         toReturn.capacidadeAlunos = sala.getCapacidadeAlunos();
-        toReturn.professores = ProfessorDTO.listOf(sala.getProfessores());
+        toReturn.professores = PessoaDTO.listOfPessoaDTO(sala.getProfessores());
         return toReturn;
     }
 

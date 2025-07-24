@@ -1,8 +1,7 @@
 package com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala;
 
 import com.example.project2.study.domain.model.EntidadeUUID.EntidadeIdUUID;
-import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.Aluno;
-import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Professor.Professor;
+import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
 import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
 import com.example.project2.study.domain.model.Instituicao.Tarefa;
 import graphql.com.google.common.base.Objects;
@@ -27,9 +26,9 @@ public class Sala extends EntidadeIdUUID {
     private Integer capacidadeAlunos = 30;
 
     @OneToMany
-    private List<Aluno> alunos;
+    private List<Pessoa> alunos;
     @OneToMany
-    private List<Professor> professores;
+    private List<Pessoa> professores;
     @OneToMany
     private List<Tarefa> tarefas;
 
@@ -37,8 +36,8 @@ public class Sala extends EntidadeIdUUID {
         this.numeroSala = salaDTO.getNumeroSala();
         this.serieAno = salaDTO.getSerieAno();
         this.capacidadeAlunos = getCapacidadeAlunos(salaDTO, this);
-        this.alunos = Aluno.listOf(salaDTO.getAlunos());
-        this.professores = Professor.listOf(salaDTO.getProfessores());
+        this.alunos = Pessoa.listOfPessoa(salaDTO.getAlunos());
+        this.professores = Pessoa.listOfPessoa(salaDTO.getProfessores());
         this.tarefas = Tarefa.listOf(salaDTO.getTarefas());
     }
 
@@ -53,7 +52,7 @@ public class Sala extends EntidadeIdUUID {
         return salas.stream().map(Sala::new).toList();
     }
 
-    public void addAluno(Aluno aluno) {
+    public void addAluno(Pessoa aluno) {
         this.getAlunos().add(aluno);
         this.setCapacidadeAlunos(this.getCapacidadeAlunos() - 1);
     }

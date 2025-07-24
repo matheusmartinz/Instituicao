@@ -16,12 +16,14 @@ public class Login extends EntidadeIdUUID {
     private String login;
     private String senha;
     private StatusAtivacao statusAtivacao = StatusAtivacao.ATIVO;
+//    private TipoUsuario tipoUsuario;
 
 
     public Login(LoginDTO loginDTO) {
         this.setNome(loginDTO.getNome());
         this.setLogin(loginDTO.getLogin());
         this.setSenha(loginDTO.getSenha());
+//        this.setTipoUsuario(TipoUsuario.valueOf(loginDTO.getTipoUsuario()));
         this.setUuid(UUID.randomUUID());
     }
 

@@ -17,7 +17,8 @@ public class AlunoRestController extends SuperRestController {
     private final AlunoService alunoService;
 
     @PostMapping("/{uuidEscola}")
-    public ResponseEntity<AlunoDTO> createAluno(@RequestBody AlunoDTO alunoDTO, @PathVariable UUID uuidEscola) {
+    public ResponseEntity<AlunoDTO> createAluno(@RequestBody AlunoDTO alunoDTO,
+                                                @PathVariable UUID uuidEscola) {
         AlunoDTO toReturn = alunoService.createAluno(alunoDTO, uuidEscola);
         return ResponseEntity.status(HttpStatus.CREATED).body(toReturn);
     }

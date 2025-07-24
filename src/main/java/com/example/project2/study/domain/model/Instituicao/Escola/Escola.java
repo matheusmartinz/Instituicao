@@ -4,7 +4,6 @@ import com.example.project2.study.domain.model.EntidadeUUID.EntidadeIdUUID;
 import com.example.project2.study.domain.model.Instituicao.Endereco;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.Sala;
-import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.Aluno;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -65,7 +64,7 @@ public class Escola extends EntidadeIdUUID {
         this.setNome(nome);
     }
 
-    public void addAluno(Aluno aluno) {
+    public void addAluno(Pessoa aluno) {
         this.getPessoas().add(aluno);
     }
 }

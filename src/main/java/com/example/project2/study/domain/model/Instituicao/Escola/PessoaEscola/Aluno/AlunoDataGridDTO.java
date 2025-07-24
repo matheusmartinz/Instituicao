@@ -1,6 +1,7 @@
 package com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno;
 
 import com.example.project2.study.domain.model.Instituicao.Escola.Escola;
+import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.PessoaTelefone;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.UtilsFormatter;
 import com.example.project2.study.domain.model.Instituicao.GenericTO;
@@ -17,7 +18,7 @@ public class AlunoDataGridDTO extends PessoaDataGridDTO {
     public String escolaUUID;
     public String escolaDescricao;
 
-    public AlunoDataGridDTO(Aluno aluno) {
+    public AlunoDataGridDTO(Pessoa aluno) {
         this.matricula = aluno.getMatricula();
         this.serie = aluno.getSerie().getValor();
         this.tarefas = aluno.getTarefas().size();

@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Getter
 public class TarefaDTO {
-    public Disciplina disciplina;
+    public String disciplina;
     public String descricao;
     public LocalDate dataEntrega;
     public Boolean concluida;

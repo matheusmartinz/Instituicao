@@ -5,6 +5,8 @@ import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.Sal
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,8 +20,9 @@ import java.util.Optional;
 @Setter
 @NoArgsConstructor
 public class Tarefa extends EntidadeIdUUID {
-    @Enumerated(EnumType.STRING)
-    private Disciplina disciplina;
+    @NotNull
+    private String disciplina;
+    @NotEmpty @NotNull
     private String descricao;
     private LocalDate dataEntrega;
     private Boolean concluida;
@@ -42,6 +45,14 @@ public class Tarefa extends EntidadeIdUUID {
 
     @Override
     public boolean equals(Object o) {
-        return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tarefa tarefa = (Tarefa) o;
+        return getId().equals(tarefa.getId());  // compara o ID único
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();  // usa o mesmo critério do equals
     }
 }

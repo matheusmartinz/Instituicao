@@ -1,6 +1,7 @@
 //package com.example.project2.study.domain.model.Pessoa;
 //
 //import com.example.project2.study.domain.Repositories.PessoaRepository;
+//import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
 //import com.example.project2.study.dtos.Pessoa.PessoaDTO;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Service;

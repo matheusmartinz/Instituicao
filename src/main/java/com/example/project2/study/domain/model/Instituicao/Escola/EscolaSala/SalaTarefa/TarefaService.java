@@ -1,7 +1,7 @@
 package com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.SalaTarefa;
 
 import com.example.project2.study.domain.model.Empresa.EntidadeService;
-import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.Aluno;
+import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoRepository;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoValidation;
 import com.example.project2.study.domain.model.Instituicao.Tarefa;
@@ -24,11 +24,11 @@ public class TarefaService extends EntidadeService<Tarefa> {
     TarefaValidator tarefaValidator;
 
     @Autowired
-     AlunoValidation alunoValidation;
+    AlunoValidation alunoValidation;
 
-    public TarefaDTO createTarefa(TarefaDTO tarefaDTO, UUID uuidAluno){
+    public TarefaDTO createTarefa(TarefaDTO tarefaDTO, UUID uuidAluno) {
         tarefaValidator.validateTarefas(tarefaDTO);
-        Aluno aluno = alunoRepository.findByUuid(uuidAluno);
+        Pessoa aluno = alunoRepository.findByUuid(uuidAluno);
         alunoValidation.validateAluno(aluno);
         Tarefa tarefa = new Tarefa(tarefaDTO);
         Tarefa saved = super.save(tarefa);

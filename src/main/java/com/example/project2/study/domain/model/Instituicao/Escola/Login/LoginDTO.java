@@ -12,11 +12,13 @@ public class LoginDTO {
     public String nome;
     public String login;
     public String senha;
+//    public String tipoUsuario;
 
     public static LoginDTO of(Login login) {
         LoginDTO toReturn = new LoginDTO();
         toReturn.nome = login.getNome();
         toReturn.login = login.getLogin();
+//        toReturn.tipoUsuario = login.getTipoUsuario().toString();
         return toReturn;
     }
 

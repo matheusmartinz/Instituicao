@@ -13,7 +13,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public String handleLoginException(DataIntegrityViolationException ex){
-        return "Email já cadastrado";
+    public String handleLoginException(String message){
+        return message;
     }
 }
