@@ -1,5 +1,7 @@
 package com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala;
 
+import com.example.project2.study.domain.model.Instituicao.Escola.Escola;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -22,5 +24,6 @@ public class SalaDataGridDTO {
         this.alunos = ofNullable(sala.getAlunos()).orElse(List.of()).size();
         this.professores = ofNullable(sala.getProfessores()).orElse(List.of()).size();
         this.tarefas = ofNullable(sala.getTarefas()).orElse(List.of()).size();
+
     }
 }

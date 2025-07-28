@@ -55,7 +55,8 @@ public class Pessoa extends EntidadeIdUUID {
     //Dados Professor
     private String quantidadeAulas;
 
-    protected Pessoa() { }
+    protected Pessoa() {
+    }
 
     public static List<Pessoa> listOfPessoa(List<PessoaDTO> pessoas) {
         return pessoas.stream().map(Pessoa::new).toList();

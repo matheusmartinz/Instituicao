@@ -20,7 +20,7 @@ public class Escola extends EntidadeIdUUID {
     @ManyToOne
     @JoinColumn(name = "endereco_fk")
     private Endereco endereco;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "escola_pessoas",
             joinColumns = @JoinColumn(name = "escola_fk"),    // coluna que referencia a escola
