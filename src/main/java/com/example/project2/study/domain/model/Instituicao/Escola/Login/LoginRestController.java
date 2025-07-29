@@ -66,4 +66,11 @@ public class LoginRestController extends SuperRestController{
         LoginDTO toReturn = LoginDTO.of(login);
         return ResponseEntity.ok(toReturn);
     }
+
+    @PutMapping("/edit")
+    public ResponseEntity<LoginDTO> editarLogin(@RequestBody LoginDTO loginDTO) {
+        Login login = loginService.updateLogin(loginDTO);
+        LoginDTO toReturn = LoginDTO.of(login);
+        return ResponseEntity.ok(toReturn);
+    }
 }

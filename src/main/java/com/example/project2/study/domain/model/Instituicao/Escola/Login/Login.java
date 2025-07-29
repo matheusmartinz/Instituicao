@@ -35,4 +35,10 @@ public class Login extends EntidadeIdUUID {
     public boolean equals(Object obj) {
         return false;
     }
+
+    public void updateLogin(LoginDTO loginDTO) {
+        this.setNome(loginDTO.getNome());
+        this.setLogin(loginDTO.getLogin());
+        this.setSenha(loginDTO.getSenha());
+    }
 }

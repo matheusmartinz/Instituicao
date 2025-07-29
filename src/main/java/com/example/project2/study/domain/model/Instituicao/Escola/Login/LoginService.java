@@ -26,4 +26,10 @@ public class LoginService extends EntidadeService<Login> {
     protected JpaRepository<Login, Long> repository() {
         return loginRepository;
     }
+
+    public Login updateLogin(LoginDTO loginDTO) {
+        Login login = loginRepository.findByLoginAndSenha(loginDTO.login, loginDTO.senha);
+        login.updateLogin(loginDTO);
+        return save(login);
+    }
 }
