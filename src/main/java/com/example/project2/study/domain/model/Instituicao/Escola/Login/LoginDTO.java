@@ -18,6 +18,7 @@ public class LoginDTO {
         LoginDTO toReturn = new LoginDTO();
         toReturn.nome = login.getNome();
         toReturn.login = login.getLogin();
+        toReturn.uuid = login.getUuid();
 //        toReturn.tipoUsuario = login.getTipoUsuario().toString();
         return toReturn;
     }

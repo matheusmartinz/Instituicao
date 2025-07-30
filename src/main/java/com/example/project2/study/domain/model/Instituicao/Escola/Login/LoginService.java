@@ -28,7 +28,7 @@ public class LoginService extends EntidadeService<Login> {
     }
 
     public Login updateLogin(LoginDTO loginDTO) {
-        Login login = loginRepository.findByLoginAndSenha(loginDTO.login, loginDTO.senha);
+        Login login = loginRepository.findByUuid(loginDTO.uuid);
         login.updateLogin(loginDTO);
         return save(login);
     }

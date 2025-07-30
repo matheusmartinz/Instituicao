@@ -16,6 +16,7 @@ public class Login extends EntidadeIdUUID {
     private String login;
     private String senha;
     private StatusAtivacao statusAtivacao = StatusAtivacao.ATIVO;
+    private UUID uuid;
 //    private TipoUsuario tipoUsuario;
 
 
