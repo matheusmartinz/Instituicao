@@ -5,18 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.server.RequestPath;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/login")
-public class LoginRestController extends SuperRestController{
+public class LoginRestController extends SuperRestController {
 
     @Autowired
     LoginService loginService;
-
 
 
     @PostMapping("/cadastro")
@@ -72,8 +68,6 @@ public class LoginRestController extends SuperRestController{
 
     @PutMapping("/edit")
     public ResponseEntity<LoginDTO> editarLogin(@RequestBody LoginDTO loginDTO) {
-        Login login = loginService.updateLogin(loginDTO);
-        LoginDTO toReturn = LoginDTO.of(login);
-        return ResponseEntity.ok(toReturn);
+        return ResponseEntity.ok(LoginDTO.of(loginService.updateLogin(loginDTO)));
     }
 }
