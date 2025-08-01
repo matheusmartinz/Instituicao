@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoginValidator {
 
-    public void validateLoginDTO(LoginDTO loginDTO) {
+    public void validateLogin(LoginDTO loginDTO) {
         if(loginDTO.login == null || loginDTO.login.isBlank()) {
             throw new RuntimeException("Favor informar o login.");
         }

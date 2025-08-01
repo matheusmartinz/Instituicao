@@ -32,7 +32,7 @@ public class LoginService extends EntidadeService<Login> {
     }
 
     public Login updateLogin(LoginDTO loginDTO) {
-        loginValidator.validateLoginDTO(loginDTO);
+        loginValidator.validateLogin(loginDTO);
         Login login = loginRepository.findByUuidAndSenha(loginDTO.uuid, loginDTO.senha);
         loginValidator.validateProfile(login);
         login.updateLogin(loginDTO);
