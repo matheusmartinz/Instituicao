@@ -1,6 +1,7 @@
 package com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala;
 
 import com.example.project2.study.domain.model.EntidadeUUID.EntidadeIdUUID;
+import com.example.project2.study.domain.model.Instituicao.Escola.Escola;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
 import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
 import com.example.project2.study.domain.model.Instituicao.Tarefa;
@@ -32,6 +33,10 @@ public class Sala extends EntidadeIdUUID {
     @OneToMany
     private List<Tarefa> tarefas;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "escola_fk")
+    private Escola escola;
+
     public Sala(SalaDTO salaDTO) {
         this.numeroSala = salaDTO.getNumeroSala();
         this.serieAno = salaDTO.getSerieAno();
@@ -59,10 +64,6 @@ public class Sala extends EntidadeIdUUID {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Sala) {
-            Sala other = (Sala) obj;
-            return Objects.equal(getId(), other.getId());
-        }
         return false;
     }
 

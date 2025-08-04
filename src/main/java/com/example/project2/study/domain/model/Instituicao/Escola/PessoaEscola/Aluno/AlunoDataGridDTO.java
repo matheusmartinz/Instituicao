@@ -4,7 +4,6 @@ import com.example.project2.study.domain.model.Instituicao.Escola.Escola;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.PessoaTelefone;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.UtilsFormatter;
-import com.example.project2.study.domain.model.Instituicao.GenericTO;
 
 import java.util.Optional;
 import java.util.UUID;

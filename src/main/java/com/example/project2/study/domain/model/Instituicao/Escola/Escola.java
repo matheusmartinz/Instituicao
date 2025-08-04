@@ -27,11 +27,11 @@ public class Escola extends EntidadeIdUUID {
             inverseJoinColumns = @JoinColumn(name = "pessoas_fk") // coluna que referencia a sala
     )
     private List<Pessoa> pessoas;
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
             name = "escola_salas",
-            joinColumns = @JoinColumn(name = "escola_fk"),    // coluna que referencia a escola
-            inverseJoinColumns = @JoinColumn(name = "salas_fk") // coluna que referencia a sala
+            joinColumns = @JoinColumn(name = "escola_fk"),
+            inverseJoinColumns = @JoinColumn(name = "salas_fk")
     )
     private List<Sala> salas;
 

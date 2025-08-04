@@ -33,6 +33,7 @@ public class SalaService extends EntidadeService<Sala> {
         Escola escola = escolaRepository.findByUuid(escolaUUID);
         escolaValidator.validaEscola(escola);
         Sala toSave = new Sala(salaDTO);
+        toSave.setEscola(escola);
         Sala salvo = super.save(toSave);
         escola.addSala(salvo);
         escolaService.update(escola);
@@ -49,8 +50,8 @@ public class SalaService extends EntidadeService<Sala> {
         super.save(sala);
     }
 
-    public List<SalaDataGridDTO> getSalas() {
-       return repository().findAll().stream()
+    public List<SalaDataGridDTO> getSalas(){
+        return repository().findAll().stream()
                 .map(SalaDataGridDTO::new)
                 .sorted(Comparator.comparing(e -> e.numeroSala))
                .toList();
