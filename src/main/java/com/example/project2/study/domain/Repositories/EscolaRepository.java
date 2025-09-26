@@ -23,4 +23,5 @@ public interface EscolaRepository extends JpaRepository<Escola, Long> {
     """, nativeQuery = true)
 List<Escola> findAllBySalasBySerieAno(@Param("serie_ano") String serieAno);
 
+    UUID uuid(UUID uuid);
 }

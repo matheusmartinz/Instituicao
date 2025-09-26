@@ -1,4 +1,4 @@
-package com.example.project2.study.domain.model.Instituicao.Escola.Login;
+package com.example.project2.study.domain.model.Instituicao.Login;
 
 import com.example.project2.study.Api.SuperRestController;
 import org.springframework.beans.factory.annotation.Autowired;

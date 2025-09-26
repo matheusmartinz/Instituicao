@@ -1,11 +1,8 @@
 package login;
 
 import com.example.project2.study.AbstractIntegrationTest;
-import com.example.project2.study.domain.model.Instituicao.Escola.Login.LoginDTO;
-import com.example.project2.study.domain.model.Instituicao.Escola.Login.LoginService;
-import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoDTO;
+import com.example.project2.study.domain.model.Instituicao.Login.LoginDTO;
 import org.assertj.core.api.SoftAssertions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
 

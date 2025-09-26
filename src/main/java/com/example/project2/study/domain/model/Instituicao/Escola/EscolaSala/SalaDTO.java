@@ -20,7 +20,7 @@ public class SalaDTO {
     public String numeroSala;
     @NotNull
     public SerieAno serieAno;
-    public Integer capacidadeAlunos;
+    public Integer capacidadeAlunos = 30;
 
     public List<PessoaDTO> alunos = new LinkedList<>();
     public List<PessoaDTO> professores = new LinkedList<>();

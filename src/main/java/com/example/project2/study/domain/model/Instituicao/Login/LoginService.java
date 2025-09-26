@@ -1,4 +1,4 @@
-package com.example.project2.study.domain.model.Instituicao.Escola.Login;
+package com.example.project2.study.domain.model.Instituicao.Login;
 
 import com.example.project2.study.domain.Repositories.LoginRepository;
 import com.example.project2.study.domain.model.Empresa.EntidadeService;
@@ -17,6 +17,8 @@ public class LoginService extends EntidadeService<Login> {
     private LoginRepository loginRepository;
 
     public LoginDTO createLogin(LoginDTO loginDTO) {
+        loginValidator.validateLoginDTO(loginDTO);
+        loginValidator.cadastroLoginDTO(loginDTO);
         Login login = new Login(loginDTO);
         Login save = save(login);
         return LoginDTO.of(save);
@@ -32,7 +34,7 @@ public class LoginService extends EntidadeService<Login> {
     }
 
     public Login updateLogin(LoginDTO loginDTO) {
-        loginValidator.validateLogin(loginDTO);
+        loginValidator.validateLoginDTO(loginDTO);
         Login login = loginRepository.findByUuidAndSenha(loginDTO.uuid, loginDTO.senha);
         loginValidator.validateProfile(login);
         login.updateLogin(loginDTO);

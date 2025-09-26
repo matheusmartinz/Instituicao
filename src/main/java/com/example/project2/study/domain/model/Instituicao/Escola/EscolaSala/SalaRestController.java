@@ -1,6 +1,7 @@
 package com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala;
 
 import com.example.project2.study.Api.SuperRestController;
+import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 public class SalaRestController extends SuperRestController {
     private final SalaService salaService;
+    private final AlunoService alunoService;
 
     @PostMapping("/{escolaUUID}")
     public ResponseEntity<SalaDTO> createSala(@RequestBody SalaDTO salaDTO, @PathVariable UUID escolaUUID) {
@@ -27,5 +29,11 @@ public class SalaRestController extends SuperRestController {
     public ResponseEntity<List<SalaDataGridDTO>> getSalas() {
         List<SalaDataGridDTO> salaDataGridDTO = salaService.getSalas();
         return ResponseEntity.status(HttpStatus.OK).body(salaDataGridDTO);
+    }
+
+    @PutMapping("/{uuidEscola}")
+    public ResponseEntity<SalaDTO> updateSala(@RequestBody SalaDTO salaDTO, @PathVariable UUID uuidEscola){
+        SalaDTO toUpdate = salaService.updateSalaByUuid(salaDTO, uuidEscola);
+        return ResponseEntity.status(HttpStatus.OK).body(toUpdate);
     }
 }

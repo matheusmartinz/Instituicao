@@ -29,6 +29,9 @@ public class SalaService extends EntidadeService<Sala> {
     @Autowired
     EscolaValidator escolaValidator;
 
+    @Autowired
+    SalaValidator salaValidator;
+
     public SalaDTO createSala(SalaDTO salaDTO, UUID escolaUUID){
         Escola escola = escolaRepository.findByUuid(escolaUUID);
         escolaValidator.validaEscola(escola);
@@ -55,5 +58,15 @@ public class SalaService extends EntidadeService<Sala> {
                 .map(SalaDataGridDTO::new)
                 .sorted(Comparator.comparing(e -> e.numeroSala))
                .toList();
+    }
+
+    public SalaDTO updateSalaByUuid(SalaDTO salaDTO, UUID uuidEscola) {
+        salaValidator.validateSalaDTO(salaDTO);
+        Escola escola = escolaRepository.findByUuid(uuidEscola);
+        escolaValidator.validaEscola(escola);
+        Sala toSave = new Sala(salaDTO);
+        toSave.setEscola(escola);
+        Sala salvo = super.save(toSave);
+        return SalaDTO.of(salvo);
     }
 }

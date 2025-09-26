@@ -119,6 +119,4 @@ public class AlunoService extends EntidadeService<Pessoa> {
         alunoValidation.validateAluno(alunofounded);
         pessoaRepository.delete(alunofounded);
     }
-
-
 }

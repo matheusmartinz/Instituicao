@@ -44,8 +44,8 @@ public class EscolaService extends EntidadeService<Escola> {
         return new EscolaDTO(save);
     }
 
-    public EscolaDTO updateByUuid(EscolaDTO escolaDTO) { // 3
-        Escola escola = escolaRepository.findByUuid(escolaDTO.uuid);
+    public EscolaDTO updateByUuid(EscolaDTO escolaDTO, UUID uuid) { // 3
+        Escola escola = escolaRepository.findByUuid(uuid);
         escolaValidator.validaEscola(escola);
         escola.updateNome(escolaDTO.nome);
         enderecoValidation.validateCidadeAndEstadoAndCEP(escolaDTO.endereco);

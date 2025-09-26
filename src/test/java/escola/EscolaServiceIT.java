@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.UUID;
 
 public class EscolaServiceIT extends AbstractIntegrationTest {
 
@@ -60,6 +61,7 @@ public class EscolaServiceIT extends AbstractIntegrationTest {
         // CRIANDO MEU DTO
         EscolaDTO createEscola = new EscolaDTO();
         createEscola.nome = "Dona Maria XX";
+        createEscola.uuid = UUID.randomUUID();
         EnderecoDTO createEnderecoDTO = new EnderecoDTO();
         createEnderecoDTO.cidade = "Manaus";
         createEnderecoDTO.estado = "AM";
@@ -74,7 +76,7 @@ public class EscolaServiceIT extends AbstractIntegrationTest {
         escolaSaved.endereco.cep = "89010-677";
 
         // ATUALIZANDO MINHA ENTIDADE
-        EscolaDTO updatedDTO = escolaService.updateByUuid(escolaSaved);
+        EscolaDTO updatedDTO = escolaService.updateByUuid(escolaSaved, escolaSaved.uuid);
 
         SoftAssertions.assertSoftly(s -> {
             s.assertThat(updatedDTO.nome).isEqualTo("Zezinho Rezende XIX");
@@ -121,7 +123,7 @@ public class EscolaServiceIT extends AbstractIntegrationTest {
         createEscola.endereco.estado = "SP";
         createEscola.endereco.cep = "89010-344";
 
-        EscolaDTO atualizarEscola = escolaService.updateByUuid(createEscola);
+        EscolaDTO atualizarEscola = escolaService.updateByUuid(createEscola, UUID.randomUUID());
 
         SoftAssertions.assertSoftly(s -> {
             s.assertThat(atualizarEscola.nome).isEqualTo("Tio Bento II");
@@ -141,7 +143,7 @@ public class EscolaServiceIT extends AbstractIntegrationTest {
 
         createdEscola.nome = "Bentinho 20";
         createdEscola.endereco = EnderecoDTODataProvider.generic("Tocantins","88999-666","PE");
-        EscolaDTO updateEscola = escolaService.updateByUuid(createdEscola);
+        EscolaDTO updateEscola = escolaService.updateByUuid(createdEscola, UUID.randomUUID());
 
 
         long after = enderecoRepository.count();

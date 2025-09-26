@@ -1,4 +1,4 @@
-package com.example.project2.study.domain.model.Instituicao.Escola.Login;
+package com.example.project2.study.domain.model.Instituicao.Login;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
