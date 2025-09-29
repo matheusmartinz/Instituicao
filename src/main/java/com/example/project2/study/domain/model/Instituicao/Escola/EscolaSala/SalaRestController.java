@@ -31,9 +31,15 @@ public class SalaRestController extends SuperRestController {
         return ResponseEntity.status(HttpStatus.OK).body(salaDataGridDTO);
     }
 
-    @PutMapping("/{uuidEscola}")
-    public ResponseEntity<SalaDTO> updateSala(@RequestBody SalaDTO salaDTO, @PathVariable UUID uuidEscola){
-        SalaDTO toUpdate = salaService.updateSalaByUuid(salaDTO, uuidEscola);
+    @PutMapping("/{uuidSala}")
+    public ResponseEntity<SalaDTO> updateSala(@RequestBody SalaDTO salaDTO, @PathVariable UUID uuidSala){
+        SalaDTO toUpdate = salaService.updateSalaByUuid(salaDTO, uuidSala);
         return ResponseEntity.status(HttpStatus.OK).body(toUpdate);
+    }
+
+    @DeleteMapping("/{uuidSala}")
+    public ResponseEntity<Void> deleteSala(@PathVariable UUID uuidSala){
+        salaService.deleteSala(uuidSala);
+        return ResponseEntity.noContent().build();
     }
 }

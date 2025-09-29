@@ -2,6 +2,9 @@ package sala;
 
 import com.example.project2.study.AbstractIntegrationTest;
 import com.example.project2.study.StudyApplication;
+import com.example.project2.study.domain.Repositories.EscolaRepository;
+import com.example.project2.study.domain.model.Instituicao.Escola.Escola;
+import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.Sala;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.SalaDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.SalaRepository;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.SalaService;
@@ -21,13 +24,16 @@ public class SalaServiceIT extends AbstractIntegrationTest {
     @Autowired
     private SalaService salaService;
 
+    @Autowired
+    private EscolaRepository escolaRepository;
+
     @Test
     public void updateSala() {
         SalaDTO salaDTO = new SalaDTO();
         salaDTO.numeroSala = "500";
         salaDTO.serieAno = SerieAno.QUARTO_ANO;
 //        long before = salaRepository.count();
-        salaService.updateSalaByUuid(salaDTO, UUID.fromString("9fb93001-d7e1-4caa-ba64-4c20f30f8c67"));
+        salaService.updateSalaByUuid(salaDTO, UUID.fromString("a823bd7e-33ab-4342-940c-1cbb7b9a0116"));
 //        long after = salaRepository.count();
 
         SoftAssertions.assertSoftly(s -> {

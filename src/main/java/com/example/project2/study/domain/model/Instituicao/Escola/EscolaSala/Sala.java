@@ -67,4 +67,8 @@ public class Sala extends EntidadeIdUUID {
         return false;
     }
 
+    public void updateSala(SalaDTO salaDTO) {
+        this.numeroSala = salaDTO.getNumeroSala();
+        this.serieAno = salaDTO.getSerieAno();
+    }
 }

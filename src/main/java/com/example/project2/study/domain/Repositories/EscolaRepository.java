@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Repository
 public interface EscolaRepository extends JpaRepository<Escola, Long> {
-        Escola findByUuid(UUID uuid);
+        Escola findByUuid(UUID uuidEscola);
 
 @Query(value = """
     SELECT DISTINCT e.* 

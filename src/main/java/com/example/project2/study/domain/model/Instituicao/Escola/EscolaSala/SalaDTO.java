@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -25,6 +26,7 @@ public class SalaDTO {
     public List<PessoaDTO> alunos = new LinkedList<>();
     public List<PessoaDTO> professores = new LinkedList<>();
     public List<TarefaDTO> tarefas = new LinkedList<>();
+    public UUID uuid;
 
     public static SalaDTO of(Sala sala) {
         SalaDTO toReturn = new SalaDTO();
@@ -33,6 +35,7 @@ public class SalaDTO {
         toReturn.alunos = PessoaDTO.listOfPessoaDTO(sala.getAlunos());
         toReturn.capacidadeAlunos = sala.getCapacidadeAlunos();
         toReturn.professores = PessoaDTO.listOfPessoaDTO(sala.getProfessores());
+        toReturn.uuid = sala.getUuid();
         return toReturn;
     }
 
