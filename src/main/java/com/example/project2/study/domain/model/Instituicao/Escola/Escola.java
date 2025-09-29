@@ -27,12 +27,8 @@ public class Escola extends EntidadeIdUUID {
             inverseJoinColumns = @JoinColumn(name = "pessoas_fk") // coluna que referencia a sala
     )
     private List<Pessoa> pessoas;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(
-            name = "escola_salas",
-            joinColumns = @JoinColumn(name = "escola_fk"),
-            inverseJoinColumns = @JoinColumn(name = "salas_fk")
-    )
+    
+    @OneToMany(mappedBy = "escola", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Sala> salas;
 
     protected Escola() {

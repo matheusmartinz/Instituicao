@@ -38,8 +38,8 @@ public class SalaRestController extends SuperRestController {
     }
 
     @DeleteMapping("/{uuidSala}")
-    public ResponseEntity<Void> deleteSala(@PathVariable UUID uuidSala){
+    public ResponseEntity<String> deleteSala(@PathVariable UUID uuidSala){
         salaService.deleteSala(uuidSala);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Sala deletada com sucesso!");
     }
 }

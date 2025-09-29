@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -34,7 +33,7 @@ public class SalaService extends EntidadeService<Sala> {
     @Autowired
     SalaValidator salaValidator;
 
-    public SalaDTO createSala(SalaDTO salaDTO, UUID escolaUUID){
+    public SalaDTO createSala(SalaDTO salaDTO, UUID escolaUUID) {
         Escola escola = escolaRepository.findByUuid(escolaUUID);
         escolaValidator.validaEscola(escola);
         Sala toSave = new Sala(salaDTO);
@@ -55,36 +54,40 @@ public class SalaService extends EntidadeService<Sala> {
         super.save(sala);
     }
 
-    public List<SalaDataGridDTO> getSalas(){
+    public List<SalaDataGridDTO> getSalas() {
         return repository().findAll().stream()
                 .map(SalaDataGridDTO::new)
                 .sorted(Comparator.comparing(e -> e.numeroSala))
-               .toList();
+                .toList();
     }
 
     public SalaDTO updateSalaByUuid(SalaDTO salaDTO, UUID uuidSala) {
         salaValidator.validateSalaDTO(salaDTO);
         Sala sala = salaRepository.findByUuid(uuidSala);
-        if(sala != null){
+        if (sala != null) {
             sala.updateSala(salaDTO);
             Escola escola = sala.getEscola();
 
             Sala salaUpdate = super.save(sala);
 
-            return  SalaDTO.of(salaUpdate);
-        }
-        else {
+            return SalaDTO.of(salaUpdate);
+        } else {
             throw new RuntimeException("Sala não encontrada para edição");
         }
     }
 
     public void deleteSala(UUID uuidSala) {
         Sala sala = salaRepository.findByUuid(uuidSala);
-        if (sala != null) {
-            salaRepository.delete(sala);
-        }
-        else {
+        if (sala == null) {
             throw new RuntimeException("Sala inexistente");
         }
+
+//        List<Escola> allBySalasIn = escolaRepository.findAllBySalasContaining(sala);
+//        for (Escola escola : allBySalasIn) {
+//            sala.setEscola(null);
+//            escolaService.deleteSala(escola, sala);
+//        }
+
+        salaRepository.delete(sala);
     }
 }

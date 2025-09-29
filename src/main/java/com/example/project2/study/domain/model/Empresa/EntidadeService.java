@@ -17,4 +17,8 @@ public abstract class EntidadeService<T extends EntidadeIdUUID> {
         }
         return repository().save(entidade);
     }
+
+    protected void delete(T entidade) {
+        repository().delete(entidade);
+    }
 }

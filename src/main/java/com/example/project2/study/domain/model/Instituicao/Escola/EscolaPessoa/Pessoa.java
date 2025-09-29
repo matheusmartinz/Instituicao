@@ -101,5 +101,6 @@ public class Pessoa extends EntidadeIdUUID {
     public void updateDados(AlunoDTO alunoDTO) {
         this.setNome(alunoDTO.nome);
         this.setTelefone(new PessoaTelefone(alunoDTO.telefone));
+        this.setSerie(SerieAno.from(alunoDTO.serieAno));
     }
 }

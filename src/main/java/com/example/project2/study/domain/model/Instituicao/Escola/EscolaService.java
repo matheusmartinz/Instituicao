@@ -3,13 +3,11 @@ package com.example.project2.study.domain.model.Instituicao.Escola;
 import com.example.project2.study.domain.Repositories.EscolaRepository;
 import com.example.project2.study.domain.model.Empresa.EntidadeService;
 import com.example.project2.study.domain.model.Instituicao.Endereco;
-import com.example.project2.study.domain.model.Instituicao.Escola.Endereco.EnderecoDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.Endereco.EnderecoService;
+import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.Sala;
 import com.example.project2.study.domain.model.Instituicao.GenericTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -94,5 +92,10 @@ public class EscolaService extends EntidadeService<Escola> {
        return escolaRepository.findAllBySalasBySerieAno(SerieAno.from(serie).name())
                 .stream().map(e -> new GenericTO<Escola>(e.getUuid().toString(), e.getNome()) )
                 .toList();
+    }
+
+    public void deleteSala(Escola escola, Sala sala) {
+        escola.getSalas().remove(sala);
+        super.save(escola);
     }
 }

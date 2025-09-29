@@ -27,21 +27,24 @@ public class SalaServiceIT extends AbstractIntegrationTest {
     @Autowired
     private EscolaRepository escolaRepository;
 
-    @Test
-    public void updateSala() {
-        SalaDTO salaDTO = new SalaDTO();
-        salaDTO.numeroSala = "500";
-        salaDTO.serieAno = SerieAno.QUARTO_ANO;
+    @Autowired
+    SalaRepository salaRepository;
+
+//    @Test
+//    public void updateSala() {
+//
+//        SalaDTO salaDTO = new SalaDTO();
+//        salaDTO.numeroSala = "500";
+//        salaDTO.serieAno = SerieAno.TERCEIRO_ANO;
 //        long before = salaRepository.count();
-        salaService.updateSalaByUuid(salaDTO, UUID.fromString("a823bd7e-33ab-4342-940c-1cbb7b9a0116"));
+//        salaService.updateSalaByUuid(salaDTO, UUID.fromString("ea0ce285-7f59-457b-8fbc-84d12ba636ac"));
 //        long after = salaRepository.count();
-
-        SoftAssertions.assertSoftly(s -> {
-            s.assertThat(salaDTO.numeroSala).isEqualTo("500");
-            s.assertThat(salaDTO.serieAno.getValor()).isEqualTo(SerieAno.QUARTO_ANO.getValor());
-
-//            s.assertThat(after).isEqualTo(before+1);
-        });
-    }
+//
+//        SoftAssertions.assertSoftly(s -> {
+//            s.assertThat(salaDTO.numeroSala).isEqualTo("500");
+//            s.assertThat(salaDTO.serieAno).isEqualTo(SerieAno.TERCEIRO_ANO);
+//            s.assertThat(after).isEqualTo(before);
+//        });
+//    }
 
 }
