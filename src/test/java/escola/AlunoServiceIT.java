@@ -29,7 +29,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     public static String emailMatheus =
             "matheus@gmail";
     public static UUID uuidEscolaValido =
-            UUID.fromString("a50e9257-4113-42e9-9901-feb879739c17");
+            UUID.fromString("e655c7e1-742a-42f4-9eba-b69e344c728c");
     public static UUID uuidSala = UUID.fromString("ed8172e3-0bc4-4f5d-8f34-27de83c22f4c");
     public static UUID uuidSalaValida =
             UUID.fromString("ed8172e3-0bc4-4f5d-8f34-27de83c22f4c");
@@ -53,7 +53,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     @SneakyThrows
     public void necessarioInformarSerieAlunoException() {
         int before = escolaRepository.findByUuid(uuidEscolaValido).getPessoas().size();
-        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO(null, "MATHEUS VIADO", null,
+        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO(null, "José Almeida", null,
                 null, emailMatheus, null);
         alunoService.createAluno(alunoDTO, uuidEscolaValido);
         int after = escolaRepository.findByUuid(uuidEscolaValido).getPessoas().size();
@@ -65,13 +65,16 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     @Test
     public void validarCriacaoSalaNaEscola(){
         int before = escolaRepository.findByUuid(uuidEscolaValido).getSalas().size();
-        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("4°", "MATHEUS VIADO", "666.777.999-00",
-                EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
-        alunoService.createAluno(alunoDTO, uuidEscolaValido);
+        SalaDTO salaDTO = new SalaDTO();
+        salaDTO.numeroSala = "25";
+        salaDTO.serieAno = SerieAno.TERCEIRO_ANO;
+        salaDTO.capacidadeAlunos = 10;
+
+        salaService.createSala(salaDTO,uuidEscolaValido);
         int after = escolaRepository.findByUuid(uuidEscolaValido).getSalas().size();
 
         SoftAssertions.assertSoftly(s ->{
-            s.assertThat(before).isEqualTo(after + 1);
+            s.assertThat(after).isEqualTo(before + 1);
         });
     }
 
@@ -80,6 +83,8 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
         long before = escolaRepository.findByUuid(uuidEscolaValido).getSalas().size();
         SalaDTO salaDTO = new SalaDTO();
         salaDTO.numeroSala = "25";
+        salaDTO.serieAno = SerieAno.TERCEIRO_ANO;
+        salaDTO.capacidadeAlunos = 10;
 
         SalaDTO criacaoSala = salaService.createSala(salaDTO,uuidEscolaValido);
         long after = escolaRepository.findByUuid(uuidEscolaValido).getSalas().size();
@@ -114,7 +119,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
             expectedExceptionsMessageRegExp = "É necessário informar o CPF do aluno.")
     @SneakyThrows
     public void necessarioInformarCpfAluno() {
-        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "MATHEUS VIADO", null, null,
+        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "José Almeida", null, null,
                 emailMatheus, null);
         alunoService.createAluno(alunoDTO, uuidEscolaValido);
     }
@@ -123,7 +128,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
             expectedExceptionsMessageRegExp = "Formato do CPF informado é inválido.")
     @SneakyThrows
     public void formatoDoCpfInválido() {
-        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "MATHEUS VIADO",
+        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "José Almeida",
                 "110.851.399-9", null, emailMatheus, null);
         alunoService.createAluno(alunoDTO, uuidEscolaValido);
     }
@@ -132,7 +137,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
             expectedExceptionsMessageRegExp = "É necessário informar o CPF do aluno.")
     @SneakyThrows
     public void necessarioInformarCpfAlunoSemCpf() {
-        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "MATHEUS VIADO", null, null,
+        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "José Almeida", null, null,
                 emailMatheus, null);
         alunoService.createAluno(alunoDTO, uuidEscolaValido);
     }
@@ -160,7 +165,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     @SneakyThrows
     public void escolaNaoEncontrada() {
         UUID uuidOutraEntidade = uuidSala;
-        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "MATHEUS VIADO",
+        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "José Almeida",
                 "110.851.399-99", EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
         alunoService.createAluno(alunoDTO, uuidOutraEntidade);
     }
@@ -169,7 +174,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
             expectedExceptionsMessageRegExp = "Não possuimos salas para o primeiro ano.")
     @SneakyThrows
     public void salaNaoEncontrada() {
-        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "MATHEUS VIADO",
+        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "José Almeida",
                 "11085139999", EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
         Escola escola = escolaService.load(uuidEscolaValido);
         escola.getSalas().clear();
@@ -212,7 +217,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
         Sala sala = salaRepository.findByUuid(UUID.fromString("228b0a25-c767-4e7a-878e-d539105bbb79"));
         Integer capacidadeAlunosAntes = sala.getCapacidadeAlunos();
 
-        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("4°", "MATHEUS VIADO",
+        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("4°", "José Almeida",
                 "110.851.399-99", EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
 
         Escola escola = escolaService.load(uuidEscolaValido);
@@ -244,20 +249,6 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
             s.assertThat(alunoDTOFinal.email).isEqualTo(emailMatheus);
         });
     }
-
-    @Test
-    public void teste() {
-        HashMap<String, Object> objetos = new HashMap<>();
-        objetos.put("nomes", List.of("Andre", "Matheus"));
-        objetos.put("telefone", "44984554263");
-
-        SoftAssertions.assertSoftly(s -> {
-            s.assertThat(objetos.get("nomes")).isNotNull();
-        });
-
-    }
-
-
     private void addSalaNaEscola(Escola escola, Sala sala) {
         if (!escola.getSalas().contains(sala)) {
             escola.addSala(sala);

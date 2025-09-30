@@ -44,10 +44,11 @@ public class LoginServiceIT extends AbstractIntegrationTest {
         loginService.createLogin(loginDTO);
     }
 
-    @Test(expectedExceptions =  LoginExceptions.class, expectedExceptionsMessageRegExp = "Email já utilizado.")
+    @Test(expectedExceptions =  LoginExceptions.class,
+            expectedExceptionsMessageRegExp = "Email já utilizado.")
     public void createLogin() {
         LoginDTO loginDTO = new LoginDTO();
-        loginDTO.setLogin("paipai@gmail.com");
+        loginDTO.setLogin("testeunitario@gmail.com");
         loginDTO.setSenha("<PASSWORD>");
         loginDTO.setNome("Matheus");
         loginDTO.setUuid(UUID.randomUUID());
@@ -57,7 +58,7 @@ public class LoginServiceIT extends AbstractIntegrationTest {
     @Test(expectedExceptions = LoginExceptions.class, expectedExceptionsMessageRegExp = "Favor informar a senha." )
     public void createLoginWithSenhaBlank(){
         LoginDTO loginDTO = new LoginDTO();
-        loginDTO.login = "<EMAIL>";
+        loginDTO.login = "talemail@gmail.com";
         loginDTO.nome = "Matheus";
         loginDTO.senha = "";
         loginService.createLogin(loginDTO);
@@ -67,7 +68,7 @@ public class LoginServiceIT extends AbstractIntegrationTest {
     @Test(expectedExceptions = LoginExceptions.class, expectedExceptionsMessageRegExp = "Favor informar a senha." )
     public void createLoginWithSenhaNull(){
         LoginDTO loginDTO = new LoginDTO();
-        loginDTO.login = "<EMAIL>";
+        loginDTO.login = "talemail@gmail.com";
         loginDTO.nome = "andre";
         loginService.createLogin(loginDTO);
 
@@ -77,7 +78,7 @@ public class LoginServiceIT extends AbstractIntegrationTest {
     public void createLoginWithAllFields() {
         long before = loginRepository.count();
         LoginDTO loginDTO = new LoginDTO();
-        loginDTO.login = "<EMAIL>";
+        loginDTO.login = "talemail@gmail.com";
         loginDTO.nome = "andre";
         loginDTO.senha = "<PASSWORD>";
         loginDTO.setUuid(UUID.randomUUID());

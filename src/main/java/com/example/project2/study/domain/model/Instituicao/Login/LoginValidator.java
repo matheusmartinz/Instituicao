@@ -15,12 +15,12 @@ public class LoginValidator extends SuperValidator {
 
     public void validateLoginDTO(LoginDTO loginDTO) {
         String isValidEmail = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
-        if(loginDTO.login.matches(isValidEmail) == false){
-            throw new LoginExceptions("Formato de email inválido.");
-        }
 
         if (isNull(loginDTO.login) || isBlank(loginDTO.login)) {
             throw new LoginExceptions("Favor informar o login.");
+        }
+        if(loginDTO.login.matches(isValidEmail) == false){
+            throw new LoginExceptions("Formato de email inválido.");
         }
         if (isNull(loginDTO.nome) || isBlank(loginDTO.nome)) {
             throw new LoginExceptions("Favor informar o nome.");
