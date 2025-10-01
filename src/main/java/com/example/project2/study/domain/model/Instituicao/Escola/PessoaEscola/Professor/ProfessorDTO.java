@@ -25,7 +25,7 @@ public class ProfessorDTO extends PessoaDTO {
         toReturn.nome = professor.getNome();
         toReturn.email = professor.getEmail();
         toReturn.telefone = new PessoaTelefoneDTO(professor.getTelefone());
-        toReturn.endereco = new EnderecoDTO(professor.getEndereco());
+        toReturn.endereco = EnderecoDTO.of(professor.getEndereco());
 
         return toReturn;
     }

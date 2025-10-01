@@ -50,6 +50,7 @@ public class Pessoa extends EntidadeIdUUID {
     private SerieAno serie;
     @OneToMany
     private List<Tarefa> tarefas = new LinkedList<>();
+    private Integer cargaHoraria;
 
 
     //Dados Professor
@@ -79,11 +80,15 @@ public class Pessoa extends EntidadeIdUUID {
         this.setMatricula(pessoaDTO.matricula);
         this.setTipoPessoa(TipoPessoa.ALUNO);
         this.setSerie(SerieAno.from(pessoaDTO.serieAno));
+        this.setDisciplinas(pessoaDTO.disciplinas);
+        this.setCargaHoraria(pessoaDTO.getCargaHoraria());
     }
+
+
 
     private static Endereco getEndereco(PessoaDTO pessoaDTO) {
         return ofNullable(pessoaDTO.endereco)
-                .map(e -> new Endereco(pessoaDTO.endereco))
+                .map(e -> Endereco.of(pessoaDTO.endereco))
                 .orElse(null);
     }
 

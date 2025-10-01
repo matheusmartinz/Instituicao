@@ -1,26 +1,36 @@
 package com.example.project2.study.domain.model.Instituicao.Login;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.UUID;
 
 @Setter
 @Getter
+@NoArgsConstructor
 public class LoginDTO {
-    public UUID uuid;
-    public String nome;
-    public String login;
-    public String senha;
+    private UUID uuid;
+    private String nome;
+    private String login;
+    private String senha;
 //    public String tipoUsuario;
 
+    private LoginDTO(Login login) {
+        this.nome = login.getNome();
+        this.login = login.getLogin();
+        this.senha = login.getSenha();
+        this.uuid = login.getUuid();
+    }
+
+    public LoginDTO(String login, String nome, String senha) {
+        this.login = login;
+        this.nome = nome;
+        this.senha = senha;
+    }
+
     public static LoginDTO of(Login login) {
-        LoginDTO toReturn = new LoginDTO();
-        toReturn.nome = login.getNome();
-        toReturn.login = login.getLogin();
-        toReturn.uuid = login.getUuid();
-//        toReturn.tipoUsuario = login.getTipoUsuario().toString();
-        return toReturn;
+        return new LoginDTO(login);
     }
 
 }

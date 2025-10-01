@@ -35,19 +35,19 @@ public class EscolaService extends EntidadeService<Escola> {
     public EscolaDTO createEscola(EscolaDTO escolaDTO) {
         escolaValidator.validateDTO(escolaDTO);
         enderecoValidation.validateEnderecoDTO(escolaDTO);
-        enderecoValidation.validateCidadeAndEstadoAndCEP(escolaDTO.endereco);
-        Escola escola = new Escola(escolaDTO);
-        findOrCreateEnderecoAndSetOnEscola(new Endereco(escolaDTO.endereco), escola);
+        enderecoValidation.validateCidadeAndEstadoAndCEP(escolaDTO.getEndereco());
+        Escola escola = Escola.of(escolaDTO);
+        findOrCreateEnderecoAndSetOnEscola(Endereco.of(escolaDTO.getEndereco()), escola);
         Escola save = super.save(escola);
         return new EscolaDTO(save);
     }
 
-    public EscolaDTO updateByUuid(EscolaDTO escolaDTO, UUID uuid) { // 3
-        Escola escola = escolaRepository.findByUuid(uuid);
+    public EscolaDTO updateByUuid(EscolaDTO escolaDTO) { // 3
+        Escola escola = escolaRepository.findByUuid(escolaDTO.getUuid());
         escolaValidator.validaEscola(escola);
-        escola.updateNome(escolaDTO.nome);
-        enderecoValidation.validateCidadeAndEstadoAndCEP(escolaDTO.endereco);
-        findOrCreateEnderecoAndSetOnEscola(new Endereco(escolaDTO.endereco), escola);
+        escola.updateNome(escolaDTO.getNome());
+        enderecoValidation.validateCidadeAndEstadoAndCEP(escolaDTO.getEndereco());
+        findOrCreateEnderecoAndSetOnEscola(Endereco.of(escolaDTO.getEndereco()), escola);
         Escola escolaAtualizada = save(escola);
         return new EscolaDTO(escolaAtualizada);
     }

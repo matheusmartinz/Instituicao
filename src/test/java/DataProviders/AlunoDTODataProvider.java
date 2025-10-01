@@ -12,7 +12,7 @@ public class AlunoDTODataProvider {
                                           String email, PessoaTelefoneDTO telefoneDTO) {
         AlunoDTO alunoDTO = new AlunoDTO();
         alunoDTO.nome = nome;
-        alunoDTO.serieAno = serie == null ? null : serie;
+        alunoDTO.serieAno = serie;
         alunoDTO.cpf = cpf;
         alunoDTO.endereco = enderecoDTO;
         alunoDTO.email = email;

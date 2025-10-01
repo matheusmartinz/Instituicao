@@ -19,13 +19,13 @@ public class LoginService extends EntidadeService<Login> {
     public LoginDTO createLogin(LoginDTO loginDTO) {
         loginValidator.validateLoginDTO(loginDTO);
         loginValidator.cadastroLoginDTO(loginDTO);
-        Login login = new Login(loginDTO);
+        Login login = Login.of(loginDTO);
         Login save = save(login);
         return LoginDTO.of(save);
     }
 
     public Login authenticLogin(LoginDTO loginDTO) {
-        return loginRepository.findByLoginAndSenha(loginDTO.login, loginDTO.senha);
+        return loginRepository.findByLoginAndSenha(loginDTO.getLogin(), loginDTO.getSenha());
     }
 
     @Override
@@ -35,7 +35,7 @@ public class LoginService extends EntidadeService<Login> {
 
     public Login updateLogin(LoginDTO loginDTO) {
         loginValidator.validateLoginDTO(loginDTO);
-        Login login = loginRepository.findByUuidAndSenha(loginDTO.uuid, loginDTO.senha);
+        Login login = loginRepository.findByUuidAndSenha(loginDTO.getUuid(), loginDTO.getSenha());
         loginValidator.validateProfile(login);
         login.updateLogin(loginDTO);
         return save(login);

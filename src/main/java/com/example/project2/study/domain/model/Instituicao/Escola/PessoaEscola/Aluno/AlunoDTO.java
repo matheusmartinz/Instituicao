@@ -1,5 +1,6 @@
 package com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno;
 
+import com.example.project2.study.Exceptions.EntidadeNaoEncontradaException;
 import com.example.project2.study.domain.model.Instituicao.Disciplina;
 import com.example.project2.study.domain.model.Instituicao.Escola.Endereco.EnderecoDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
@@ -7,7 +8,8 @@ import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.Sal
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.UtilsFormatter;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaTelefoneDTO;
-import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.LinkedList;
@@ -15,12 +17,15 @@ import java.util.List;
 
 import static java.util.Optional.ofNullable;
 
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@Data
 public class AlunoDTO extends PessoaDTO {
     public String matricula;
     public List<TarefaDTO> tarefas = new LinkedList<>();
-    public List<Disciplina> disciplinas;
+    public List<Disciplina> disciplinas = new LinkedList<>();
     public String serieAno;
+    private Integer cargaHoraria = 44;
 
 
     public static List<AlunoDTO> listOf(List<Pessoa> alunos) {
@@ -40,7 +45,19 @@ public class AlunoDTO extends PessoaDTO {
                 .map(PessoaTelefoneDTO::new)
                 .orElse(null);
         this.endereco = ofNullable(aluno.getEndereco())
-                .map(EnderecoDTO::new)
+                .map(EnderecoDTO::of)
                 .orElse(null);
+        this.cargaHoraria = aluno.getCargaHoraria();
+    }
+
+    public void addDisciplina(Disciplina disciplina) {
+        if (this.getDisciplinas().contains(disciplina)) {
+            throw new EntidadeNaoEncontradaException(); // DuplicateEntityException
+        }
+        this.getDisciplinas().add(disciplina);
+    }
+
+    public void addCargaHoraria(int cargaHorario) {
+        this.setCargaHoraria(this.getCargaHoraria() - cargaHorario);
     }
 }

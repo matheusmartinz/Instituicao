@@ -14,11 +14,11 @@ public class EnderecoTest {
     @Test
     public void testEndereco() {
         EnderecoDTO enderecoDTO = new EnderecoDTO();
-        enderecoDTO.cep = "87060-550";
-        enderecoDTO.cidade = "Maringá";
-        enderecoDTO.estado = UF.PR.toString();
+        enderecoDTO.setCep("87060-550");
+        enderecoDTO.setCidade("Maringá");
+        enderecoDTO.setEstado(UF.PR.toString());
 
-        Endereco endereco = new Endereco(enderecoDTO);
+        Endereco endereco = Endereco.of(enderecoDTO);
         String descritivo = endereco.getDescritivoCidadeUF();
         SoftAssertions.assertSoftly(s -> {
             s.assertThat(endereco.getCep()).isEqualTo("87060550");

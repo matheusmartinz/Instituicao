@@ -27,7 +27,7 @@ public class PessoaDTO {
         this.nome = pessoa.getNome();
         this.telefone = new PessoaTelefoneDTO(pessoa.getTelefone());
         this.cpf = pessoa.getCpf();
-        this.endereco = new EnderecoDTO(pessoa.getEndereco());
+        this.endereco = EnderecoDTO.of(pessoa.getEndereco());
         this.email = pessoa.getEmail();
         this.uuid = pessoa.getUuid();
     }

@@ -4,6 +4,7 @@ import com.example.project2.study.domain.model.EntidadeUUID.EntidadeIdUUID;
 import com.example.project2.study.domain.model.Instituicao.Escola.Endereco.EnderecoDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.UF;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,18 +16,21 @@ import lombok.Setter;
         name = "endereco",
         uniqueConstraints = @UniqueConstraint(columnNames = {"cep", "cidade", "estado"})
 )
+@NoArgsConstructor
 public class Endereco extends EntidadeIdUUID {
     private String cep;
     @Enumerated(EnumType.STRING)
     private UF estado;
     private String cidade;
 
-    public Endereco() {}
+    private Endereco(EnderecoDTO enderecoDTO) {
+        this.cep = enderecoDTO.getCep().replace("-", "");
+        this.cidade = enderecoDTO.getCidade();
+        this.estado = UF.valueOf(enderecoDTO.getEstado());
+    }
 
-    public Endereco(EnderecoDTO enderecoDTO) {
-        this.cep = enderecoDTO.cep.replaceAll("-", "");
-        this.cidade = enderecoDTO.cidade;
-        this.estado = UF.valueOf(enderecoDTO.estado);
+    public static Endereco of(EnderecoDTO enderecoDTO) {
+      return new Endereco(enderecoDTO);
     }
 
     public String getDescritivoCidadeUF() {
@@ -35,6 +39,7 @@ public class Endereco extends EntidadeIdUUID {
 
     @Override
     public boolean equals(Object o) {
-        return false;
+        throw new RuntimeException("implementar metodo");
+//        return false;
     }
 }

@@ -19,9 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -42,10 +40,23 @@ public class AlunoService extends EntidadeService<Pessoa> {
         escolaValidator.validaEscola(escola);
 
         alunoDTO.matricula = MatriculaGenerator.gerarMatricula();
-        alunoDTO.disciplinas = List.of(Disciplina.PORTUGUES, Disciplina.MATEMATICA, Disciplina.GEOGRAFIA);
+        Collections.addAll(alunoDTO.getDisciplinas(),
+                Disciplina.PORTUGUES,
+                Disciplina.MATEMATICA,
+                Disciplina.INGLES
+        );
+
+        int cargaHorario = CargaHorariaPorDisciplina.getCargaHoraria(alunoDTO.getDisciplinas(), alunoDTO.getSerieAno());
+
+        alunoDTO.addCargaHoraria(cargaHorario);
+
         Pessoa ofAluno = new Pessoa(alunoDTO);
+
         Pessoa aluno = customSave(ofAluno, escola);
+
+
         escola.addAluno(aluno);
+//        disciplinaRepository.getCargaHoraria(Disciplina.INGLES, SerieAno.PRIMEIRO_ANO);
 
         List<Sala> salasComMesmaSerie = escola.getSalas().stream()
                 .filter(e -> e.getSerieAno().equals(aluno.getSerie()))
