@@ -5,6 +5,8 @@ import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.A
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaTelefoneDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
 
+import java.util.UUID;
+
 public class AlunoDTODataProvider {
 
     public static AlunoDTO createAlunoDTO(String serie, String nome,
@@ -12,7 +14,7 @@ public class AlunoDTODataProvider {
                                           String email, PessoaTelefoneDTO telefoneDTO) {
         AlunoDTO alunoDTO = new AlunoDTO();
         alunoDTO.nome = nome;
-        alunoDTO.serieAno = serie;
+        alunoDTO.setSerieAno(serie);
         alunoDTO.cpf = cpf;
         alunoDTO.endereco = enderecoDTO;
         alunoDTO.email = email;

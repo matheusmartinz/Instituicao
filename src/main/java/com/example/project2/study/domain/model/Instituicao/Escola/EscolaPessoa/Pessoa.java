@@ -77,10 +77,10 @@ public class Pessoa extends EntidadeIdUUID {
         this.setEmail(pessoaDTO.email);
         this.setTelefone(getTelefone(pessoaDTO));
         this.setEndereco(getEndereco(pessoaDTO));
-        this.setMatricula(pessoaDTO.matricula);
+        this.setMatricula(pessoaDTO.getMatricula());
         this.setTipoPessoa(TipoPessoa.ALUNO);
-        this.setSerie(SerieAno.from(pessoaDTO.serieAno));
-        this.setDisciplinas(pessoaDTO.disciplinas);
+        this.setSerie(SerieAno.from(pessoaDTO.getSerieAno()));
+        this.setDisciplinas(pessoaDTO.getDisciplinas());
         this.setCargaHoraria(pessoaDTO.getCargaHoraria());
     }
 
@@ -106,6 +106,6 @@ public class Pessoa extends EntidadeIdUUID {
     public void updateDados(AlunoDTO alunoDTO) {
         this.setNome(alunoDTO.nome);
         this.setTelefone(new PessoaTelefone(alunoDTO.telefone));
-        this.setSerie(SerieAno.from(alunoDTO.serieAno));
+        this.setSerie(SerieAno.from(alunoDTO.getSerieAno()));
     }
 }

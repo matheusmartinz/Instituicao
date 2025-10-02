@@ -14,12 +14,13 @@ import com.example.project2.study.domain.model.Instituicao.Escola.EscolaValidato
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.MatriculaGenerator;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.PessoaEmEscola.PessoaTelefoneService;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.PessoaRepository;
-import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -40,25 +41,22 @@ public class AlunoService extends EntidadeService<Pessoa> {
         Escola escola = escolaRepository.findByUuid(uuidEscola);
         escolaValidator.validaEscola(escola);
 
-        alunoDTO.matricula = MatriculaGenerator.gerarMatricula();
-        Collections.addAll(alunoDTO.getDisciplinas(),
-                Disciplina.PORTUGUES,
+        alunoDTO.setMatricula(MatriculaGenerator.gerarMatricula());
+        List<Disciplina> disciplinasPadrao = List.of(Disciplina.PORTUGUES,
                 Disciplina.MATEMATICA,
-                Disciplina.INGLES
-        );
+                Disciplina.INGLES);
+
+        alunoDTO.addAllDisciplinas(disciplinasPadrao);
 
         int cargaHorario = CargaHorariaPorDisciplina.getCargaHoraria(alunoDTO.getDisciplinas(), alunoDTO.getSerieAno());
 
-        alunoDTO.addCargaHoraria(cargaHorario);
         cargaHorariaValidator.validateCargaHoraria(cargaHorario);
+        alunoDTO.addCargaHoraria(cargaHorario);
 
         Pessoa ofAluno = new Pessoa(alunoDTO);
-
         Pessoa aluno = customSave(ofAluno, escola);
 
-
         escola.addAluno(aluno);
-//        disciplinaRepository.getCargaHoraria(Disciplina.INGLES, SerieAno.PRIMEIRO_ANO);
 
         List<Sala> salasComMesmaSerie = escola.getSalas().stream()
                 .filter(e -> e.getSerieAno().equals(aluno.getSerie()))
@@ -131,5 +129,9 @@ public class AlunoService extends EntidadeService<Pessoa> {
         Pessoa alunofounded = pessoaRepository.findByUuid(uuidAluno);
         alunoValidation.validateAluno(alunofounded);
         pessoaRepository.delete(alunofounded);
+    }
+
+    public void removeDisciplina(AlunoDTO aluno, Disciplina disciplina) {
+        aluno.removeDisciplina(disciplina);
     }
 }

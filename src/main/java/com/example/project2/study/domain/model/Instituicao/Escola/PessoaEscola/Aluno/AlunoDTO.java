@@ -1,6 +1,5 @@
 package com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno;
 
-import com.example.project2.study.Exceptions.EntidadeNaoEncontradaException;
 import com.example.project2.study.domain.model.Instituicao.Disciplina;
 import com.example.project2.study.domain.model.Instituicao.Escola.Endereco.EnderecoDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
@@ -21,10 +20,10 @@ import static java.util.Optional.ofNullable;
 @NoArgsConstructor
 @Data
 public class AlunoDTO extends PessoaDTO {
-    public String matricula;
-    public List<TarefaDTO> tarefas = new LinkedList<>();
-    public List<Disciplina> disciplinas = new LinkedList<>();
-    public String serieAno;
+    private String matricula;
+    private List<TarefaDTO> tarefas = new LinkedList<>();
+    private List<Disciplina> disciplinas = new LinkedList<>();
+    private String serieAno;
     private Integer cargaHoraria = 0;
 
 
@@ -51,13 +50,24 @@ public class AlunoDTO extends PessoaDTO {
     }
 
     public void addDisciplina(Disciplina disciplina) {
-        if (this.getDisciplinas().contains(disciplina)) {
-            throw new EntidadeNaoEncontradaException(); // DuplicateEntityException
+        if (!this.getDisciplinas().contains(disciplina)) {
+            this.getDisciplinas().add(disciplina);
         }
-        this.getDisciplinas().add(disciplina);
     }
 
     public void addCargaHoraria(int cargaHorario) {
         this.setCargaHoraria(this.getCargaHoraria() + cargaHorario);
+    }
+
+    public void addAllDisciplinas(List<Disciplina> disciplinas) {
+        for (Disciplina disciplina : disciplinas) {
+            if (!this.getDisciplinas().contains(disciplina)) {
+                this.getDisciplinas().add(disciplina);
+            }
+        }
+    }
+
+    public void removeDisciplina(Disciplina disciplina) {
+        this.getDisciplinas().remove(disciplina);
     }
 }

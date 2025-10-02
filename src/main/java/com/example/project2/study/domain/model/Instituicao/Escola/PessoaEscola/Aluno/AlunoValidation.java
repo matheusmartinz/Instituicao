@@ -16,7 +16,7 @@ public class AlunoValidation {
     private PessoaValidation pessoaValidation;
 
     public void validateAluno(AlunoDTO alunoDTO) {
-        if (alunoDTO.serieAno == null) {
+        if (alunoDTO.getSerieAno() == null) {
             throw new RuntimeException("É necessário informar a série do aluno.");
         }
         alunoDTO.cpf = pessoaValidation.validateCpf(alunoDTO.cpf);

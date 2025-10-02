@@ -8,6 +8,7 @@ import com.example.project2.study.domain.Repositories.EscolaRepository;
 import com.example.project2.study.domain.model.Instituicao.Disciplina;
 import com.example.project2.study.domain.model.Instituicao.Escola.Endereco.EnderecoDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.Escola;
+import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.Sala;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.SalaDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.SalaRepository;
@@ -19,13 +20,11 @@ import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.A
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaTelefoneDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
 import lombok.SneakyThrows;
-import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import org.assertj.core.api.SoftAssertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
 
-import java.util.Objects;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -34,10 +33,11 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
             "matheus@gmail";
     public static UUID uuidEscolaValido =
             UUID.fromString("e655c7e1-742a-42f4-9eba-b69e344c728c");
-    public static UUID uuidEscolaValidoCasa = UUID.fromString("df23829c-75ca-430e-a51a-d4815e9eb282");
     public static UUID uuidSala = UUID.fromString("8d2d724b-ef6a-49dc-b312-ac7ccb3f38b9");
     public static UUID uuidSalaValida =
             UUID.fromString("8d2d724b-ef6a-49dc-b312-ac7ccb3f38b9");
+    public static UUID uuidAluno =
+            UUID.fromString("921ec3ea-bd9b-4d51-a79f-cc1c25c34fae");
 
 
     @Autowired
@@ -197,10 +197,10 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
         AlunoDTO alunoDTOFinal = alunoService.createAluno(alunoDTO, uuidEscolaValido);
 
         SoftAssertions.assertSoftly(s -> {
-            s.assertThat(alunoDTOFinal.matricula).isNotNull();
-            s.assertThat(alunoDTOFinal.tarefas).isEmpty();
-            s.assertThat(alunoDTOFinal.disciplinas).hasSize(3);
-            s.assertThat(SerieAno.from(alunoDTOFinal.serieAno).isAno(SerieAno.QUARTO_ANO)).isTrue();
+            s.assertThat(alunoDTOFinal.getMatricula()).isNotNull();
+            s.assertThat(alunoDTOFinal.getTarefas()).isEmpty();
+            s.assertThat(alunoDTOFinal.getDisciplinas()).hasSize(3);
+            s.assertThat(SerieAno.from(alunoDTOFinal.getSerieAno()).isAno(SerieAno.QUARTO_ANO)).isTrue();
             s.assertThat(alunoDTOFinal.nome).isEqualTo("José Carlos");
             s.assertThat(alunoDTOFinal.cpf).isEqualTo("220.567.432-11");
             s.assertThat(alunoDTOFinal.email).isNotNull();
@@ -260,24 +260,61 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
 
 
     @Test
-    public void cargaHorarioAluno() {
-        AlunoDTO dataProvider = AlunoDTODataProvider.createAlunoDTO(SerieAno.TERCEIRO_ANO.getValor(), "José Almeida", "110.851.399-99",
+    public void createCargaHorarioAluno() {
+        AlunoDTO dataProvider = AlunoDTODataProvider.createAlunoDTO(SerieAno.QUARTO_ANO.getValor(), "José Almeida", "110.851.399-99",
                 EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
 
-        AlunoDTO alunoDTO = alunoService.createAluno(dataProvider, uuidEscolaValidoCasa);
+        dataProvider.addDisciplina(Disciplina.GEOGRAFIA);
+        dataProvider.addDisciplina(Disciplina.INGLES);
+        dataProvider.addDisciplina(Disciplina.MATEMATICA);
+
+
+        AlunoDTO alunoDTO = alunoService.createAluno(dataProvider, uuidEscolaValido);
 
         SoftAssertions.assertSoftly(s -> {
-            s.assertThat(alunoDTO.getCargaHoraria()).isEqualTo(33);
-            s.assertThat(alunoDTO.getDisciplinas()).hasSize(3);
+            s.assertThat(alunoDTO.getCargaHoraria()).isEqualTo(42);
+            s.assertThat(alunoDTO.getDisciplinas()).hasSize(4);
         });
     }
 
     @Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = "A quantidade de disciplinas excedeu o máximo de 44 Horas")
-    public void cargaHorariaAlunoExceeded(){
-        AlunoDTO dataProvider = AlunoDTODataProvider.createAlunoDTO(SerieAno.TERCEIRO_ANO.getValor(), "José Almeida", "110.851.399-99",
+    public void cargaHorariaAlunoExceeded() {
+        AlunoDTO dataProvider = AlunoDTODataProvider.createAlunoDTO(SerieAno.QUARTO_ANO.getValor(), "José Almeida", "110.851.399-99",
                 EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
 
-        alunoService.createAluno(dataProvider, uuidEscolaValidoCasa);
+        dataProvider.addDisciplina(Disciplina.GEOGRAFIA);
+        dataProvider.addDisciplina(Disciplina.BIOLOGIA);
+        dataProvider.addDisciplina(Disciplina.LITERATURA);
+
+        alunoService.createAluno(dataProvider, uuidEscolaValido);
     }
 
+    @Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = "Este aluno já contém esta disciplina.")
+    public void addSameDiscipline() {
+        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO(SerieAno.QUARTO_ANO.getValor(), "José Almeida", "110.851.399-99",
+                EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
+
+        alunoDTO.addDisciplina(Disciplina.MATEMATICA);
+
+        alunoService.createAluno(alunoDTO, uuidEscolaValido);
+    }
+
+    @Test
+    public void removeDisciplina() {
+        AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO(SerieAno.QUARTO_ANO.getValor(), "José Almeida", "110.851.399-99",
+                EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
+
+        AlunoDTO aluno = alunoService.createAluno(alunoDTO, uuidEscolaValido);
+
+        alunoService.removeDisciplina(aluno, Disciplina.MATEMATICA);
+
+        Pessoa byUuid = alunoRepository.findByUuid(aluno.uuid);
+
+        SoftAssertions.assertSoftly(s -> {
+            s.assertThat(alunoDTO.getDisciplinas()).hasSize(2);
+            s.assertThat(byUuid.getDisciplinas()).hasSize(2);
+            s.assertThat(alunoDTO.getDisciplinas()).doesNotContain(Disciplina.MATEMATICA);
+            s.assertThat(alunoDTO.getDisciplinas()).isEqualTo(List.of(Disciplina.PORTUGUES, Disciplina.INGLES));
+        });
+    }
 }
