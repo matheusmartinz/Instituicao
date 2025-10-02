@@ -25,7 +25,7 @@ public class AlunoDTO extends PessoaDTO {
     public List<TarefaDTO> tarefas = new LinkedList<>();
     public List<Disciplina> disciplinas = new LinkedList<>();
     public String serieAno;
-    private Integer cargaHoraria = 44;
+    private Integer cargaHoraria = 0;
 
 
     public static List<AlunoDTO> listOf(List<Pessoa> alunos) {
@@ -58,6 +58,6 @@ public class AlunoDTO extends PessoaDTO {
     }
 
     public void addCargaHoraria(int cargaHorario) {
-        this.setCargaHoraria(this.getCargaHoraria() - cargaHorario);
+        this.setCargaHoraria(this.getCargaHoraria() + cargaHorario);
     }
 }

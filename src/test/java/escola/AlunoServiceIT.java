@@ -19,9 +19,11 @@ import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.A
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaTelefoneDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
 import lombok.SneakyThrows;
+import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import org.assertj.core.api.SoftAssertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -32,6 +34,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
             "matheus@gmail";
     public static UUID uuidEscolaValido =
             UUID.fromString("e655c7e1-742a-42f4-9eba-b69e344c728c");
+    public static UUID uuidEscolaValidoCasa = UUID.fromString("df23829c-75ca-430e-a51a-d4815e9eb282");
     public static UUID uuidSala = UUID.fromString("8d2d724b-ef6a-49dc-b312-ac7ccb3f38b9");
     public static UUID uuidSalaValida =
             UUID.fromString("8d2d724b-ef6a-49dc-b312-ac7ccb3f38b9");
@@ -258,15 +261,23 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
 
     @Test
     public void cargaHorarioAluno() {
-        AlunoDTO dataProvider = AlunoDTODataProvider.createAlunoDTO(SerieAno.QUARTO_ANO.getValor(), "José Almeida", "110.851.399-99",
+        AlunoDTO dataProvider = AlunoDTODataProvider.createAlunoDTO(SerieAno.TERCEIRO_ANO.getValor(), "José Almeida", "110.851.399-99",
                 EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
 
-        AlunoDTO alunoDTO = alunoService.createAluno(dataProvider, uuidEscolaValido);
+        AlunoDTO alunoDTO = alunoService.createAluno(dataProvider, uuidEscolaValidoCasa);
 
         SoftAssertions.assertSoftly(s -> {
-            s.assertThat(alunoDTO.getCargaHoraria()).isEqualTo(35);
+            s.assertThat(alunoDTO.getCargaHoraria()).isEqualTo(33);
             s.assertThat(alunoDTO.getDisciplinas()).hasSize(3);
         });
+    }
+
+    @Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = "A quantidade de disciplinas excedeu o máximo de 44 Horas")
+    public void cargaHorariaAlunoExceeded(){
+        AlunoDTO dataProvider = AlunoDTODataProvider.createAlunoDTO(SerieAno.TERCEIRO_ANO.getValor(), "José Almeida", "110.851.399-99",
+                EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
+
+        alunoService.createAluno(dataProvider, uuidEscolaValidoCasa);
     }
 
 }

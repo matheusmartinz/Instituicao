@@ -4,5 +4,7 @@ public enum Disciplina {
     MATEMATICA,
     GEOGRAFIA,
     PORTUGUES,
-    INGLES
+    INGLES,
+    LITERATURA,
+    BIOLOGIA
 }

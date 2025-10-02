@@ -78,15 +78,17 @@ public class SalaService extends EntidadeService<Sala> {
 
     public void deleteSala(UUID uuidSala) {
         Sala sala = salaRepository.findByUuid(uuidSala);
+        Escola escola = sala.getEscola();
+
         if (sala == null) {
             throw new RuntimeException("Sala inexistente");
         }
 
-//        List<Escola> allBySalasIn = escolaRepository.findAllBySalasContaining(sala);
-//        for (Escola escola : allBySalasIn) {
-//            sala.setEscola(null);
-//            escolaService.deleteSala(escola, sala);
-//        }
+        if (escola != null) {
+            escola.getSalas().remove(sala);
+        }
+
+        sala.setEscola(null);
 
         salaRepository.delete(sala);
     }

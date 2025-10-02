@@ -33,6 +33,7 @@ public class AlunoService extends EntidadeService<Pessoa> {
     private final AlunoValidation alunoValidation;
     private final PessoaTelefoneService telefoneService;
     private final PessoaRepository pessoaRepository;
+    private final CargaHorariaValidator cargaHorariaValidator;
 
     public AlunoDTO createAluno(AlunoDTO alunoDTO, UUID uuidEscola) {
         alunoValidation.validateAluno(alunoDTO);
@@ -49,6 +50,7 @@ public class AlunoService extends EntidadeService<Pessoa> {
         int cargaHorario = CargaHorariaPorDisciplina.getCargaHoraria(alunoDTO.getDisciplinas(), alunoDTO.getSerieAno());
 
         alunoDTO.addCargaHoraria(cargaHorario);
+        cargaHorariaValidator.validateCargaHoraria(cargaHorario);
 
         Pessoa ofAluno = new Pessoa(alunoDTO);
 

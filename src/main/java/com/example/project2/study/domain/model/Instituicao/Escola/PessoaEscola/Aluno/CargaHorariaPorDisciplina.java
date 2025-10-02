@@ -10,29 +10,89 @@ import java.util.Map;
 public class CargaHorariaPorDisciplina {
     private static final Map<SerieAno, Map<Disciplina, Integer>> cargaHorariaPorSerie = new HashMap<>();
 
+    private static void adicionarCargaHoraria(SerieAno serie, Map<Disciplina, Integer> disciplinas) {
+        cargaHorariaPorSerie.put(serie, new HashMap<>(disciplinas));
+    }
 
     static {
-        // PRIMEIRO ANO
-        Map<Disciplina, Integer> primeiroAno = new HashMap<>();
-        primeiroAno.put(Disciplina.MATEMATICA, 100);
-        primeiroAno.put(Disciplina.PORTUGUES, 120);
-        primeiroAno.put(Disciplina.GEOGRAFIA, 80);
-        cargaHorariaPorSerie.put(SerieAno.PRIMEIRO_ANO, primeiroAno);
+        adicionarCargaHoraria(SerieAno.PRIMEIRO_ANO,
+                Map.of(
+                        Disciplina.GEOGRAFIA, 10,
+                        Disciplina.BIOLOGIA, 12,
+                        Disciplina.LITERATURA, 12,
+                        Disciplina.INGLES, 10,
+                        Disciplina.MATEMATICA, 12,
+                        Disciplina.PORTUGUES, 12
+        ));
 
-        // SEGUNDO ANO
-        Map<Disciplina, Integer> segundoAno = new HashMap<>();
-        segundoAno.put(Disciplina.MATEMATICA, 110);
-        segundoAno.put(Disciplina.PORTUGUES, 130);
-        segundoAno.put(Disciplina.INGLES, 60);
-        cargaHorariaPorSerie.put(SerieAno.SEGUNDO_ANO, segundoAno);
+        adicionarCargaHoraria(SerieAno.SEGUNDO_ANO,
+                Map.of(
+                        Disciplina.GEOGRAFIA, 15,
+                        Disciplina.BIOLOGIA, 11,
+                        Disciplina.LITERATURA, 9,
+                        Disciplina.INGLES, 5,
+                        Disciplina.MATEMATICA, 15,
+                        Disciplina.PORTUGUES, 10
+                ));
 
+        adicionarCargaHoraria(SerieAno.TERCEIRO_ANO,
+                Map.of(
+                        Disciplina.GEOGRAFIA, 30,
+                        Disciplina.BIOLOGIA, 5,
+                        Disciplina.LITERATURA, 4,
+                        Disciplina.INGLES, 10,
+                        Disciplina.MATEMATICA, 20,
+                        Disciplina.PORTUGUES, 3
+                ));
+        adicionarCargaHoraria(SerieAno.QUARTO_ANO,
+                Map.of(
+                        Disciplina.GEOGRAFIA, 9,
+                        Disciplina.BIOLOGIA, 5,
+                        Disciplina.LITERATURA, 4,
+                        Disciplina.INGLES, 10,
+                        Disciplina.MATEMATICA, 20,
+                        Disciplina.PORTUGUES, 30
+                ));
 
-        Map<Disciplina, Integer> quartoAno = new HashMap<>();
-        quartoAno.put(Disciplina.MATEMATICA, 110);
-        quartoAno.put(Disciplina.PORTUGUES, 130);
-        quartoAno.put(Disciplina.INGLES, 60);
-        cargaHorariaPorSerie.put(SerieAno.QUARTO_ANO, quartoAno);
+        adicionarCargaHoraria(SerieAno.QUINTO_ANO,
+                Map.of(
+                        Disciplina.GEOGRAFIA, 12,
+                        Disciplina.BIOLOGIA, 9,
+                        Disciplina.LITERATURA, 8,
+                        Disciplina.INGLES, 15,
+                        Disciplina.MATEMATICA, 25,
+                        Disciplina.PORTUGUES, 40
+                ));
 
+        adicionarCargaHoraria(SerieAno.SEXTO_ANO,
+                Map.of(
+                        Disciplina.GEOGRAFIA, 9,
+                        Disciplina.BIOLOGIA, 5,
+                        Disciplina.LITERATURA, 4,
+                        Disciplina.INGLES, 10,
+                        Disciplina.MATEMATICA, 20,
+                        Disciplina.PORTUGUES, 30
+                ));
+
+        adicionarCargaHoraria(SerieAno.SETIMO_ANO,
+                Map.of(
+                        Disciplina.GEOGRAFIA, 12,
+                        Disciplina.BIOLOGIA, 8,
+                        Disciplina.LITERATURA, 6,
+                        Disciplina.INGLES, 12,
+                        Disciplina.MATEMATICA, 25,
+                        Disciplina.PORTUGUES, 35
+                ));
+
+        adicionarCargaHoraria(SerieAno.OITAVO_ANO,
+                Map.of(
+                        Disciplina.GEOGRAFIA, 12,
+                        Disciplina.BIOLOGIA, 8,
+                        Disciplina.LITERATURA, 6,
+                        Disciplina.INGLES, 12,
+                        Disciplina.MATEMATICA, 25,
+                        Disciplina.PORTUGUES, 35
+                ));
     }
 
     public static int getCargaHoraria(List<Disciplina> disciplinas, String serieAno) {
@@ -47,6 +107,4 @@ public class CargaHorariaPorDisciplina {
 
      return cargaHoraria;
     }
-
-
 }
