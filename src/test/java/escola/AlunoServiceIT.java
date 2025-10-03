@@ -36,9 +36,6 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     public static UUID uuidSala = UUID.fromString("8d2d724b-ef6a-49dc-b312-ac7ccb3f38b9");
     public static UUID uuidSalaValida =
             UUID.fromString("8d2d724b-ef6a-49dc-b312-ac7ccb3f38b9");
-    public static UUID uuidAluno =
-            UUID.fromString("921ec3ea-bd9b-4d51-a79f-cc1c25c34fae");
-
 
     @Autowired
     AlunoService alunoService;
@@ -201,13 +198,13 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
             s.assertThat(alunoDTOFinal.getTarefas()).isEmpty();
             s.assertThat(alunoDTOFinal.getDisciplinas()).hasSize(3);
             s.assertThat(SerieAno.from(alunoDTOFinal.getSerieAno()).isAno(SerieAno.QUARTO_ANO)).isTrue();
-            s.assertThat(alunoDTOFinal.nome).isEqualTo("José Carlos");
-            s.assertThat(alunoDTOFinal.cpf).isEqualTo("220.567.432-11");
-            s.assertThat(alunoDTOFinal.email).isNotNull();
-            s.assertThat(alunoDTOFinal.telefone).isNull();
-            s.assertThat(alunoDTOFinal.uuid).isNotNull();
+            s.assertThat(alunoDTOFinal.getNome()).isEqualTo("José Carlos");
+            s.assertThat(alunoDTOFinal.getCpf()).isEqualTo("220.567.432-11");
+            s.assertThat(alunoDTOFinal.getEmail()).isNotNull();
+            s.assertThat(alunoDTOFinal.getTelefone()).isNull();
+            s.assertThat(alunoDTOFinal.getUuid()).isNotNull();
 
-            EnderecoDTO enderecoDTO = alunoDTOFinal.endereco;
+            EnderecoDTO enderecoDTO = alunoDTOFinal.getEndereco();
 
             s.assertThat(enderecoDTO.getUuid()).isNotNull();
             s.assertThat(enderecoDTO.getCidade()).isEqualTo("Maringá");
@@ -250,11 +247,11 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
         AlunoDTO alunoDTOFinal = alunoService.createAluno(alunoDTO, uuidEscolaValido);
 
         SoftAssertions.assertSoftly(s -> {
-            PessoaTelefoneDTO telefone = alunoDTOFinal.telefone;
+            PessoaTelefoneDTO telefone = alunoDTOFinal.getTelefone();
             s.assertThat(telefone.ddd).isEqualTo("44");
             s.assertThat(telefone.fone).isEqualTo("992228899");
-            s.assertThat(telefone.pessoaUUID).isEqualTo(alunoDTOFinal.uuid);
-            s.assertThat(alunoDTOFinal.email).isEqualTo(emailMatheus);
+            s.assertThat(telefone.pessoaUUID).isEqualTo(alunoDTOFinal.getUuid());
+            s.assertThat(alunoDTOFinal.getEmail()).isEqualTo(emailMatheus);
         });
     }
 
@@ -289,7 +286,6 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
         alunoService.createAluno(dataProvider, uuidEscolaValido);
     }
 
-    @Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = "Este aluno já contém esta disciplina.")
     public void addSameDiscipline() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO(SerieAno.QUARTO_ANO.getValor(), "José Almeida", "110.851.399-99",
                 EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
@@ -301,20 +297,67 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
 
     @Test
     public void removeDisciplina() {
+        AlunoDTO aluno = createGenericAluno();
+
+        alunoService.removeDisciplina(aluno.getUuid(), Disciplina.MATEMATICA);
+
+        Pessoa byUuid = alunoRepository.findByUuid(aluno.getUuid());
+
+        SoftAssertions.assertSoftly(s -> {
+            s.assertThat(aluno.getDisciplinas()).hasSize(3);
+            s.assertThat(byUuid.getDisciplinas()).hasSize(2);
+            s.assertThat(byUuid.getDisciplinas()).doesNotContain(Disciplina.MATEMATICA);
+            s.assertThat(byUuid.getDisciplinas()).isEqualTo(List.of(Disciplina.PORTUGUES, Disciplina.INGLES));
+        });
+    }
+
+    @Test
+    public void updateAluno() {
+        AlunoDTO alunoDTO = createGenericAluno();
+
+        SoftAssertions.assertSoftly(s -> {
+            s.assertThat(alunoDTO.getNome()).isEqualTo("José Almeida");
+            s.assertThat(alunoDTO.getEmail()).isEqualTo("matheus@gmail");
+            s.assertThat(alunoDTO.getDisciplinas()).isEqualTo(List.of(Disciplina.PORTUGUES,
+                    Disciplina.MATEMATICA,
+                    Disciplina.INGLES));
+            s.assertThat(alunoDTO.getCargaHoraria()).isEqualTo(31);
+        });
+
+        alunoDTO.setNome("JUJUBINHA 123");
+        alunoDTO.setEmail("jujubinha_123@gmail.com");
+        alunoDTO.setDisciplinas(List.of(Disciplina.GEOGRAFIA, Disciplina.INGLES));
+        alunoService.updateAluno(alunoDTO);
+
+        Pessoa alunoEntity = alunoRepository.findByUuid(alunoDTO.getUuid());
+
+        SoftAssertions.assertSoftly(s -> {
+            s.assertThat(alunoEntity.getNome()).isEqualTo("JUJUBINHA 123");
+            s.assertThat(alunoEntity.getEmail()).isEqualTo("jujubinha_123@gmail.com");
+            s.assertThat(alunoEntity.getDisciplinas()).isEqualTo(List.of(Disciplina.GEOGRAFIA,
+                    Disciplina.INGLES));
+            s.assertThat(alunoEntity.getCargaHoraria()).isEqualTo(22);
+        });
+    }
+
+    @Test
+    public void addDisciplina() {
+        AlunoDTO alunoDTO = createGenericAluno();
+
+        SoftAssertions.assertSoftly(s -> {
+            s.assertThat(alunoDTO.getDisciplinas()).hasSize(3);
+        });
+
+    }
+
+
+
+    private AlunoDTO createGenericAluno() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO(SerieAno.QUARTO_ANO.getValor(), "José Almeida", "110.851.399-99",
                 EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
 
-        AlunoDTO aluno = alunoService.createAluno(alunoDTO, uuidEscolaValido);
-
-        alunoService.removeDisciplina(aluno, Disciplina.MATEMATICA);
-
-        Pessoa byUuid = alunoRepository.findByUuid(aluno.uuid);
-
-        SoftAssertions.assertSoftly(s -> {
-            s.assertThat(alunoDTO.getDisciplinas()).hasSize(2);
-            s.assertThat(byUuid.getDisciplinas()).hasSize(2);
-            s.assertThat(alunoDTO.getDisciplinas()).doesNotContain(Disciplina.MATEMATICA);
-            s.assertThat(alunoDTO.getDisciplinas()).isEqualTo(List.of(Disciplina.PORTUGUES, Disciplina.INGLES));
-        });
+        return alunoService.createAluno(alunoDTO, uuidEscolaValido);
     }
+
+
 }

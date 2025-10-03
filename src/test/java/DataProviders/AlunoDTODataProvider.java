@@ -13,12 +13,12 @@ public class AlunoDTODataProvider {
                                           String cpf, EnderecoDTO enderecoDTO,
                                           String email, PessoaTelefoneDTO telefoneDTO) {
         AlunoDTO alunoDTO = new AlunoDTO();
-        alunoDTO.nome = nome;
+        alunoDTO.setNome(nome);
         alunoDTO.setSerieAno(serie);
-        alunoDTO.cpf = cpf;
-        alunoDTO.endereco = enderecoDTO;
-        alunoDTO.email = email;
-        alunoDTO.telefone = telefoneDTO;
+        alunoDTO.alterarCpf(cpf);
+        alunoDTO.setEndereco(enderecoDTO);
+        alunoDTO.setEmail(email);
+        alunoDTO.setTelefone(telefoneDTO);
         return alunoDTO;
     }
 

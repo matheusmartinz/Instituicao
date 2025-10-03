@@ -118,7 +118,7 @@ public class AlunoService extends EntidadeService<Pessoa> {
 
     public AlunoDataGridDTO updateByUuid(AlunoDTO alunoDTO) {
         alunoValidation.validateAluno(alunoDTO);
-        Pessoa aluno = alunoRepository.findByUuid(alunoDTO.uuid);
+        Pessoa aluno = alunoRepository.findByUuid(alunoDTO.getUuid());
         alunoValidation.validateAluno(aluno);
         aluno.updateDados(alunoDTO);
         Pessoa alunoSave = save(aluno);
@@ -131,7 +131,20 @@ public class AlunoService extends EntidadeService<Pessoa> {
         pessoaRepository.delete(alunofounded);
     }
 
-    public void removeDisciplina(AlunoDTO aluno, Disciplina disciplina) {
+    public void removeDisciplina(UUID uuid, Disciplina disciplina) {
+        Pessoa aluno = alunoRepository.findByUuid(uuid);
+        alunoValidation.validateAluno(aluno);
         aluno.removeDisciplina(disciplina);
+        save(aluno);
+    }
+
+    public void updateAluno(AlunoDTO alunoDTO) {
+        alunoValidation.validateAluno(alunoDTO);
+        Pessoa aluno = alunoRepository.findByUuid(alunoDTO.getUuid());
+        alunoValidation.validateAluno(aluno);
+        aluno.setNome(alunoDTO.getNome());
+        aluno.setEmail(alunoDTO.getEmail());
+        aluno.updateDisciplinas(alunoDTO.getDisciplinas());
+        super.save(aluno);
     }
 }

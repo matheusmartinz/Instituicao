@@ -1,7 +1,6 @@
 package com.example.project2.study.domain.model.Instituicao.Escola;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,19 +30,8 @@ public enum SerieAno {
                 return ano;
             }
         }
-        throw new RuntimeException("Ano não cadastrado: " + valor);
+        throw new IllegalArgumentException("Ano não cadastrado: " + valor);
     }
-
-//    @JsonCreator
-//    public static SerieAno from(String valor) {
-//        for (SerieAno ano : values()) {
-//            if (ano.valor.equalsIgnoreCase(valor)) {
-//                return ano;
-//            }
-//        }
-//        throw new IllegalArgumentException("Ano inválido: " + valor);
-//    }
-
 
     public String getValor() {
         return valor;

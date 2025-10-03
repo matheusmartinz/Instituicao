@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class AlunoDTO extends PessoaDTO {
         this.uuid = aluno.getUuid();
         this.matricula = aluno.getMatricula();
         this.tarefas = TarefaDTO.listOf(aluno.getTarefas());
-        this.disciplinas = aluno.getDisciplinas();
+        this.disciplinas = new ArrayList<>(aluno.getDisciplinas());
         this.serieAno = aluno.getSerie().getValor();
         this.nome = aluno.getNome();
         this.cpf = UtilsFormatter.formatCpf(aluno.getCpf());
@@ -67,7 +68,6 @@ public class AlunoDTO extends PessoaDTO {
         }
     }
 
-    public void removeDisciplina(Disciplina disciplina) {
-        this.getDisciplinas().remove(disciplina);
-    }
+
+
 }
