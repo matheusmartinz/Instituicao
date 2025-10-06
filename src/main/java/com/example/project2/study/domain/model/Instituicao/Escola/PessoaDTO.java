@@ -65,7 +65,7 @@ public class PessoaDTO {
         return new PessoaDTO(professorDTO);
     }
 
-    public void alterarCpf(String cpf){
+    public void alterarCpf(String cpf) {
         this.cpf = cpf;
     }
 }

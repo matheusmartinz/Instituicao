@@ -67,7 +67,4 @@ public class AlunoDTO extends PessoaDTO {
             }
         }
     }
-
-
-
 }

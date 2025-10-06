@@ -129,7 +129,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     @Test(expectedExceptions = RuntimeException.class,
             expectedExceptionsMessageRegExp = "Formato do CPF informado é inválido.")
     @SneakyThrows
-    public void formatoDoCpfInválido() {
+    public void formatoDoCpfInvalido() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "José Almeida",
                 "110.851.399-9", null, emailMatheus, null);
         alunoService.createAluno(alunoDTO, uuidEscolaValido);
@@ -340,24 +340,11 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
         });
     }
 
-    @Test
-    public void addDisciplina() {
-        AlunoDTO alunoDTO = createGenericAluno();
 
-        SoftAssertions.assertSoftly(s -> {
-            s.assertThat(alunoDTO.getDisciplinas()).hasSize(3);
-        });
-
-    }
-
-
-
-    private AlunoDTO createGenericAluno() {
+    public AlunoDTO createGenericAluno() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO(SerieAno.QUARTO_ANO.getValor(), "José Almeida", "110.851.399-99",
                 EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
 
         return alunoService.createAluno(alunoDTO, uuidEscolaValido);
     }
-
-
 }

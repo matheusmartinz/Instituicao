@@ -118,11 +118,21 @@ public class Pessoa extends EntidadeIdUUID {
 
     public void removeDisciplina(Disciplina disciplina) {
         this.disciplinas.remove(disciplina);
+        updateCargaHoraria();
     }
 
     public void updateDisciplinas(List<Disciplina> disciplinas) {
         this.disciplinas.clear();
         this.disciplinas.addAll(disciplinas);
-        this.setCargaHoraria(CargaHorariaPorDisciplina.getCargaHoraria(disciplinas, this.serie.getValor()));
+        updateCargaHoraria();
+    }
+
+    public void updateDisciplina(Disciplina disciplina) {
+        this.disciplinas.add(disciplina);
+        updateCargaHoraria();
+    }
+
+    private void updateCargaHoraria() {
+        this.setCargaHoraria(CargaHorariaPorDisciplina.getCargaHoraria(this.disciplinas, this.serie.getValor()));
     }
 }

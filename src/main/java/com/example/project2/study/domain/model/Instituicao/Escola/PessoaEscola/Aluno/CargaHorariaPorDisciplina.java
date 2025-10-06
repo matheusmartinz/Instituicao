@@ -50,10 +50,10 @@ public class CargaHorariaPorDisciplina {
 
         adicionarCargaHoraria(SerieAno.QUARTO_ANO,
                 Map.of(
-                        Disciplina.GEOGRAFIA, 11,
+                        Disciplina.GEOGRAFIA, 7,
                         Disciplina.BIOLOGIA, 10,
                         Disciplina.LITERATURA, 12,
-                        Disciplina.INGLES, 11,
+                        Disciplina.INGLES, 13,
                         Disciplina.MATEMATICA, 10,
                         Disciplina.PORTUGUES, 10
                 ));
