@@ -7,20 +7,25 @@ import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.Sal
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.UtilsFormatter;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaTelefoneDTO;
-import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import static java.util.Optional.ofNullable;
 
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@Data
 public class AlunoDTO extends PessoaDTO {
-    public String matricula;
-    public List<TarefaDTO> tarefas = new LinkedList<>();
-    public List<Disciplina> disciplinas;
-    public String serieAno;
+    private String matricula;
+    private List<TarefaDTO> tarefas = new LinkedList<>();
+    private List<Disciplina> disciplinas = new LinkedList<>();
+    private String serieAno;
+    private Integer cargaHoraria = 0;
 
 
     public static List<AlunoDTO> listOf(List<Pessoa> alunos) {
@@ -31,7 +36,7 @@ public class AlunoDTO extends PessoaDTO {
         this.uuid = aluno.getUuid();
         this.matricula = aluno.getMatricula();
         this.tarefas = TarefaDTO.listOf(aluno.getTarefas());
-        this.disciplinas = aluno.getDisciplinas();
+        this.disciplinas = new ArrayList<>(aluno.getDisciplinas());
         this.serieAno = aluno.getSerie().getValor();
         this.nome = aluno.getNome();
         this.cpf = UtilsFormatter.formatCpf(aluno.getCpf());
@@ -40,7 +45,26 @@ public class AlunoDTO extends PessoaDTO {
                 .map(PessoaTelefoneDTO::new)
                 .orElse(null);
         this.endereco = ofNullable(aluno.getEndereco())
-                .map(EnderecoDTO::new)
+                .map(EnderecoDTO::of)
                 .orElse(null);
+        this.cargaHoraria = aluno.getCargaHoraria();
+    }
+
+    public void addDisciplina(Disciplina disciplina) {
+        if (!this.getDisciplinas().contains(disciplina)) {
+            this.getDisciplinas().add(disciplina);
+        }
+    }
+
+    public void addCargaHoraria(int cargaHorario) {
+        this.setCargaHoraria(this.getCargaHoraria() + cargaHorario);
+    }
+
+    public void addAllDisciplinas(List<Disciplina> disciplinas) {
+        for (Disciplina disciplina : disciplinas) {
+            if (!this.getDisciplinas().contains(disciplina)) {
+                this.getDisciplinas().add(disciplina);
+            }
+        }
     }
 }

@@ -44,7 +44,7 @@ public class LoginServiceIT extends AbstractIntegrationTest {
         loginService.createLogin(loginDTO);
     }
 
-    @Test(expectedExceptions =  LoginExceptions.class,
+    @Test(expectedExceptions = LoginExceptions.class,
             expectedExceptionsMessageRegExp = "Email já utilizado.")
     public void createLogin() {
         LoginDTO loginDTO = new LoginDTO();
@@ -55,21 +55,16 @@ public class LoginServiceIT extends AbstractIntegrationTest {
         loginService.createLogin(loginDTO);
     }
 
-    @Test(expectedExceptions = LoginExceptions.class, expectedExceptionsMessageRegExp = "Favor informar a senha." )
-    public void createLoginWithSenhaBlank(){
-        LoginDTO loginDTO = new LoginDTO();
-        loginDTO.login = "talemail@gmail.com";
-        loginDTO.nome = "Matheus";
-        loginDTO.senha = "";
+    @Test(expectedExceptions = LoginExceptions.class, expectedExceptionsMessageRegExp = "Favor informar a senha.")
+    public void createLoginWithSenhaBlank() {
+        LoginDTO loginDTO = new LoginDTO("talemail@gmail.com", "Matheus", "");
         loginService.createLogin(loginDTO);
 
     }
 
-    @Test(expectedExceptions = LoginExceptions.class, expectedExceptionsMessageRegExp = "Favor informar a senha." )
-    public void createLoginWithSenhaNull(){
-        LoginDTO loginDTO = new LoginDTO();
-        loginDTO.login = "talemail@gmail.com";
-        loginDTO.nome = "andre";
+    @Test(expectedExceptions = LoginExceptions.class, expectedExceptionsMessageRegExp = "Favor informar a senha.")
+    public void createLoginWithSenhaNull() {
+        LoginDTO loginDTO = new LoginDTO("talemail@gmail.com", "andre", "");
         loginService.createLogin(loginDTO);
 
     }
@@ -77,10 +72,7 @@ public class LoginServiceIT extends AbstractIntegrationTest {
     @Test
     public void createLoginWithAllFields() {
         long before = loginRepository.count();
-        LoginDTO loginDTO = new LoginDTO();
-        loginDTO.login = "talemail@gmail.com";
-        loginDTO.nome = "andre";
-        loginDTO.senha = "<PASSWORD>";
+        LoginDTO loginDTO = new LoginDTO("talemail@gmail.com", "andre", "<PASSWORD>" );
         loginDTO.setUuid(UUID.randomUUID());
         loginService.createLogin(loginDTO);
         long after = loginRepository.count();
@@ -92,9 +84,7 @@ public class LoginServiceIT extends AbstractIntegrationTest {
 
     @Test(expectedExceptions = LoginExceptions.class, expectedExceptionsMessageRegExp = "Formato de email inválido.")
     public void testLogin() {
-        LoginDTO loginDTO = new LoginDTO();
-        loginDTO.login = "<EMAIL>";
-        loginDTO.senha = "<PASSWORD>";
+        LoginDTO loginDTO = new LoginDTO("<EMAIL>", null, "<PASSWORD>" );
         loginService.createLogin(loginDTO);
     }
 }

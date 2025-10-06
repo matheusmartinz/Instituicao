@@ -14,7 +14,6 @@ import com.example.project2.study.domain.model.Instituicao.Escola.EscolaValidato
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.MatriculaGenerator;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.PessoaEmEscola.PessoaTelefoneService;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.PessoaRepository;
-import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -35,16 +34,28 @@ public class AlunoService extends EntidadeService<Pessoa> {
     private final AlunoValidation alunoValidation;
     private final PessoaTelefoneService telefoneService;
     private final PessoaRepository pessoaRepository;
+    private final CargaHorariaValidator cargaHorariaValidator;
 
     public AlunoDTO createAluno(AlunoDTO alunoDTO, UUID uuidEscola) {
         alunoValidation.validateAluno(alunoDTO);
         Escola escola = escolaRepository.findByUuid(uuidEscola);
         escolaValidator.validaEscola(escola);
 
-        alunoDTO.matricula = MatriculaGenerator.gerarMatricula();
-        alunoDTO.disciplinas = List.of(Disciplina.PORTUGUES, Disciplina.MATEMATICA, Disciplina.GEOGRAFIA);
+        alunoDTO.setMatricula(MatriculaGenerator.gerarMatricula());
+        List<Disciplina> disciplinasPadrao = List.of(Disciplina.PORTUGUES,
+                Disciplina.MATEMATICA,
+                Disciplina.INGLES);
+
+        alunoDTO.addAllDisciplinas(disciplinasPadrao);
+
+        int cargaHorario = CargaHorariaPorDisciplina.getCargaHoraria(alunoDTO.getDisciplinas(), alunoDTO.getSerieAno());
+
+        cargaHorariaValidator.validateCargaHoraria(cargaHorario);
+        alunoDTO.addCargaHoraria(cargaHorario);
+
         Pessoa ofAluno = new Pessoa(alunoDTO);
         Pessoa aluno = customSave(ofAluno, escola);
+
         escola.addAluno(aluno);
 
         List<Sala> salasComMesmaSerie = escola.getSalas().stream()
@@ -107,7 +118,7 @@ public class AlunoService extends EntidadeService<Pessoa> {
 
     public AlunoDataGridDTO updateByUuid(AlunoDTO alunoDTO) {
         alunoValidation.validateAluno(alunoDTO);
-        Pessoa aluno = alunoRepository.findByUuid(alunoDTO.uuid);
+        Pessoa aluno = alunoRepository.findByUuid(alunoDTO.getUuid());
         alunoValidation.validateAluno(aluno);
         aluno.updateDados(alunoDTO);
         Pessoa alunoSave = save(aluno);
@@ -118,5 +129,22 @@ public class AlunoService extends EntidadeService<Pessoa> {
         Pessoa alunofounded = pessoaRepository.findByUuid(uuidAluno);
         alunoValidation.validateAluno(alunofounded);
         pessoaRepository.delete(alunofounded);
+    }
+
+    public void removeDisciplina(UUID uuid, Disciplina disciplina) {
+        Pessoa aluno = alunoRepository.findByUuid(uuid);
+        alunoValidation.validateAluno(aluno);
+        aluno.removeDisciplina(disciplina);
+        save(aluno);
+    }
+
+    public void updateAluno(AlunoDTO alunoDTO) {
+        alunoValidation.validateAluno(alunoDTO);
+        Pessoa aluno = alunoRepository.findByUuid(alunoDTO.getUuid());
+        alunoValidation.validateAluno(aluno);
+        aluno.setNome(alunoDTO.getNome());
+        aluno.setEmail(alunoDTO.getEmail());
+        aluno.updateDisciplinas(alunoDTO.getDisciplinas());
+        super.save(aluno);
     }
 }

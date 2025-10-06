@@ -64,7 +64,15 @@ public class Sala extends EntidadeIdUUID {
 
     @Override
     public boolean equals(Object obj) {
-        return false;
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Sala sala = (Sala) obj;
+        return Objects.equal(sala.getUuid(), this.getUuid());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.getUuid());
     }
 
     public void updateSala(SalaDTO salaDTO) {

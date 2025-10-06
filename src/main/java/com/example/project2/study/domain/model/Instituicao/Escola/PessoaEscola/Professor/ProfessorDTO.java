@@ -13,8 +13,8 @@ import java.util.List;
 @Getter
 @Setter
 public class ProfessorDTO extends PessoaDTO {
-        public String quantidadeAulas;
-        public List<Disciplina> disciplinas;
+        private String quantidadeAulas;
+        private List<Disciplina> disciplinas;
 
 
     private static ProfessorDTO of(Pessoa professor) {
@@ -25,7 +25,7 @@ public class ProfessorDTO extends PessoaDTO {
         toReturn.nome = professor.getNome();
         toReturn.email = professor.getEmail();
         toReturn.telefone = new PessoaTelefoneDTO(professor.getTelefone());
-        toReturn.endereco = new EnderecoDTO(professor.getEndereco());
+        toReturn.endereco = EnderecoDTO.of(professor.getEndereco());
 
         return toReturn;
     }

@@ -1,15 +1,16 @@
 package com.example.project2.study.domain.model.Instituicao.Login;
 
 import com.example.project2.study.domain.model.EntidadeUUID.EntidadeIdUUID;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Entity
-@Setter
-@Getter
+@Data
+@NoArgsConstructor
 public class Login extends EntidadeIdUUID {
     private String nome;
     @Column(unique = true)
@@ -17,20 +18,17 @@ public class Login extends EntidadeIdUUID {
     private String senha;
     private StatusAtivacao statusAtivacao = StatusAtivacao.ATIVO;
     private UUID uuid;
-//    private TipoUsuario tipoUsuario;
 
-
-    public Login(LoginDTO loginDTO) {
+    private Login(LoginDTO loginDTO) {
         this.setNome(loginDTO.getNome());
         this.setLogin(loginDTO.getLogin());
         this.setSenha(loginDTO.getSenha());
-//        this.setTipoUsuario(TipoUsuario.valueOf(loginDTO.getTipoUsuario()));
         this.setUuid(UUID.randomUUID());
     }
 
-    public Login() {
+    public static Login of(LoginDTO loginDTO) {
+        return new Login(loginDTO);
     }
-
 
     @Override
     public boolean equals(Object obj) {

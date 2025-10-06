@@ -3,7 +3,6 @@ package escola;
 import com.example.project2.study.AbstractIntegrationTest;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoValidation;
-import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,9 +15,9 @@ public class AlunoValidationTest extends AbstractIntegrationTest {
     private AlunoValidation alunoValidation;
 
     @Test
-    public void validateAlunoSerieIsNull () {
+    public void validateAlunoSerieIsNull() {
         AlunoDTO alunoDTO = new AlunoDTO();
-        alunoDTO.serieAno = null;
+        alunoDTO.setSerieAno(null);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             alunoValidation.validateAluno(alunoDTO);

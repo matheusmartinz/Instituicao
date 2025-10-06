@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component;
 public class EscolaValidator {
 
     public void validateDTO(EscolaDTO escolaDTO) {
-        if (escolaDTO.nome == null || escolaDTO.nome.isBlank()) {
+        if (escolaDTO.getNome() == null || escolaDTO.getNome().isBlank()) {
             throw new RuntimeException("Favor informar o nome.");
         } else {
-            escolaDTO.nome = escolaDTO.nome.trim();
+            escolaDTO.setNome(escolaDTO.getNome().trim());
         }
     }
 

@@ -16,22 +16,22 @@ public class LoginValidator extends SuperValidator {
     public void validateLoginDTO(LoginDTO loginDTO) {
         String isValidEmail = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
 
-        if (isNull(loginDTO.login) || isBlank(loginDTO.login)) {
+        if (isNull(loginDTO.getLogin()) || isBlank(loginDTO.getLogin())) {
             throw new LoginExceptions("Favor informar o login.");
         }
-        if(loginDTO.login.matches(isValidEmail) == false){
+        if(loginDTO.getLogin().matches(isValidEmail) == false){
             throw new LoginExceptions("Formato de email inválido.");
         }
-        if (isNull(loginDTO.nome) || isBlank(loginDTO.nome)) {
+        if (isNull(loginDTO.getNome()) || isBlank(loginDTO.getNome())) {
             throw new LoginExceptions("Favor informar o nome.");
         }
-        if (isNull(loginDTO.senha) || isBlank(loginDTO.senha)) {
+        if (isNull(loginDTO.getSenha()) || isBlank(loginDTO.getSenha())) {
             throw new LoginExceptions("Favor informar a senha.");
         }
     }
 
     public void cadastroLoginDTO(LoginDTO loginDTO) {
-        Login login = loginRepository.findByLogin(loginDTO.login);
+        Login login = loginRepository.findByLogin(loginDTO.getLogin());
         if (login != null) {
             throw new LoginExceptions("Email já utilizado.");
         }

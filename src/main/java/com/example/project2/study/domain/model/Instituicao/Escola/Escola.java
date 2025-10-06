@@ -6,6 +6,7 @@ import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.P
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.Sala;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
 
@@ -14,6 +15,8 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
+@NoArgsConstructor
+
 public class Escola extends EntidadeIdUUID {
     private String nome;
 
@@ -27,18 +30,20 @@ public class Escola extends EntidadeIdUUID {
             inverseJoinColumns = @JoinColumn(name = "pessoas_fk") // coluna que referencia a sala
     )
     private List<Pessoa> pessoas;
-    
+
     @OneToMany(mappedBy = "escola", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Sala> salas;
 
-    protected Escola() {
+
+    private Escola(EscolaDTO escolaDTO) {
+        this.setNome(escolaDTO.getNome());
+        this.setSalas(Sala.listOf(escolaDTO.getSalas()));
+        this.setPessoas(Pessoa.listOfPessoa(escolaDTO.getPessoas()));
+        this.setEndereco(Endereco.of(escolaDTO.getEndereco()));
     }
 
-    public Escola(EscolaDTO escolaDTO) {
-        this.setNome(escolaDTO.nome);
-        this.setSalas(Sala.listOf(escolaDTO.salas));
-        this.setPessoas(Pessoa.listOfPessoa(escolaDTO.pessoas));
-        this.setEndereco(new Endereco(escolaDTO.endereco));
+    public static Escola of(EscolaDTO escolaDTO) {
+        return new Escola(escolaDTO);
     }
 
     public void addSala(Sala sala) {

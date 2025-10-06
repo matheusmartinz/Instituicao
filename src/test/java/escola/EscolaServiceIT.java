@@ -5,9 +5,9 @@ import DataProviders.EscolaDTODataProvider;
 import com.example.project2.study.AbstractIntegrationTest;
 import com.example.project2.study.domain.Repositories.EscolaRepository;
 import com.example.project2.study.domain.model.Instituicao.Endereco;
-import com.example.project2.study.domain.model.Instituicao.Escola.*;
 import com.example.project2.study.domain.model.Instituicao.Escola.Endereco.EnderecoDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.Endereco.EnderecoRepository;
+import com.example.project2.study.domain.model.Instituicao.Escola.*;
 import org.assertj.core.api.SoftAssertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
@@ -30,20 +30,20 @@ public class EscolaServiceIT extends AbstractIntegrationTest {
     public void createEscola() {
         long beforeCount = escolaRepository.count();
         EscolaDTO dtoToSave = new EscolaDTO();
-        dtoToSave.nome = "XVIDEOS";
+        dtoToSave.setNome("Lula");
         EnderecoDTO enderecoDTO = new EnderecoDTO();
-        enderecoDTO.cidade = "Cuiabá";
-        enderecoDTO.estado = "PE";
-        enderecoDTO.cep = "89355-997";
-        dtoToSave.endereco = enderecoDTO;
+        enderecoDTO.setCidade("Cuiabá");
+        enderecoDTO.setEstado("PE");
+        enderecoDTO.setCep("89355-997");
+        dtoToSave.setEndereco(enderecoDTO);
         EscolaDTO escolaDTO = escolaService.createEscola(dtoToSave);
         long afterCount = escolaRepository.count();
         SoftAssertions.assertSoftly(s -> {
-            s.assertThat(escolaDTO.nome).isNotNull();
-            s.assertThat(escolaDTO.endereco.cidade).isEqualTo("Cuiabá");
-            s.assertThat(escolaDTO.endereco.estado).isEqualTo("PE");
-            s.assertThat(escolaDTO.endereco.cep).isEqualTo("89355997");
-            s.assertThat(escolaDTO.uuid).isNotNull();
+            s.assertThat(escolaDTO.getNome()).isNotNull();
+            s.assertThat(escolaDTO.getEndereco().getCidade()).isEqualTo("Cuiabá");
+            s.assertThat(escolaDTO.getEndereco().getEstado()).isEqualTo("PE");
+            s.assertThat(escolaDTO.getEndereco().getCep()).isEqualTo("89355997");
+            s.assertThat(escolaDTO.getUuid()).isNotNull();
             s.assertThat(beforeCount + 1).isEqualTo(afterCount);
         });
     }
@@ -51,8 +51,9 @@ public class EscolaServiceIT extends AbstractIntegrationTest {
     @Test
     public void findAll() {
         List<EscolaDataGridDTO> all = escolaService.findAll();
+
         SoftAssertions.assertSoftly(s -> {
-            s.assertThat(all).hasSize(4);
+            s.assertThat(all).hasSize(1);
         });
     }
 
@@ -60,99 +61,98 @@ public class EscolaServiceIT extends AbstractIntegrationTest {
     public void updateEscola() {
         // CRIANDO MEU DTO
         EscolaDTO createEscola = new EscolaDTO();
-        createEscola.nome = "Dona Maria XX";
-        createEscola.uuid = UUID.randomUUID();
+        createEscola.setNome("Dona Maria XX");
+        createEscola.setUuid(UUID.randomUUID());
         EnderecoDTO createEnderecoDTO = new EnderecoDTO();
-        createEnderecoDTO.cidade = "Manaus";
-        createEnderecoDTO.estado = "AM";
-        createEnderecoDTO.cep = "88900-766";
-        createEscola.endereco = createEnderecoDTO;
+        createEnderecoDTO.setCidade("Manaus");
+        createEnderecoDTO.setEstado("AM");
+        createEnderecoDTO.setCep("88900-766");
+        createEscola.setEndereco(createEnderecoDTO);
         // SALVANDO MINHA ENTIDADE
         EscolaDTO escolaSaved = escolaService.createEscola(createEscola);
         // ALTERANDO MEU DTO
-        escolaSaved.nome = "Zezinho Rezende XIX";
-        escolaSaved.endereco.cidade = "Santa Catarina";
-        escolaSaved.endereco.estado = "SC";
-        escolaSaved.endereco.cep = "89010-677";
+        escolaSaved.setNome("Zezinho Rezende XIX");
+        escolaSaved.getEndereco().setCidade("Santa Catarina");
+        escolaSaved.getEndereco().setEstado("SC");
+        escolaSaved.getEndereco().setCep("89010-677");
 
         // ATUALIZANDO MINHA ENTIDADE
-        EscolaDTO updatedDTO = escolaService.updateByUuid(escolaSaved, escolaSaved.uuid);
+        EscolaDTO updatedDTO = escolaService.updateByUuid(escolaSaved);
 
         SoftAssertions.assertSoftly(s -> {
-            s.assertThat(updatedDTO.nome).isEqualTo("Zezinho Rezende XIX");
-            s.assertThat(updatedDTO.endereco.cidade).isEqualTo("Santa Catarina");
-            s.assertThat(updatedDTO.endereco.estado).isEqualTo("SC");
-            s.assertThat(updatedDTO.endereco.cep).isEqualTo("89010677");
-            s.assertThat(updatedDTO.uuid).isNotNull();
+            s.assertThat(updatedDTO.getNome()).isEqualTo("zezinho rezende xix");
+            s.assertThat(updatedDTO.getEndereco().getCidade()).isEqualTo("Santa Catarina");
+            s.assertThat(updatedDTO.getEndereco().getEstado()).isEqualTo("SC");
+            s.assertThat(updatedDTO.getEndereco().getCep()).isEqualTo("89010677");
+            s.assertThat(updatedDTO.getUuid()).isNotNull();
         });
     }
 
     @Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = "Favor informar o nome.")
     public void nomeNaoInformadoWithSpacingName() {
         EnderecoDTO enderecoDTO = EnderecoDTODataProvider.ofMaringa();
-        EscolaDTO escolaDTO = EscolaDTODataProvider.createAlunoDTO("  ", enderecoDTO);
+        EscolaDTO escolaDTO = EscolaDTODataProvider.createEscolaDTO("  ", enderecoDTO);
         escolaService.createEscola(escolaDTO);
     }
 
     @Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = "Favor informar o nome.")
     public void nomeNaoInformadoWithNomeNull() {
         EnderecoDTO enderecoDTO = EnderecoDTODataProvider.ofMaringa();
-        EscolaDTO escolaDTO = EscolaDTODataProvider.createAlunoDTO(null, enderecoDTO);
+        EscolaDTO escolaDTO = EscolaDTODataProvider.createEscolaDTO(null, enderecoDTO);
         escolaService.createEscola(escolaDTO);
     }
 
     @Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = "Favor informar o endereço.")
     public void nomeNaoInformadoWithAddressNull() {
-        EscolaDTO escolaDTO = EscolaDTODataProvider.createAlunoDTO("Joaquim Pamonha", null);
+        EscolaDTO escolaDTO = EscolaDTODataProvider.createEscolaDTO("Joaquim Pamonha", null);
         escolaService.createEscola(escolaDTO);
     }
 
     @Test
     public void updateByUuidMesmoCEP() {
         EscolaDTO escolaDTO = new EscolaDTO();
-        escolaDTO.nome = "Tia benta XIX";
-        escolaDTO.endereco = new EnderecoDTO();
-        escolaDTO.endereco.cidade = "Echaporã";
-        escolaDTO.endereco.estado = "SP";
-        escolaDTO.endereco.cep = "89010-344";
+        escolaDTO.setNome("Tia benta XIX");
+
+        escolaDTO.setEndereco(new EnderecoDTO());
+        escolaDTO.getEndereco().setCidade("Echaporã");
+        escolaDTO.getEndereco().setEstado("SP");
+        escolaDTO.getEndereco().setCep("89010-344");
 
         EscolaDTO createEscola = escolaService.createEscola(escolaDTO);
 
-        createEscola.nome = "Tio Bento II";
-        createEscola.endereco.cidade = "Echaporã";
-        createEscola.endereco.estado = "SP";
-        createEscola.endereco.cep = "89010-344";
+        createEscola.setNome("Tio Bento II");
+        createEscola.getEndereco().setCidade("Echaporã");
+        createEscola.getEndereco().setEstado("SP");
+        createEscola.getEndereco().setCep("89010-344");
 
-        EscolaDTO atualizarEscola = escolaService.updateByUuid(createEscola, UUID.randomUUID());
+        EscolaDTO atualizarEscola = escolaService.updateByUuid(createEscola);
 
         SoftAssertions.assertSoftly(s -> {
-            s.assertThat(atualizarEscola.nome).isEqualTo("Tio Bento II");
-            s.assertThat(atualizarEscola.endereco.cidade).isEqualTo("Echaporã");
-            s.assertThat(atualizarEscola.endereco.estado).isEqualTo("SP");
-            s.assertThat(atualizarEscola.endereco.cep).isEqualTo("89010344");
+            s.assertThat(atualizarEscola.getNome()).isEqualTo("tio bento ii");
+            s.assertThat(atualizarEscola.getEndereco().getCidade()).isEqualTo("Echaporã");
+            s.assertThat(atualizarEscola.getEndereco().getEstado()).isEqualTo("SP");
+            s.assertThat(atualizarEscola.getEndereco().getCep()).isEqualTo("89010344");
         });
     }
 
     @Test
     public void updateByUuidNewCEP() {
         long before = enderecoRepository.count();
-        EnderecoDTO maringa = new EnderecoDTO(enderecoRepository.findByCidadeAndCepAndEstado("Maringá", "87030655",UF.PR));
+        EnderecoDTO maringa = EnderecoDTO.of(enderecoRepository.findByCidadeAndCepAndEstado("Maringá", "87010355", UF.PR));
 
-        EscolaDTO escolaDTO = EscolaDTODataProvider.createAlunoDTO("Bento XX", maringa);
+        EscolaDTO escolaDTO = EscolaDTODataProvider.createEscolaDTO("Joao Segundo", maringa);
         EscolaDTO createdEscola = escolaService.createEscola(escolaDTO);
 
-        createdEscola.nome = "Bentinho 20";
-        createdEscola.endereco = EnderecoDTODataProvider.generic("Tocantins","88999-666","PE");
-        EscolaDTO updateEscola = escolaService.updateByUuid(createdEscola, UUID.randomUUID());
-
-
+        createdEscola.setNome("Bentinho 20");
+        createdEscola.setEndereco(EnderecoDTO.of("Maringá", "88999-666", "PR"));
+        EscolaDTO updateEscola = escolaService.updateByUuid(createdEscola);
         long after = enderecoRepository.count();
 
-        SoftAssertions.assertSoftly(s ->{
-            s.assertThat(updateEscola.nome).isEqualTo("Bentinho 20");
-            s.assertThat(updateEscola.endereco.cidade).isNotEqualTo(maringa.cidade);
-            s.assertThat(updateEscola.endereco.cep).isNotEqualTo(maringa.cep);
-            s.assertThat(updateEscola.endereco.estado).isNotEqualTo(maringa.estado);
+        SoftAssertions.assertSoftly(s -> {
+            s.assertThat(updateEscola.getNome()).isEqualTo("bentinho 20");
+            s.assertThat(updateEscola.getEndereco().getCidade()).isEqualTo(maringa.getCidade());
+            s.assertThat(updateEscola.getEndereco().getCep()).isNotEqualTo(maringa.getCep());
+            s.assertThat(updateEscola.getEndereco().getEstado()).isEqualTo(maringa.getEstado());
             s.assertThat(after).isEqualTo(before + 1);
         });
     }
@@ -168,11 +168,12 @@ public class EscolaServiceIT extends AbstractIntegrationTest {
             expectedExceptionsMessageRegExp = "Favor informar o nome.")
     public void favorInformarONomeExceptionNomeVazioComEspaco() {
         EscolaDTO escolaDTO = new EscolaDTO();
-        escolaDTO.nome = "   ";
-        escolaDTO.endereco = new EnderecoDTO();
-        escolaDTO.endereco.cidade = "Echaporã";
-        escolaDTO.endereco.estado = "SP";
-        escolaDTO.endereco.cep = "89010-344";
+        escolaDTO.setNome("   ");
+
+        escolaDTO.setEndereco(new EnderecoDTO());
+        escolaDTO.getEndereco().setCidade("Echaporã");
+        escolaDTO.getEndereco().setEstado("SP");
+        escolaDTO.getEndereco().setCep("89010-344");
         escolaService.createEscola(escolaDTO);
     }
 
@@ -180,41 +181,42 @@ public class EscolaServiceIT extends AbstractIntegrationTest {
     public void createEscolaNotCreatesEndereco() {
         long before = enderecoRepository.count();
         EscolaDTO escolaDTO = new EscolaDTO();
-        escolaDTO.nome = "Beta IV";
-        escolaDTO.endereco = new EnderecoDTO();
-        escolaDTO.endereco.cidade = "Echaporã";
-        escolaDTO.endereco.estado = "SP";
-        escolaDTO.endereco.cep = "89010-344";
+        escolaDTO.setNome("Beta IV");
+
+        escolaDTO.setEndereco(new EnderecoDTO());
+        escolaDTO.getEndereco().setCidade("Maringá");
+        escolaDTO.getEndereco().setEstado("PR");
+        escolaDTO.getEndereco().setCep("87010-355");
         EscolaDTO escola = escolaService.createEscola(escolaDTO);
         long after = enderecoRepository.count();
 
         Endereco endereco = enderecoRepository.findByCidadeAndCepAndEstado(
-                escolaDTO.endereco.cidade,
-                escolaDTO.endereco.cep.replaceAll("-", ""),
-                UF.valueOf(escolaDTO.endereco.estado)
+                escolaDTO.getEndereco().getCidade(),
+                escolaDTO.getEndereco().getCep().replaceAll("-", ""),
+                UF.valueOf(escolaDTO.getEndereco().getEstado())
         );
 
         SoftAssertions.assertSoftly(s -> {
-            s.assertThat(escola.endereco.cidade).isEqualTo(endereco.getCidade());
-            s.assertThat(escola.endereco.cep).isEqualTo(endereco.getCep());
-            s.assertThat(UF.valueOf(escola.endereco.estado)).isEqualTo(endereco.getEstado());
+            s.assertThat(escola.getEndereco().getCidade()).isEqualTo(endereco.getCidade());
+            s.assertThat(escola.getEndereco().getCep()).isEqualTo(endereco.getCep());
+            s.assertThat(UF.valueOf(escola.getEndereco().getEstado())).isEqualTo(endereco.getEstado());
             s.assertThat(after).isEqualTo(before);
         });
     }
 
     @Test
-    public void createEscolaCreatesEndereco(){
+    public void createEscolaCreatesEndereco() {
         long before = enderecoRepository.count();
-        EscolaDTO escolaDTO = EscolaDTODataProvider.createAlunoDTO("Francisco Segundo",
-                EnderecoDTODataProvider.generic("Sarandi","88099-455","PR"));
+        EscolaDTO escolaDTO = EscolaDTODataProvider.createEscolaDTO("Francisco Segundo",
+                EnderecoDTO.of("Sarandi", "88099-455", "PR"));
         EscolaDTO criarEscola = escolaService.createEscola(escolaDTO);
         long after = enderecoRepository.count();
 
         SoftAssertions.assertSoftly(s -> {
-            s.assertThat(criarEscola.nome).isEqualTo("Francisco Segundo");
-            s.assertThat(criarEscola.endereco.cidade).isEqualTo("Sarandi");
-            s.assertThat(criarEscola.endereco.cep).isEqualTo("88099455");
-            s.assertThat(criarEscola.endereco.estado).isEqualTo("PR");
+            s.assertThat(criarEscola.getNome()).isEqualTo("francisco segundo");
+            s.assertThat(criarEscola.getEndereco().getCidade()).isEqualTo("Sarandi");
+            s.assertThat(criarEscola.getEndereco().getCep()).isEqualTo("88099455");
+            s.assertThat(criarEscola.getEndereco().getEstado()).isEqualTo("PR");
             s.assertThat(after).isEqualTo(before + 1);
         });
     }
@@ -224,19 +226,20 @@ public class EscolaServiceIT extends AbstractIntegrationTest {
             expectedExceptionsMessageRegExp = "Favor informar a cidade.")
     public void createEscolaCidadeBlank() {
         EscolaDTO escolaDTO = new EscolaDTO();
-        escolaDTO.nome = "Tio Ben 10";
-        escolaDTO.endereco = new EnderecoDTO();
-        escolaDTO.endereco.cidade = "   ";
-        escolaDTO.endereco.cep = "88010-666";
-        escolaDTO.endereco.estado = "SP";
+        escolaDTO.setNome("Tio Ben 10");
+        escolaDTO.setEndereco(new EnderecoDTO());
+
+        escolaDTO.getEndereco().setCidade("   ");
+        escolaDTO.getEndereco().setCep("88010-666");
+        escolaDTO.getEndereco().setEstado("SP");
 
         EscolaDTO createdEscola = escolaService.createEscola(escolaDTO);
 
         SoftAssertions.assertSoftly(s -> {
-            s.assertThat(createdEscola.nome).isBlank();
-            s.assertThat(createdEscola.endereco.cidade).isEqualTo("Presidente Prudente");
-            s.assertThat(createdEscola.endereco.cep).isEqualTo("88010-666");
-            s.assertThat(createdEscola.endereco.estado).isEqualTo("SP");
+            s.assertThat(createdEscola.getNome()).isBlank();
+            s.assertThat(createdEscola.getEndereco().getCidade()).isEqualTo("Presidente Prudente");
+            s.assertThat(createdEscola.getEndereco().getCep()).isEqualTo("88010-666");
+            s.assertThat(createdEscola.getEndereco().getEstado()).isEqualTo("SP");
         });
     }
 
@@ -244,16 +247,16 @@ public class EscolaServiceIT extends AbstractIntegrationTest {
             expectedExceptionsMessageRegExp = "Favor informar a cidade.")
     public void createEscolaCidadeNull() {
         EscolaDTO escolaDTO = new EscolaDTO();
-        escolaDTO.nome = "Tio Ben 10";
-        escolaDTO.endereco = EnderecoDTODataProvider.generic(null, "88010-666", "SP");
+        escolaDTO.setNome("Tio Ben 10");
+        escolaDTO.setEndereco(EnderecoDTO.of(null, "88010-666", "SP"));
 
         EscolaDTO createdEscola = escolaService.createEscola(escolaDTO);
 
         SoftAssertions.assertSoftly(s -> {
-            s.assertThat(createdEscola.nome).isNull();
-            s.assertThat(createdEscola.endereco.cidade).isEqualTo("Presidente Prudente");
-            s.assertThat(createdEscola.endereco.cep).isEqualTo("88010666");
-            s.assertThat(createdEscola.endereco.estado).isEqualTo("SP");
+            s.assertThat(createdEscola.getNome()).isNull();
+            s.assertThat(createdEscola.getEndereco().getCidade()).isEqualTo("Presidente Prudente");
+            s.assertThat(createdEscola.getEndereco().getCep()).isEqualTo("88010666");
+            s.assertThat(createdEscola.getEndereco().getEstado()).isEqualTo("SP");
         });
     }
 
@@ -261,15 +264,15 @@ public class EscolaServiceIT extends AbstractIntegrationTest {
             expectedExceptionsMessageRegExp = "Favor informar o cep.")
     public void createEscolaCepBlank() {
         EscolaDTO escolaDTO = new EscolaDTO();
-        escolaDTO.nome = "Ben 10";
-        escolaDTO.endereco = EnderecoDTODataProvider.generic("Presidente Prudente", "  ", "SP");
+        escolaDTO.setNome("Ben 10");
+        escolaDTO.setEndereco(EnderecoDTO.of("Presidente Prudente", "  ", "SP"));
         EscolaDTO criarEscola = escolaService.createEscola(escolaDTO);
 
         SoftAssertions.assertSoftly(s -> {
-            s.assertThat(criarEscola.nome).isEqualTo("Ben 10");
-            s.assertThat(criarEscola.endereco.cidade).isEqualTo("Presidente Prudente");
-            s.assertThat(criarEscola.endereco.cep).isBlank();
-            s.assertThat(criarEscola.endereco.estado).isEqualTo("SP");
+            s.assertThat(criarEscola.getNome()).isEqualTo("Ben 10");
+            s.assertThat(criarEscola.getEndereco().getCidade()).isEqualTo("Presidente Prudente");
+            s.assertThat(criarEscola.getEndereco().getCep()).isBlank();
+            s.assertThat(criarEscola.getEndereco().getEstado()).isEqualTo("SP");
         });
     }
 

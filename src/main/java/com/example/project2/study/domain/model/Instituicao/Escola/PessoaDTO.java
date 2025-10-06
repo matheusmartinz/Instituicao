@@ -4,19 +4,44 @@ import com.example.project2.study.domain.model.Instituicao.Escola.Endereco.Ender
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Professor.ProfessorDTO;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
+@Getter
 public class PessoaDTO {
-    public String nome;
-    public String cpf;
-    public String email;
-    public PessoaTelefoneDTO telefone;
-    public EnderecoDTO endereco;
-    public UUID uuid;
+    @Setter
+    protected String nome;
+    protected String cpf;
+    @Setter
+    protected String email;
+    @Setter
+    protected PessoaTelefoneDTO telefone;
+    @Setter
+    protected EnderecoDTO endereco;
+    protected UUID uuid;
+
+    public PessoaDTO(AlunoDTO alunoDTO) {
+        this.nome = alunoDTO.getNome();
+        this.cpf = alunoDTO.getCpf();
+        this.email = alunoDTO.getEmail();
+        this.telefone = alunoDTO.getTelefone();
+        this.endereco = alunoDTO.getEndereco();
+        this.uuid = alunoDTO.getUuid();
+    }
+
+    public PessoaDTO(ProfessorDTO professorDTO) {
+        this.nome = professorDTO.getNome();
+        this.cpf = professorDTO.getCpf();
+        this.email = professorDTO.getEmail();
+        this.telefone = professorDTO.getTelefone();
+        this.endereco = professorDTO.getEndereco();
+        this.uuid = professorDTO.getUuid();
+    }
 
 
     public static List<PessoaDTO> listOfPessoaDTO(List<Pessoa> pessoas) {
@@ -27,31 +52,20 @@ public class PessoaDTO {
         this.nome = pessoa.getNome();
         this.telefone = new PessoaTelefoneDTO(pessoa.getTelefone());
         this.cpf = pessoa.getCpf();
-        this.endereco = new EnderecoDTO(pessoa.getEndereco());
+        this.endereco = EnderecoDTO.of(pessoa.getEndereco());
         this.email = pessoa.getEmail();
         this.uuid = pessoa.getUuid();
     }
 
     public static PessoaDTO of(AlunoDTO alunoDTO) {
-        PessoaDTO toReturn = new PessoaDTO();
-        toReturn.nome = alunoDTO.nome;
-        toReturn.cpf = alunoDTO.cpf;
-        toReturn.email = alunoDTO.email;
-        toReturn.telefone = alunoDTO.telefone;
-        toReturn.endereco = alunoDTO.endereco;
-        toReturn.uuid = alunoDTO.uuid;
-        return toReturn;
-
+        return new PessoaDTO(alunoDTO);
     }
 
     public static PessoaDTO of(ProfessorDTO professorDTO) {
-        PessoaDTO toReturn = new PessoaDTO();
-        toReturn.nome = professorDTO.nome;
-        toReturn.cpf = professorDTO.cpf;
-        toReturn.email = professorDTO.email;
-        toReturn.telefone = professorDTO.telefone;
-        toReturn.endereco = professorDTO.endereco;
-        toReturn.uuid = professorDTO.uuid;
-        return toReturn;
+        return new PessoaDTO(professorDTO);
+    }
+
+    public void alterarCpf(String cpf) {
+        this.cpf = cpf;
     }
 }

@@ -34,9 +34,9 @@ public class EscolaRestController extends SuperRestController {
         return ResponseEntity.status(HttpStatus.OK).body(listarEscola);
     }
 
-    @PutMapping("/{uuid}")
-    public ResponseEntity<EscolaDTO> atualizacaoEscola(@RequestBody EscolaDTO escolaDTO, @PathVariable UUID uuid) {
-     EscolaDTO atualizarEscola = escolaService.updateByUuid(escolaDTO, uuid);
+    @PutMapping
+    public ResponseEntity<EscolaDTO> atualizacaoEscola(@RequestBody EscolaDTO escolaDTO) {
+     EscolaDTO atualizarEscola = escolaService.updateByUuid(escolaDTO);
      return ResponseEntity.ok(atualizarEscola);
     }
 

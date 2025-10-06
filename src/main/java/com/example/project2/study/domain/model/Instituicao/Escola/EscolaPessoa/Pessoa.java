@@ -6,12 +6,14 @@ import com.example.project2.study.domain.model.Instituicao.Endereco;
 import com.example.project2.study.domain.model.Instituicao.Escola.Escola;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoDTO;
+import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.CargaHorariaPorDisciplina;
 import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
 import com.example.project2.study.domain.model.Instituicao.Tarefa;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,6 +52,7 @@ public class Pessoa extends EntidadeIdUUID {
     private SerieAno serie;
     @OneToMany
     private List<Tarefa> tarefas = new LinkedList<>();
+    private Integer cargaHoraria;
 
 
     //Dados Professor
@@ -62,34 +65,42 @@ public class Pessoa extends EntidadeIdUUID {
         return pessoas.stream().map(Pessoa::new).toList();
     }
 
+    public List<Disciplina> getDisciplinas() {
+        return List.copyOf(disciplinas);
+    }
+
     protected Pessoa(PessoaDTO pessoaDTO) {
-        this.setNome(pessoaDTO.nome);
-        this.setCpf(pessoaDTO.cpf);
-        this.setEmail(pessoaDTO.email);
+        this.setNome(pessoaDTO.getNome());
+        this.setCpf(pessoaDTO.getCpf());
+        this.setEmail(pessoaDTO.getEmail());
         this.setTelefone(getTelefone(pessoaDTO));
         this.setEndereco(getEndereco(pessoaDTO));
     }
 
     public Pessoa(AlunoDTO pessoaDTO) {
-        this.setNome(pessoaDTO.nome);
-        this.setCpf(pessoaDTO.cpf);
-        this.setEmail(pessoaDTO.email);
+        this.setNome(pessoaDTO.getNome());
+        this.setCpf(pessoaDTO.getCpf());
+        this.setEmail(pessoaDTO.getEmail());
         this.setTelefone(getTelefone(pessoaDTO));
         this.setEndereco(getEndereco(pessoaDTO));
-        this.setMatricula(pessoaDTO.matricula);
+        this.setMatricula(pessoaDTO.getMatricula());
         this.setTipoPessoa(TipoPessoa.ALUNO);
-        this.setSerie(SerieAno.from(pessoaDTO.serieAno));
+        this.setSerie(SerieAno.from(pessoaDTO.getSerieAno()));
+        this.setDisciplinas(pessoaDTO.getDisciplinas());
+        this.setCargaHoraria(pessoaDTO.getCargaHoraria());
     }
 
+
+
     private static Endereco getEndereco(PessoaDTO pessoaDTO) {
-        return ofNullable(pessoaDTO.endereco)
-                .map(e -> new Endereco(pessoaDTO.endereco))
+        return ofNullable(pessoaDTO.getEndereco())
+                .map(e -> Endereco.of(pessoaDTO.getEndereco()))
                 .orElse(null);
     }
 
     private static PessoaTelefone getTelefone(PessoaDTO pessoaDTO) {
-        return ofNullable(pessoaDTO.telefone)
-                .map(e -> new PessoaTelefone(pessoaDTO.telefone))
+        return ofNullable(pessoaDTO.getTelefone())
+                .map(e -> new PessoaTelefone(pessoaDTO.getTelefone()))
                 .orElse(null);
     }
 
@@ -99,8 +110,29 @@ public class Pessoa extends EntidadeIdUUID {
     }
 
     public void updateDados(AlunoDTO alunoDTO) {
-        this.setNome(alunoDTO.nome);
-        this.setTelefone(new PessoaTelefone(alunoDTO.telefone));
-        this.setSerie(SerieAno.from(alunoDTO.serieAno));
+        this.setNome(alunoDTO.getNome());
+        this.setTelefone(new PessoaTelefone(alunoDTO.getTelefone()));
+        this.setSerie(SerieAno.from(alunoDTO.getSerieAno()));
+        this.setDisciplinas(alunoDTO.getDisciplinas());
+    }
+
+    public void removeDisciplina(Disciplina disciplina) {
+        this.disciplinas.remove(disciplina);
+        updateCargaHoraria();
+    }
+
+    public void updateDisciplinas(List<Disciplina> disciplinas) {
+        this.disciplinas.clear();
+        this.disciplinas.addAll(disciplinas);
+        updateCargaHoraria();
+    }
+
+    public void updateDisciplina(Disciplina disciplina) {
+        this.disciplinas.add(disciplina);
+        updateCargaHoraria();
+    }
+
+    private void updateCargaHoraria() {
+        this.setCargaHoraria(CargaHorariaPorDisciplina.getCargaHoraria(this.disciplinas, this.serie.getValor()));
     }
 }

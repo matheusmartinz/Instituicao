@@ -5,18 +5,20 @@ import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.A
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaTelefoneDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
 
+import java.util.UUID;
+
 public class AlunoDTODataProvider {
 
     public static AlunoDTO createAlunoDTO(String serie, String nome,
                                           String cpf, EnderecoDTO enderecoDTO,
                                           String email, PessoaTelefoneDTO telefoneDTO) {
         AlunoDTO alunoDTO = new AlunoDTO();
-        alunoDTO.nome = nome;
-        alunoDTO.serieAno = serie == null ? null : serie;
-        alunoDTO.cpf = cpf;
-        alunoDTO.endereco = enderecoDTO;
-        alunoDTO.email = email;
-        alunoDTO.telefone = telefoneDTO;
+        alunoDTO.setNome(nome);
+        alunoDTO.setSerieAno(serie);
+        alunoDTO.alterarCpf(cpf);
+        alunoDTO.setEndereco(enderecoDTO);
+        alunoDTO.setEmail(email);
+        alunoDTO.setTelefone(telefoneDTO);
         return alunoDTO;
     }
 
