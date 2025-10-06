@@ -6,7 +6,6 @@ import com.example.project2.study.AbstractIntegrationTest;
 import com.example.project2.study.domain.model.Instituicao.Disciplina;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoDTO;
-import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoRepository;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoService;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.CargaHorariaPorDisciplina;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.PessoaRepository;
@@ -26,10 +25,10 @@ public class ProfessorServiceIT extends AbstractIntegrationTest {
 
     @Autowired
     AlunoService alunoService;
-    @Autowired
-    private AlunoRepository alunoRepository;
+
     @Autowired
     private PessoaRepository pessoaRepository;
+
     @Autowired
     private ProfessorService professorService;
 

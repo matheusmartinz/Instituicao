@@ -13,7 +13,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -89,7 +88,6 @@ public class Pessoa extends EntidadeIdUUID {
         this.setDisciplinas(pessoaDTO.getDisciplinas());
         this.setCargaHoraria(pessoaDTO.getCargaHoraria());
     }
-
 
 
     private static Endereco getEndereco(PessoaDTO pessoaDTO) {
