@@ -26,6 +26,7 @@ public class AlunoDTO extends PessoaDTO {
     private List<Disciplina> disciplinas = new LinkedList<>();
     private String serieAno;
     private Integer cargaHoraria = 0;
+    private boolean bolsista;
 
 
     public static List<AlunoDTO> listOf(List<Pessoa> alunos) {
@@ -48,6 +49,7 @@ public class AlunoDTO extends PessoaDTO {
                 .map(EnderecoDTO::of)
                 .orElse(null);
         this.cargaHoraria = aluno.getCargaHoraria();
+        this.bolsista = aluno.getBolsista();
     }
 
     public void addDisciplina(Disciplina disciplina) {

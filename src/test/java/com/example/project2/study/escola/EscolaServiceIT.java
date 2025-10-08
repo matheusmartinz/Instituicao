@@ -1,8 +1,8 @@
-package escola;
+package com.example.project2.study.escola;
 
-import DataProviders.EnderecoDTODataProvider;
-import DataProviders.EscolaDTODataProvider;
-import com.example.project2.study.AbstractIntegrationTest;
+import com.example.project2.study.DataProviders.EnderecoDTODataProvider;
+import com.example.project2.study.DataProviders.EscolaDTODataProvider;
+import com.example.project2.study.AbstractIntegrationIT;
 import com.example.project2.study.domain.Repositories.EscolaRepository;
 import com.example.project2.study.domain.model.Instituicao.Endereco;
 import com.example.project2.study.domain.model.Instituicao.Escola.Endereco.EnderecoDTO;
@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.UUID;
 
-public class EscolaServiceIT extends AbstractIntegrationTest {
+public class EscolaServiceIT extends AbstractIntegrationIT {
 
     @Autowired
     EscolaService escolaService;

@@ -52,6 +52,7 @@ public class Pessoa extends EntidadeIdUUID {
     @OneToMany
     private List<Tarefa> tarefas = new LinkedList<>();
     private Integer cargaHoraria;
+    private Boolean bolsista;
 
 
     //Dados Professor
@@ -87,6 +88,7 @@ public class Pessoa extends EntidadeIdUUID {
         this.setSerie(SerieAno.from(pessoaDTO.getSerieAno()));
         this.setDisciplinas(pessoaDTO.getDisciplinas());
         this.setCargaHoraria(pessoaDTO.getCargaHoraria());
+        this.setBolsista(pessoaDTO.isBolsista());
     }
 
 
@@ -132,5 +134,9 @@ public class Pessoa extends EntidadeIdUUID {
 
     private void updateCargaHoraria() {
         this.setCargaHoraria(CargaHorariaPorDisciplina.getCargaHoraria(this.disciplinas, this.serie.getValor()));
+    }
+
+    public boolean isBolsista() {
+        return bolsista;
     }
 }

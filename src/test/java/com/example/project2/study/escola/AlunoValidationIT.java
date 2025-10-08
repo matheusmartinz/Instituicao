@@ -1,6 +1,6 @@
-package escola;
+package com.example.project2.study.escola;
 
-import com.example.project2.study.AbstractIntegrationTest;
+import com.example.project2.study.AbstractIntegrationIT;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoValidation;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AlunoValidationTest extends AbstractIntegrationTest {
+public class AlunoValidationIT extends AbstractIntegrationIT {
 
     @Autowired
     private AlunoValidation alunoValidation;

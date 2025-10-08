@@ -1,4 +1,4 @@
-package DataProviders;
+package com.example.project2.study.DataProviders;
 
 import com.example.project2.study.domain.model.Empresa.Genero;
 import com.example.project2.study.domain.model.Empresa.JogoIndependenteDTO;

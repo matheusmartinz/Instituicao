@@ -1,8 +1,8 @@
-package escola;
+package com.example.project2.study.escola;
 
-import DataProviders.AlunoDTODataProvider;
-import DataProviders.EnderecoDTODataProvider;
-import com.example.project2.study.AbstractIntegrationTest;
+import com.example.project2.study.DataProviders.AlunoDTODataProvider;
+import com.example.project2.study.DataProviders.EnderecoDTODataProvider;
+import com.example.project2.study.AbstractIntegrationIT;
 import com.example.project2.study.domain.model.Instituicao.Disciplina;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaPessoa.Pessoa;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoDTO;
@@ -18,7 +18,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.UUID;
 
-public class ProfessorServiceIT extends AbstractIntegrationTest {
+public class ProfessorServiceIT extends AbstractIntegrationIT {
 
     public static UUID uuidEscolaValido =
             UUID.fromString("e655c7e1-742a-42f4-9eba-b69e344c728c");
@@ -35,7 +35,7 @@ public class ProfessorServiceIT extends AbstractIntegrationTest {
     @Test
     public void addDisciplinaAluno() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO(SerieAno.QUARTO_ANO.getValor(), "José Silva",
-                "43325789300", EnderecoDTODataProvider.ofMaringa(), "josé@gmail.com", null
+                "43325789300", EnderecoDTODataProvider.ofMaringa(), "josé@gmail.com", null, Boolean.FALSE
         );
         SoftAssertions.assertSoftly(s -> {
             s.assertThat(alunoDTO).isNotNull();

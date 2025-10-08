@@ -2,16 +2,15 @@ package com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.
 
 import com.example.project2.study.domain.model.Instituicao.Disciplina;
 import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
+import lombok.NoArgsConstructor;
 
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+@NoArgsConstructor
 public class CargaHorariaPorDisciplina {
     private static final Map<SerieAno, Map<Disciplina, Integer>> cargaHorariaPorSerie = new EnumMap<>(SerieAno.class);
-
-    private CargaHorariaPorDisciplina() {
-    }
 
     private static void adicionarCargaHoraria(SerieAno serie, Map<Disciplina, Integer> disciplinas) {
         cargaHorariaPorSerie.put(serie, new EnumMap<>(disciplinas));

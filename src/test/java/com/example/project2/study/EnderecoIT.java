@@ -6,7 +6,7 @@ import com.example.project2.study.domain.model.Instituicao.Escola.UF;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 
-public class EnderecoTest {
+public class EnderecoIT extends AbstractIntegrationIT {
 
 //    @Autowired
 //    private EnderecoService enderecoService;

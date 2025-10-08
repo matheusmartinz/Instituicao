@@ -1,4 +1,4 @@
-package DataProviders;
+package com.example.project2.study.DataProviders;
 
 import com.example.project2.study.domain.model.Instituicao.Escola.Endereco.EnderecoDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.Aluno.AlunoDTO;
@@ -8,7 +8,7 @@ public class AlunoDTODataProvider {
 
     public static AlunoDTO createAlunoDTO(String serie, String nome,
                                           String cpf, EnderecoDTO enderecoDTO,
-                                          String email, PessoaTelefoneDTO telefoneDTO) {
+                                          String email, PessoaTelefoneDTO telefoneDTO, Boolean bolsista) {
         AlunoDTO alunoDTO = new AlunoDTO();
         alunoDTO.setNome(nome);
         alunoDTO.setSerieAno(serie);
@@ -16,6 +16,7 @@ public class AlunoDTODataProvider {
         alunoDTO.setEndereco(enderecoDTO);
         alunoDTO.setEmail(email);
         alunoDTO.setTelefone(telefoneDTO);
+        alunoDTO.setBolsista(bolsista);
         return alunoDTO;
     }
 

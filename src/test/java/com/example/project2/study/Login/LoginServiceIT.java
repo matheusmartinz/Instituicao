@@ -1,6 +1,6 @@
 package Instituicao.Login;
 
-import com.example.project2.study.AbstractIntegrationTest;
+import com.example.project2.study.AbstractIntegrationIT;
 import com.example.project2.study.Exceptions.LoginExceptions;
 import com.example.project2.study.domain.Repositories.LoginRepository;
 import com.example.project2.study.domain.model.Instituicao.Login.LoginDTO;
@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 
 import java.util.UUID;
 
-public class LoginServiceIT extends AbstractIntegrationTest {
+public class LoginServiceIT extends AbstractIntegrationIT {
 
     @Autowired
     LoginService loginService;

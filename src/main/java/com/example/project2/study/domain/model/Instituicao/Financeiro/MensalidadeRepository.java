@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface MensalidadeRepository extends JpaRepository<Mensalidade, Integer> {
-    Mensalidade findByUuid(UUID uuidAluno);
+public interface MensalidadeRepository extends JpaRepository<Mensalidade, Long> {
+    Mensalidade findByUuid(UUID uuidMensalidade);
 }

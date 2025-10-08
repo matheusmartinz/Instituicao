@@ -8,7 +8,7 @@ import com.example.project2.study.domain.model.Carro.Cor;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 
-public class AnimalIT {
+public class AnimalIT extends AbstractIntegrationIT {
 
     @Test
     public void cachorro() {

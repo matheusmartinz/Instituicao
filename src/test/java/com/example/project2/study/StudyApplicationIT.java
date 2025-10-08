@@ -1,10 +1,8 @@
 package com.example.project2.study;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class StudyApplicationTests {
+class StudyApplicationIT extends AbstractIntegrationIT {
 
 	@Test
 	void contextLoads() {

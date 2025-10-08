@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-public class CarroDTOTest {
+public class CarroDTOIT extends AbstractIntegrationIT {
 
     @Test
     public void test() {

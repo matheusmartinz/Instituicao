@@ -43,7 +43,6 @@ public class PessoaDTO {
         this.uuid = professorDTO.getUuid();
     }
 
-
     public static List<PessoaDTO> listOfPessoaDTO(List<Pessoa> pessoas) {
         return pessoas.stream().map(PessoaDTO::new).toList();
     }

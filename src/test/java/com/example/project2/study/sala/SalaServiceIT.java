@@ -1,25 +1,17 @@
-package sala;
+package com.example.project2.study.sala;
 
-import com.example.project2.study.AbstractIntegrationTest;
+import com.example.project2.study.AbstractIntegrationIT;
 import com.example.project2.study.StudyApplication;
 import com.example.project2.study.domain.Repositories.EscolaRepository;
-import com.example.project2.study.domain.model.Instituicao.Escola.Escola;
-import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.Sala;
-import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.SalaDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.SalaRepository;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaSala.SalaService;
-import com.example.project2.study.domain.model.Instituicao.Escola.SerieAno;
-import org.assertj.core.api.SoftAssertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.testng.annotations.Test;
-
-import java.util.UUID;
 
 @SpringBootTest(classes = StudyApplication.class)
 @ActiveProfiles("test")
-public class SalaServiceIT extends AbstractIntegrationTest {
+public class SalaServiceIT extends AbstractIntegrationIT {
 
     @Autowired
     private SalaService salaService;

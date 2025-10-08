@@ -1,9 +1,9 @@
-package escola;
+package com.example.project2.study.escola;
 
-import DataProviders.AlunoDTODataProvider;
-import DataProviders.EnderecoDTODataProvider;
-import DataProviders.PessoaTelefoneDTODataProvider;
-import com.example.project2.study.AbstractIntegrationTest;
+import com.example.project2.study.AbstractIntegrationIT;
+import com.example.project2.study.DataProviders.AlunoDTODataProvider;
+import com.example.project2.study.DataProviders.EnderecoDTODataProvider;
+import com.example.project2.study.DataProviders.PessoaTelefoneDTODataProvider;
 import com.example.project2.study.domain.Repositories.EscolaRepository;
 import com.example.project2.study.domain.model.Instituicao.Disciplina;
 import com.example.project2.study.domain.model.Instituicao.Escola.Endereco.EnderecoDTO;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.UUID;
 
 
-public class AlunoServiceIT extends AbstractIntegrationTest {
+public class AlunoServiceIT extends AbstractIntegrationIT {
     public static String emailMatheus =
             "matheus@gmail";
     public static UUID uuidEscolaValido =
@@ -56,7 +56,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     public void necessarioInformarSerieAlunoException() {
         int before = escolaRepository.findByUuid(uuidEscolaValido).getPessoas().size();
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO(null, "José Almeida", null,
-                null, emailMatheus, null);
+                null, emailMatheus, null, Boolean.FALSE);
         alunoService.createAluno(alunoDTO, uuidEscolaValido);
         int after = escolaRepository.findByUuid(uuidEscolaValido).getPessoas().size();
         SoftAssertions.assertSoftly(s -> {
@@ -103,7 +103,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     @SneakyThrows
     public void necessarioInformarNomeComEspacamento() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "    ", "11085139999",
-                null, emailMatheus, null);
+                null, emailMatheus, null, Boolean.FALSE);
         alunoService.createAluno(alunoDTO, uuidEscolaValido);
     }
 
@@ -112,7 +112,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     @SneakyThrows
     public void necessarioInformarNomeNull() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", null, "11085139999",
-                null, emailMatheus, null);
+                null, emailMatheus, null, Boolean.FALSE);
         alunoService.createAluno(alunoDTO, uuidEscolaValido);
     }
 
@@ -122,7 +122,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     @SneakyThrows
     public void necessarioInformarCpfAluno() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "José Almeida", null, null,
-                emailMatheus, null);
+                emailMatheus, null, Boolean.FALSE);
         alunoService.createAluno(alunoDTO, uuidEscolaValido);
     }
 
@@ -131,7 +131,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     @SneakyThrows
     public void formatoDoCpfInvalido() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "José Almeida",
-                "110.851.399-9", null, emailMatheus, null);
+                "110.851.399-9", null, emailMatheus, null, Boolean.FALSE);
         alunoService.createAluno(alunoDTO, uuidEscolaValido);
     }
 
@@ -140,7 +140,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     @SneakyThrows
     public void necessarioInformarCpfAlunoSemCpf() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "José Almeida", null, null,
-                emailMatheus, null);
+                emailMatheus, null, Boolean.FALSE);
         alunoService.createAluno(alunoDTO, uuidEscolaValido);
     }
 
@@ -149,7 +149,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     @SneakyThrows
     public void necessarioInformarEnderecoAlunoComCpf() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "ANDRÉ FRANCO",
-                "110.851.399-99", null, emailMatheus, null);
+                "110.851.399-99", null, emailMatheus, null, Boolean.FALSE);
         alunoService.createAluno(alunoDTO, uuidEscolaValido);
     }
 
@@ -158,7 +158,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     @SneakyThrows
     public void necessarioInformarEmailAlunoSemEmail() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("2°", "ANDRÉ FRANCO",
-                "110.851.399-99", EnderecoDTODataProvider.ofMaringa(), null, null);
+                "110.851.399-99", EnderecoDTODataProvider.ofMaringa(), null, null, Boolean.FALSE);
         alunoService.createAluno(alunoDTO, uuidEscolaValido);
     }
 
@@ -168,7 +168,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     public void escolaNaoEncontrada() {
         UUID uuidOutraEntidade = uuidSala;
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "José Almeida",
-                "110.851.399-99", EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
+                "110.851.399-99", EnderecoDTODataProvider.ofMaringa(), emailMatheus, null, Boolean.FALSE);
         alunoService.createAluno(alunoDTO, uuidOutraEntidade);
     }
 
@@ -177,7 +177,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     @SneakyThrows
     public void salaNaoEncontrada() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("1°", "José Almeida",
-                "11085139999", EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
+                "11085139999", EnderecoDTODataProvider.ofMaringa(), emailMatheus, null, Boolean.FALSE);
         Escola escola = escolaService.load(uuidEscolaValido);
         escola.getSalas().clear();
         escolaService.update(escola);
@@ -189,7 +189,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     @SneakyThrows
     public void alunoCriadoComSucesso() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("4°", "José Carlos",
-                "220.567.432-11", EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
+                "220.567.432-11", EnderecoDTODataProvider.ofMaringa(), emailMatheus, null, Boolean.FALSE);
 
         AlunoDTO alunoDTOFinal = alunoService.createAluno(alunoDTO, uuidEscolaValido);
 
@@ -220,7 +220,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
         Integer capacidadeAlunosAntes = sala.getCapacidadeAlunos();
 
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("4°", "José Almeida",
-                "110.851.399-99", EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
+                "110.851.399-99", EnderecoDTODataProvider.ofMaringa(), emailMatheus, null, Boolean.FALSE);
 
         alunoService.createAluno(alunoDTO, uuidEscolaValido);
 
@@ -235,7 +235,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     @Test
     public void alunoComTelefone() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO("4°", "André", "88899944455",
-                EnderecoDTODataProvider.ofMaringa(), emailMatheus, PessoaTelefoneDTODataProvider.ofTelefone());
+                EnderecoDTODataProvider.ofMaringa(), emailMatheus, PessoaTelefoneDTODataProvider.ofTelefone(), Boolean.FALSE);
 
         SalaDTO dtoSalaTOSave = new SalaDTO();
         dtoSalaTOSave.numeroSala = "10";
@@ -259,7 +259,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     @Test
     public void createCargaHorarioAluno() {
         AlunoDTO dataProvider = AlunoDTODataProvider.createAlunoDTO(SerieAno.QUARTO_ANO.getValor(), "José Almeida", "110.851.399-99",
-                EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
+                EnderecoDTODataProvider.ofMaringa(), emailMatheus, null, Boolean.FALSE);
 
         dataProvider.addDisciplina(Disciplina.GEOGRAFIA);
         dataProvider.addDisciplina(Disciplina.INGLES);
@@ -277,7 +277,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
     @Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = "A quantidade de disciplinas excedeu o máximo de 44 Horas")
     public void cargaHorariaAlunoExceeded() {
         AlunoDTO dataProvider = AlunoDTODataProvider.createAlunoDTO(SerieAno.QUARTO_ANO.getValor(), "José Almeida", "110.851.399-99",
-                EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
+                EnderecoDTODataProvider.ofMaringa(), emailMatheus, null, Boolean.FALSE);
 
         dataProvider.addDisciplina(Disciplina.GEOGRAFIA);
         dataProvider.addDisciplina(Disciplina.BIOLOGIA);
@@ -288,7 +288,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
 
     public void addSameDiscipline() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO(SerieAno.QUARTO_ANO.getValor(), "José Almeida", "110.851.399-99",
-                EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
+                EnderecoDTODataProvider.ofMaringa(), emailMatheus, null, Boolean.FALSE);
 
         alunoDTO.addDisciplina(Disciplina.MATEMATICA);
 
@@ -343,7 +343,7 @@ public class AlunoServiceIT extends AbstractIntegrationTest {
 
     public AlunoDTO createGenericAluno() {
         AlunoDTO alunoDTO = AlunoDTODataProvider.createAlunoDTO(SerieAno.QUARTO_ANO.getValor(), "José Almeida", "110.851.399-99",
-                EnderecoDTODataProvider.ofMaringa(), emailMatheus, null);
+                EnderecoDTODataProvider.ofMaringa(), emailMatheus, null, Boolean.FALSE);
 
         return alunoService.createAluno(alunoDTO, uuidEscolaValido);
     }

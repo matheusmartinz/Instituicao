@@ -1,5 +1,6 @@
-package escola;
+package com.example.project2.study.escola;
 
+import com.example.project2.study.AbstractIntegrationIT;
 import com.example.project2.study.domain.model.Instituicao.Escola.PessoaEscola.MatriculaGenerator;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-public class MatriculaGeneratorTest {
+public class MatriculaGeneratorIT extends AbstractIntegrationIT {
 
     @Test
     public void gerarMatricula() {

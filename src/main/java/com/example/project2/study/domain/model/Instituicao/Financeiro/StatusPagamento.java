@@ -4,5 +4,17 @@ public enum StatusPagamento {
     EM_ABERTO,
     PAGO,
     ATRASADO,
-    ISENTO
+    ISENTO;
+
+    public boolean isIsento() {
+        return this == ISENTO;
+    }
+
+    public boolean isPago() {
+        return this == PAGO || this == ISENTO;
+    }
+
+    public boolean isAtrasado() {
+        return this == ATRASADO;
+    }
 }

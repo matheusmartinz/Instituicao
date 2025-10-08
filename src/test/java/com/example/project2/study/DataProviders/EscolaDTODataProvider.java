@@ -1,4 +1,4 @@
-package DataProviders;
+package com.example.project2.study.DataProviders;
 
 import com.example.project2.study.domain.model.Instituicao.Escola.Endereco.EnderecoDTO;
 import com.example.project2.study.domain.model.Instituicao.Escola.EscolaDTO;

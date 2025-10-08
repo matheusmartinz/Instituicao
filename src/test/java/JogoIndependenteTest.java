@@ -1,4 +1,4 @@
-import DataProviders.JogoDTODataProvider;
+import com.example.project2.study.DataProviders.JogoDTODataProvider;
 import com.example.project2.study.StudyApplication;
 import com.example.project2.study.domain.Repositories.EmpresaDesenvolvedoraRepository;
 import com.example.project2.study.domain.Repositories.JogoIndependenteRepository;
