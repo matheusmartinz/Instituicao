@@ -1,10 +1,10 @@
-import com.example.project2.study.DataProviders.JogoDTODataProvider;
-import com.example.project2.study.StudyApplication;
-import com.example.project2.study.domain.Repositories.EmpresaDesenvolvedoraRepository;
-import com.example.project2.study.domain.Repositories.JogoIndependenteRepository;
-import com.example.project2.study.domain.model.Empresa.EmpresaDesenvolvedora;
-import com.example.project2.study.domain.model.Empresa.JogoIndependenteDTO;
-import com.example.project2.study.domain.model.Empresa.JogoIndependente;
+import com.example.project.study.dataproviders.JogoDTODataProvider;
+import com.example.project.study.StudyApplication;
+import com.example.project.study.domain.repositories.EmpresaDesenvolvedoraRepository;
+import com.example.project.study.domain.repositories.JogoIndependenteRepository;
+import com.example.project.study.domain.model.empresa.EmpresaDesenvolvedora;
+import com.example.project.study.domain.model.empresa.JogoIndependenteDTO;
+import com.example.project.study.domain.model.empresa.JogoIndependente;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,0 +1,72 @@
+package com.example.project.study.domain.model.instituicao.escola.pessoa.aluno;
+
+import com.example.project.study.domain.model.instituicao.Disciplina;
+import com.example.project.study.domain.model.instituicao.escola.endereco.EnderecoDTO;
+import com.example.project.study.domain.model.instituicao.escola.pessoa.Pessoa;
+import com.example.project.study.domain.model.instituicao.escola.sala.tarefa.TarefaDTO;
+import com.example.project.study.domain.model.instituicao.escola.sala.UtilsFormatter;
+import com.example.project.study.domain.model.instituicao.escola.PessoaDTO;
+import com.example.project.study.domain.model.instituicao.escola.PessoaTelefoneDTO;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.util.Optional.ofNullable;
+
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@Data
+public class AlunoDTO extends PessoaDTO {
+    private String matricula;
+    private List<TarefaDTO> tarefas = new LinkedList<>();
+    private List<Disciplina> disciplinas = new LinkedList<>();
+    private String serieAno;
+    private Integer cargaHoraria = 0;
+    private boolean bolsista;
+
+
+    public static List<AlunoDTO> listOf(List<Pessoa> alunos) {
+        return alunos.stream().map(AlunoDTO::new).toList();
+    }
+
+    public AlunoDTO(Pessoa aluno) {
+        this.uuid = aluno.getUuid();
+        this.matricula = aluno.getMatricula();
+        this.tarefas = TarefaDTO.listOf(aluno.getTarefas());
+        this.disciplinas = new ArrayList<>(aluno.getDisciplinas());
+        this.serieAno = aluno.getSerie().getValor();
+        this.nome = aluno.getNome();
+        this.cpf = UtilsFormatter.formatCpf(aluno.getCpf());
+        this.email = aluno.getEmail().toLowerCase();
+        this.telefone = ofNullable(aluno.getTelefone())
+                .map(PessoaTelefoneDTO::new)
+                .orElse(null);
+        this.endereco = ofNullable(aluno.getEndereco())
+                .map(EnderecoDTO::of)
+                .orElse(null);
+        this.cargaHoraria = aluno.getCargaHoraria();
+        this.bolsista = aluno.getBolsista();
+    }
+
+    public void addDisciplina(Disciplina disciplina) {
+        if (!this.getDisciplinas().contains(disciplina)) {
+            this.getDisciplinas().add(disciplina);
+        }
+    }
+
+    public void addCargaHoraria(int cargaHorario) {
+        this.setCargaHoraria(this.getCargaHoraria() + cargaHorario);
+    }
+
+    public void addAllDisciplinas(List<Disciplina> disciplinas) {
+        for (Disciplina disciplina : disciplinas) {
+            if (!this.getDisciplinas().contains(disciplina)) {
+                this.getDisciplinas().add(disciplina);
+            }
+        }
+    }
+}
