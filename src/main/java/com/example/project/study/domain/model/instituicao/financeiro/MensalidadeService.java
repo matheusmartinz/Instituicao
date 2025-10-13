@@ -1,6 +1,7 @@
 package com.example.project.study.domain.model.instituicao.financeiro;
 
 import com.example.project.study.domain.model.empresa.EntidadeService;
+import com.example.project.study.domain.model.entidadeuuid.EntidadeIdUUID;
 import com.example.project.study.domain.model.instituicao.escola.pessoa.Pessoa;
 import com.example.project.study.domain.model.instituicao.escola.pessoa.PessoaRepository;
 import com.example.project.study.domain.model.instituicao.escola.pessoa.aluno.AlunoValidation;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -60,5 +62,29 @@ public class MensalidadeService extends EntidadeService<Mensalidade> {
     @Override
     protected JpaRepository<Mensalidade, Long> repository() {
         return mensalidadeRepository;
+    }
+
+    public List<MensalidadeDTO> findAll() {
+        return mensalidadeRepository.findAll().stream().map(MensalidadeDTO::of).toList();
+    }
+
+    public MensalidadeDTO findByUuid(UUID uuidBoleto){
+        Mensalidade mensalidade = mensalidadeRepository.findByUuid(uuidBoleto);
+        mensalidadeValidation.mensalidadeFound(mensalidade);
+        return MensalidadeDTO.of(mensalidade);
+    }
+
+    public void deleteBoleto(UUID uuidBoleto) {
+        Mensalidade mensalidade = mensalidadeRepository.findByUuid(uuidBoleto);
+        mensalidadeValidation.mensalidadeFound(mensalidade);
+        mensalidadeRepository.delete(mensalidade);
+    }
+
+    public MensalidadeDTO updateByUuid(MensalidadeDTO mensalidadeDTO, UUID uuidBoleto) {
+        Mensalidade mensalidade = mensalidadeRepository.findByUuid(uuidBoleto);
+        mensalidadeValidation.mensalidadeFound(mensalidade);
+        mensalidadeValidation.validatePagarBoleto(mensalidade, mensalidadeDTO);
+        Mensalidade updateDados = Mensalidade.updateMensalidade(mensalidadeDTO);
+        return MensalidadeDTO.of(super.save(updateDados));
     }
 }

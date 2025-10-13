@@ -1,8 +1,8 @@
 package com.example.project.study;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.EntityManager;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -14,10 +14,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 
 @SpringBootTest(classes = StudyApplication.class)
 @ActiveProfiles("test")
@@ -31,15 +28,14 @@ public class AbstractIntegrationIT extends AbstractTransactionalTestNGSpringCont
     private MockMvc mvc;
 
     @SneakyThrows
-    @BeforeMethod
+    @BeforeEach
     protected void beforeMethod() {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
     }
 
     @SneakyThrows
-    public ResultActions getRequest(String url, String token, ResultMatcher mockMvcResultMatchersStatusExpected) {
+    public ResultActions getRequest(String url, ResultMatcher mockMvcResultMatchersStatusExpected) {
         return mvc.perform(MockMvcRequestBuilders.get(url)
-                .header("access_token", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)).andDo(result -> {
             if (result.getResolvedException() != null) {
@@ -49,9 +45,34 @@ public class AbstractIntegrationIT extends AbstractTransactionalTestNGSpringCont
     }
 
     @SneakyThrows
-    public ResultActions postRequest(String url,  String content, ResultMatcher mockMvcResultMatchersStatusExpected) {
+    public ResultActions postRequest(String url, String content, ResultMatcher mockMvcResultMatchersStatusExpected) {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post(url)
-//                .header("access_token", token)
+                .characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        if (content != null) {
+            requestBuilder = requestBuilder.content(content);
+        }
+
+        return mvc.perform(requestBuilder).andDo(result -> {
+            if (result.getResolvedException() != null) {
+                result.getResolvedException().printStackTrace();
+            }
+        }).andExpect(mockMvcResultMatchersStatusExpected);
+    }
+
+    @SneakyThrows
+    public ResultActions deleteRequest(String url, ResultMatcher mockMvcResultMatchersStatusExpected) {
+        return mvc.perform(MockMvcRequestBuilders.delete(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(mockMvcResultMatchersStatusExpected);
+    }
+
+    @SneakyThrows
+    public ResultActions putRequest(String url, String content, ResultMatcher mockMvcResultMatchersStatusExpected) {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put(url)
                 .characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -69,8 +90,6 @@ public class AbstractIntegrationIT extends AbstractTransactionalTestNGSpringCont
 
 }
 
-//
-//import br.com.produtec.nexus.api.rest.JWTPayloadDataProvider;
 //import br.com.produtec.nexus.domain.model.auditoria.AuditoriaRepository;
 //import br.com.produtec.nexus.domain.model.estabelecimento.EstabelecimentoDataProvider;
 //import br.com.produtec.nexus.domain.model.estabelecimento.EstabelecimentoRedRepository;
@@ -277,7 +296,7 @@ public class AbstractIntegrationIT extends AbstractTransactionalTestNGSpringCont
 //    public ResultActions putRequest(String url, String token, String content, ResultMatcher mockMvcResultMatchersStatusExpected) {
 //        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put(url)
 //                .header("access_token", token)
-////                .locale(Locale."pt-BR")
+/// /                .locale(Locale."pt-BR")
 //                .characterEncoding("UTF-8")
 //                .contentType(MediaType.APPLICATION_JSON)
 //                .accept(MediaType.APPLICATION_JSON);

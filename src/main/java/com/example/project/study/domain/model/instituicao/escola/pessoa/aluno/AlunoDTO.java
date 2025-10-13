@@ -29,6 +29,7 @@ public class AlunoDTO extends PessoaDTO {
     private boolean bolsista;
 
 
+
     public static List<AlunoDTO> listOf(List<Pessoa> alunos) {
         return alunos.stream().map(AlunoDTO::new).toList();
     }

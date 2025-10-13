@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class FinanceiroMensalidadeIT extends AbstractIntegrationIT {
     public static UUID uuidEscolaValido =
-            UUID.fromString("6fc80983-ec52-4345-b494-f66a057a39f0");
+            UUID.fromString("5fbc6a76-fc94-40d9-a7e0-b5df856b637f");
 
     @Autowired
     private AlunoService alunoService;

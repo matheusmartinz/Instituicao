@@ -44,8 +44,21 @@ public class Mensalidade extends EntidadeIdUUID {
         this.setDataPagamento(mensalidadeDTO.getDataPagamento());
     }
 
+    private Mensalidade(MensalidadeDTO mensalidadeDTO) {
+        this.setDataEmissao(mensalidadeDTO.getDataEmissao());
+        this.setStatusPagamento(mensalidadeDTO.getStatusPagamento());
+        this.setValorPagamento(mensalidadeDTO.getValorPagamento());
+        this.setMulta(mensalidadeDTO.getMulta());
+        this.setJuros(mensalidadeDTO.getJuros());
+        this.setDataVencimento(mensalidadeDTO.getDataVencimento());
+    }
+
     public static Mensalidade of(MensalidadeDTO mensalidadeDTO, UUID alunoUUID) {
         return new Mensalidade(mensalidadeDTO, alunoUUID);
+    }
+
+    public static Mensalidade updateMensalidade(MensalidadeDTO mensalidadeDTO) {
+        return new Mensalidade(mensalidadeDTO);
     }
 
     public boolean isPago() {
@@ -59,7 +72,9 @@ public class Mensalidade extends EntidadeIdUUID {
 
             return getValorPagamento().add(novaMulta).add(novoJuros);
         }
-        return mensalidadeDTO.getValorPagamento();
+//        return mensalidadeDTO.getValorPagamento().subtract(BigDecimal.valueOf());
+        BigDecimal desconto = mensalidadeDTO.getValorPagamento().multiply(BigDecimal.valueOf(0.10)).setScale(2, RoundingMode.HALF_EVEN);
+        return mensalidadeDTO.getValorPagamento().subtract(desconto);
     }
 
     public boolean isVencido() {

@@ -63,7 +63,7 @@ public class Escola extends EntidadeIdUUID {
     }
 
     public void addAluno(Pessoa aluno) {
-        this.pessoas.add(aluno);
+       this.pessoas.add(aluno);
     }
 
     @Override
