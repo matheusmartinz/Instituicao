@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static java.util.Optional.ofNullable;
@@ -41,7 +42,7 @@ public class Sala extends EntidadeIdUUID {
         this.numeroSala = salaDTO.getNumeroSala();
         this.serieAno = salaDTO.getSerieAno();
         this.capacidadeAlunos = getCapacidadeAlunos(salaDTO, this);
-        this.alunos = Pessoa.listOfPessoa(salaDTO.getAlunos());
+        this.alunos = new LinkedList<>(Pessoa.listOfPessoa(salaDTO.getAlunos()));
         this.professores = Pessoa.listOfPessoa(salaDTO.getProfessores());
         this.tarefas = Tarefa.listOf(salaDTO.getTarefas());
     }

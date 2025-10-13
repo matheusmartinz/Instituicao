@@ -39,8 +39,8 @@ public class Escola extends EntidadeIdUUID {
 
     private Escola(EscolaDTO escolaDTO) {
         this.setNome(escolaDTO.getNome());
-        this.setSalas(Sala.listOf(escolaDTO.getSalas()));
-        this.setPessoas(Pessoa.listOfPessoa(escolaDTO.getPessoas()));
+        this.setSalas(new LinkedList<>(Sala.listOf(escolaDTO.getSalas())));
+        this.setPessoas( new LinkedList<>(Pessoa.listOfPessoa(escolaDTO.getPessoas())));
         this.setEndereco(Endereco.of(escolaDTO.getEndereco()));
     }
 

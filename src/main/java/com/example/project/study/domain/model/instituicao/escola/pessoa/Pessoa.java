@@ -66,7 +66,7 @@ public class Pessoa extends EntidadeIdUUID {
     }
 
     public List<Disciplina> getDisciplinas() {
-        return List.copyOf(disciplinas);
+        return List.copyOf(disciplinas); //TODO COLOCAR TODAS AS LISTAS DESTA FORMA - TIRAR DE add.ALUNO - add.SALA E RETORNAR SOMENTE A COPIA DA LISTA IGUAL DESTA FORMA
     }
 
     protected Pessoa(PessoaDTO pessoaDTO) {
