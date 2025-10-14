@@ -3,6 +3,7 @@ package com.example.project.study.domain.model.instituicao.financeiro;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Getter
 public class MensalidadeJurosMultaDTO {
@@ -13,7 +14,7 @@ public class MensalidadeJurosMultaDTO {
     private MensalidadeJurosMultaDTO(double valorMensalidade,
                                      double valorMulta,
                                      double valorJuros) {
-        this.valorMensalidade = BigDecimal.valueOf(valorMensalidade);
+        this.valorMensalidade = BigDecimal.valueOf(valorMensalidade).setScale(2, RoundingMode.HALF_EVEN);
         this.valorMulta = BigDecimal.valueOf(valorMulta);
         this.valorJuros = BigDecimal.valueOf(valorJuros);
     }

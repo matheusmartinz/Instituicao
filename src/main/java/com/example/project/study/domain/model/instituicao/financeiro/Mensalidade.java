@@ -30,6 +30,8 @@ public class Mensalidade extends EntidadeIdUUID {
     private LocalDate dataPagamento;
     private BigDecimal valorPago;
 
+    private UUID formaPagamentoFK;
+
     private Mensalidade(MensalidadeDTO mensalidadeDTO, UUID alunoUUID) {
         this.setDataEmissao(mensalidadeDTO.getDataEmissao());
 
@@ -72,12 +74,28 @@ public class Mensalidade extends EntidadeIdUUID {
 
             return getValorPagamento().add(novaMulta).add(novoJuros);
         }
-//        return mensalidadeDTO.getValorPagamento().subtract(BigDecimal.valueOf());
-        BigDecimal desconto = mensalidadeDTO.getValorPagamento().multiply(BigDecimal.valueOf(0.10)).setScale(2, RoundingMode.HALF_EVEN);
-        return mensalidadeDTO.getValorPagamento().subtract(desconto);
+        return mensalidadeDTO.getValorPagamento();
     }
 
     public boolean isVencido() {
         return LocalDate.now().isAfter(getDataVencimento());
+    }
+
+    public boolean isEmDia() {
+        return LocalDate.now().isBefore(getDataVencimento().plusDays(1L));
+    }
+
+    public BigDecimal updateValorPagamentoEmDia(MensalidadeDTO mensalidadeDTO) {
+        if (isEmDia()) {
+            BigDecimal desconto = mensalidadeDTO.getValorPagamento().multiply(BigDecimal.valueOf(0.10)).setScale(2, RoundingMode.HALF_EVEN);
+            return getValorPagamento().subtract(desconto);
+        }
+        return mensalidadeDTO.getValorPagamento();
+    }
+
+    public void updateStatusPagamentoBoleto(MensalidadeDTO mensalidadeDTO) {
+        this.setDataPagamento(LocalDate.now());
+        this.setValorPago(mensalidadeDTO.getValorPagamento());
+        this.setStatusPagamento(StatusPagamento.PAGO);
     }
 }

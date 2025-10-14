@@ -38,8 +38,7 @@ public class EscolaService extends EntidadeService<Escola> {
         enderecoValidation.validateCidadeAndEstadoAndCEP(escolaDTO.getEndereco());
         Escola escola = Escola.of(escolaDTO);
         findOrCreateEnderecoAndSetOnEscola(Endereco.of(escolaDTO.getEndereco()), escola);
-        Escola save = super.save(escola);
-        return new EscolaDTO(save);
+        return new EscolaDTO(super.save(escola));
     }
 
     public EscolaDTO updateByUuid(EscolaDTO escolaDTO) { // 3

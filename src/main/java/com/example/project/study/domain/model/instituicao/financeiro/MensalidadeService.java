@@ -1,7 +1,6 @@
 package com.example.project.study.domain.model.instituicao.financeiro;
 
 import com.example.project.study.domain.model.empresa.EntidadeService;
-import com.example.project.study.domain.model.entidadeuuid.EntidadeIdUUID;
 import com.example.project.study.domain.model.instituicao.escola.pessoa.Pessoa;
 import com.example.project.study.domain.model.instituicao.escola.pessoa.PessoaRepository;
 import com.example.project.study.domain.model.instituicao.escola.pessoa.aluno.AlunoValidation;
@@ -9,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,9 +26,8 @@ public class MensalidadeService extends EntidadeService<Mensalidade> {
         MensalidadeJurosMultaDTO mensalidadeBySerie = MensalidadeAlunoSerieJurosMulta.findMensalidadeBySerie(aluno.getSerie());
         mensalidadeDTO.setMensalidadeJurosMulta(mensalidadeBySerie);
         mensalidadeValidation.validateBoletoCreated(mensalidadeDTO, aluno);
-        Mensalidade mensalidade = Mensalidade.of(mensalidadeDTO, aluno.getUuid());
-        Mensalidade mensalidadeSave = super.save(mensalidade);
-        return MensalidadeDTO.of(mensalidadeSave);
+
+        return MensalidadeDTO.of(super.save(Mensalidade.of(mensalidadeDTO, aluno.getUuid())));
     }
 
 
@@ -39,15 +36,12 @@ public class MensalidadeService extends EntidadeService<Mensalidade> {
         alunoValidation.validateAluno(alunoPagar);
 
         Mensalidade mensalidade = mensalidadeRepository.findByUuid(mensalidadeDTO.getUuid());
-
-        mensalidade.setDataPagamento(LocalDate.now());
-        mensalidade.setValorPago(mensalidadeDTO.getValorPagamento());
-        mensalidade.setStatusPagamento(StatusPagamento.PAGO);
+        mensalidade.updateStatusPagamentoBoleto(mensalidadeDTO);
 
         return MensalidadeDTO.of(super.save(mensalidade));
     }
 
-    public MensalidadeDTO consultaBoleto(MensalidadeDTO mensalidadeDTO, UUID aluno) {
+    public MensalidadeDTO consultaMensalidade(MensalidadeDTO mensalidadeDTO, UUID aluno) {
         Pessoa alunoConsultar = pessoaRepository.findByUuid(aluno);
         alunoValidation.validateAluno(alunoConsultar);
 
@@ -56,6 +50,7 @@ public class MensalidadeService extends EntidadeService<Mensalidade> {
         mensalidadeValidation.mensalidadeFound(mensalidadeConsulta);
         mensalidadeValidation.isVencido(mensalidadeDTO, mensalidadeConsulta);
         mensalidadeValidation.isPago(mensalidadeConsulta);
+        mensalidadeValidation.isEmDia(mensalidadeDTO, mensalidadeConsulta);
         return mensalidadeDTO;
     }
 
@@ -68,7 +63,7 @@ public class MensalidadeService extends EntidadeService<Mensalidade> {
         return mensalidadeRepository.findAll().stream().map(MensalidadeDTO::of).toList();
     }
 
-    public MensalidadeDTO findByUuid(UUID uuidBoleto){
+    public MensalidadeDTO findByUuid(UUID uuidBoleto) {
         Mensalidade mensalidade = mensalidadeRepository.findByUuid(uuidBoleto);
         mensalidadeValidation.mensalidadeFound(mensalidade);
         return MensalidadeDTO.of(mensalidade);

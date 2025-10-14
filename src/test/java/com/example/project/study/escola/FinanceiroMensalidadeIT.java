@@ -108,7 +108,7 @@ public class FinanceiroMensalidadeIT extends AbstractIntegrationIT {
         mensalidadeRepository.save(mensalidadeFounded);
 
         // Consultar meu boleto atrasado
-        MensalidadeDTO consultaMensalidade = mensalidadeService.consultaBoleto(MensalidadeDTO.of(mensalidadeFounded), alunoFounded.getUuid());
+        MensalidadeDTO consultaMensalidade = mensalidadeService.consultaMensalidade(MensalidadeDTO.of(mensalidadeFounded), alunoFounded.getUuid());
 
         // Pagar boleto
         MensalidadeDTO pagarMensalidade = mensalidadeService.pagarBoleto(consultaMensalidade, alunoFounded.getUuid());
@@ -157,7 +157,7 @@ public class FinanceiroMensalidadeIT extends AbstractIntegrationIT {
 
         Mensalidade mensalidadeFounded = mensalidadeRepository.findByUuid(mensalidadeCreatedDTO.getUuid());
 
-        MensalidadeDTO mensalidadeConsultada = mensalidadeService.consultaBoleto(MensalidadeDTO.of(mensalidadeFounded), alunoFounded.getUuid());
+        MensalidadeDTO mensalidadeConsultada = mensalidadeService.consultaMensalidade(MensalidadeDTO.of(mensalidadeFounded), alunoFounded.getUuid());
 
         MensalidadeDTO mensalidadePagamento = mensalidadeService.pagarBoleto(mensalidadeConsultada, alunoFounded.getUuid());
 

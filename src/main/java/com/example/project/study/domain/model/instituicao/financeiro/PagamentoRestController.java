@@ -1,12 +1,8 @@
 package com.example.project.study.domain.model.instituicao.financeiro;
 
-import com.example.project.study.domain.model.instituicao.escola.pessoa.aluno.AlunoValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -15,14 +11,21 @@ import java.util.UUID;
 public class PagamentoRestController {
 
     @Autowired
-    private AlunoValidation alunoValidation;
-    @Autowired
     private MensalidadeService mensalidadeService;
+    @Autowired
+    private PagamentoService pagamentoService;
 
     @PostMapping("/{uuidAluno}")
-    public ResponseEntity<String> pagamento(@PathVariable UUID uuidAluno, MensalidadeDTO mensalidadeDTO) {
-        mensalidadeService.consultaBoleto(mensalidadeDTO, uuidAluno);
-        mensalidadeService.pagarBoleto(mensalidadeDTO, uuidAluno);
-        return ResponseEntity.ok().body("Pagamento realizado com sucesso.");
+    public ResponseEntity<MensalidadeDTO> pagamento(@PathVariable UUID uuidAluno, @RequestBody MensalidadeDTO mensalidadeDTO) {
+        MensalidadeDTO mensalidadeDTOConsultada = mensalidadeService.consultaMensalidade(mensalidadeDTO, uuidAluno);
+        MensalidadeDTO mensalidadeDTOPaga = mensalidadeService.pagarBoleto(mensalidadeDTOConsultada, uuidAluno);
+        return ResponseEntity.ok(mensalidadeDTOPaga);
+    }
+
+    @PostMapping
+    public ResponseEntity<PagamentoDTO> createPagamento(@RequestBody MensalidadeDTO mensalidadeDTO, @PathVariable UUID uuidAluno, @RequestBody PagamentoDTO pagamentoDTO){
+        MensalidadeDTO mensalidadeConsultada = mensalidadeService.consultaMensalidade(mensalidadeDTO, uuidAluno);
+        PagamentoDTO pagamentoDTORealizado = pagamentoService.pagarMensalidade(mensalidadeConsultada, uuidAluno, pagamentoDTO);
+        return ResponseEntity.ok().body(pagamentoDTORealizado);
     }
 }
