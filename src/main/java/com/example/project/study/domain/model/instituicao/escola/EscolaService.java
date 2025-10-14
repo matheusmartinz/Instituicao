@@ -65,17 +65,24 @@ public class EscolaService extends EntidadeService<Escola> {
     }
 
     private void findOrCreateEnderecoAndSetOnEscola(Endereco enderecoToValidate, Escola escola) {
-        Endereco recuperado = enderecoService.findByCidadeAndCepAndEstado(
-                enderecoToValidate.getCidade(),
-                enderecoToValidate.getCep(),
-                enderecoToValidate.getEstado()
-        );
-        if (recuperado == null) {
-            Endereco endereco = enderecoService.saveEndereco(enderecoToValidate);
-            escola.setEndereco(endereco);
-        } else {
-            escola.setEndereco(recuperado);
+        try {
+            Endereco recuperado = enderecoService.findByCidadeAndCepAndEstado(
+                    enderecoToValidate.getCidade(),
+                    enderecoToValidate.getCep(),
+                    enderecoToValidate.getEstado()
+            );
+
+            if (recuperado == null) {
+                Endereco endereco = enderecoService.saveEndereco(enderecoToValidate);
+                escola.setEndereco(endereco);
+            } else {
+                escola.setEndereco(recuperado);
+            }
         }
+        catch (Exception e) {
+                throw new RuntimeException(e);
+        }
+
     }
 
     public void deleteByUuid(UUID uuidEscola) {
