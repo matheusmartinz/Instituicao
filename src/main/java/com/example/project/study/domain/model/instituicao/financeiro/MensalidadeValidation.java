@@ -27,7 +27,7 @@ public class MensalidadeValidation {
         }
     }
 
-    public void mensalidadeFound(Mensalidade mensalidadeFounded) {
+    public void checkIsNull(Mensalidade mensalidadeFounded) {
         if (mensalidadeFounded == null) {
             throw new EntidadeNaoEncontradaException("Mensalidade deste aluno não encontrada.");
         }

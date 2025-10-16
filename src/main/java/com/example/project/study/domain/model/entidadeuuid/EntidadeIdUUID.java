@@ -1,6 +1,5 @@
 package com.example.project.study.domain.model.entidadeuuid;
 
-import com.example.project.study.domain.model.instituicao.escola.Escola;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;

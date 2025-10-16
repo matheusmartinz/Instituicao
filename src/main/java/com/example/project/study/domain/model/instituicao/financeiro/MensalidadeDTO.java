@@ -36,8 +36,16 @@ public class MensalidadeDTO extends EntidadeIdUUIDDTO {
         this.setDataPagamento(mensalidade.getDataPagamento());
     }
 
+    public MensalidadeDTO(FinanceiroDTO financeiroDTO) {
+        this.setValorPagamento(financeiroDTO.getValorPago());
+    }
+
     public static MensalidadeDTO of(Mensalidade mensalidade) {
         return new MensalidadeDTO(mensalidade);
+    }
+
+    public static MensalidadeDTO of(FinanceiroDTO financeiroDTO) {
+        return new MensalidadeDTO(financeiroDTO);
     }
 
     public void setJuros(BigDecimal juros) {

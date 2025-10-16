@@ -47,7 +47,7 @@ public class MensalidadeService extends EntidadeService<Mensalidade> {
 
         Mensalidade mensalidadeConsulta = mensalidadeRepository.findByUuid(mensalidadeDTO.getUuid());
 
-        mensalidadeValidation.mensalidadeFound(mensalidadeConsulta);
+        mensalidadeValidation.checkIsNull(mensalidadeConsulta);
         mensalidadeValidation.isVencido(mensalidadeDTO, mensalidadeConsulta);
         mensalidadeValidation.isPago(mensalidadeConsulta);
         mensalidadeValidation.isEmDia(mensalidadeDTO, mensalidadeConsulta);
@@ -65,19 +65,19 @@ public class MensalidadeService extends EntidadeService<Mensalidade> {
 
     public MensalidadeDTO findByUuid(UUID uuidBoleto) {
         Mensalidade mensalidade = mensalidadeRepository.findByUuid(uuidBoleto);
-        mensalidadeValidation.mensalidadeFound(mensalidade);
+        mensalidadeValidation.checkIsNull(mensalidade);
         return MensalidadeDTO.of(mensalidade);
     }
 
     public void deleteBoleto(UUID uuidBoleto) {
         Mensalidade mensalidade = mensalidadeRepository.findByUuid(uuidBoleto);
-        mensalidadeValidation.mensalidadeFound(mensalidade);
+        mensalidadeValidation.checkIsNull(mensalidade);
         mensalidadeRepository.delete(mensalidade);
     }
 
     public MensalidadeDTO updateByUuid(MensalidadeDTO mensalidadeDTO, UUID uuidBoleto) {
         Mensalidade mensalidade = mensalidadeRepository.findByUuid(uuidBoleto);
-        mensalidadeValidation.mensalidadeFound(mensalidade);
+        mensalidadeValidation.checkIsNull(mensalidade);
         mensalidadeValidation.validatePagarBoleto(mensalidade, mensalidadeDTO);
         Mensalidade updateDados = Mensalidade.updateMensalidade(mensalidadeDTO);
         return MensalidadeDTO.of(super.save(updateDados));

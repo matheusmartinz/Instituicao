@@ -29,16 +29,6 @@ public class PagamentoService extends EntidadeService<Pagamento> {
         return PagamentoDTO.of(super.save(Pagamento.of(pagamentoDTO)));
     }
 
-//    public MensalidadeDTO pagarBoleto(MensalidadeDTO mensalidadeDTO, UUID aluno) {
-//        Pessoa alunoPagar = pessoaRepository.findByUuid(aluno);
-//        alunoValidation.validateAluno(alunoPagar);
-//
-//        Mensalidade mensalidade = mensalidadeRepository.findByUuid(mensalidadeDTO.getUuid());
-//        mensalidade.updateStatusPagamentoBoleto(mensalidadeDTO);
-//
-//        return MensalidadeDTO.of(super.save(mensalidade));
-//    }
-
     @Override
     protected JpaRepository<Pagamento, Long> repository() {
         return pagamentoRepository;

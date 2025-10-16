@@ -22,10 +22,10 @@ public class PagamentoRestController {
         return ResponseEntity.ok(mensalidadeDTOPaga);
     }
 
-    @PostMapping
-    public ResponseEntity<PagamentoDTO> createPagamento(@RequestBody MensalidadeDTO mensalidadeDTO, @PathVariable UUID uuidAluno, @RequestBody PagamentoDTO pagamentoDTO){
-        MensalidadeDTO mensalidadeConsultada = mensalidadeService.consultaMensalidade(mensalidadeDTO, uuidAluno);
-        PagamentoDTO pagamentoDTORealizado = pagamentoService.pagarMensalidade(mensalidadeConsultada, uuidAluno, pagamentoDTO);
+    @PostMapping("/testepagamento/{uuidAluno}")
+    public ResponseEntity<PagamentoDTO> createPagamento(@RequestBody FinanceiroDTO financeiroDTO, @PathVariable UUID uuidAluno){
+        MensalidadeDTO mensalidadeConsultada = mensalidadeService.consultaMensalidade(financeiroDTO, uuidAluno);
+        PagamentoDTO pagamentoDTORealizado = pagamentoService.pagarMensalidade(mensalidadeConsultada, uuidAluno, algumDTO);
         return ResponseEntity.ok().body(pagamentoDTORealizado);
     }
 }
