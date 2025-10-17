@@ -40,8 +40,12 @@ public class FinanceiroService extends EntidadeService<Pagamento> {
 
         mensalidadeFounded.updateValorPagamentoEmDia(mensalidadeService.consultaMensalidade(financeiroDTO.getMensalidadeDTO(), financeiroDTO.getMensalidadeDTO().getAlunoFK()));
 
-        Pagamento pagamentoDTOCreated = pagamentoService.pagarMensalidade(financeiroDTO);
+        mensalidadeFounded.updateStatusPagamentoBoleto(financeiroDTO.getMensalidadeDTO());
+        Pagamento pagamentoSalvo = super.save(Pagamento.of(financeiroDTO));
 
-        return FinanceiroDTO.of(pagamentoDTOCreated, mensalidadeFounded);
+        FinanceiroDTO financeiroDTOResponse = FinanceiroDTO.of(pagamentoSalvo);
+        financeiroDTOResponse.setMensalidadeDTO(MensalidadeDTO.of(mensalidadeFounded));
+
+        return financeiroDTOResponse;
     }
 }
