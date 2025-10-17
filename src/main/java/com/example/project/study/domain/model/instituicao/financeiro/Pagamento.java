@@ -30,11 +30,11 @@ public class Pagamento extends EntidadeIdUUID {
     }
 
     private Pagamento(FinanceiroDTO financeiroDTO) {
-        this.setStatusPagamento(financeiroDTO.getStatusPagamento());
-        this.setMensalidadeFK(financeiroDTO.getMensalidadeFK());
-        this.setDataPagamento(financeiroDTO.getDataPagamento());
-        this.setValorPago(financeiroDTO.getValorPago());
-        this.setFormaPagamento(financeiroDTO.getFormaPagamento());
+        this.setStatusPagamento(financeiroDTO.getPagamentoDTO().getStatusPagamento());
+        this.setMensalidadeFK(financeiroDTO.getPagamentoDTO().getMensalidadeFK());
+        this.setDataPagamento(financeiroDTO.getPagamentoDTO().getDataPagamento());
+        this.setValorPago(financeiroDTO.getPagamentoDTO().getValorPago());
+        this.setFormaPagamento(financeiroDTO.getPagamentoDTO().getFormaPagamento());
     }
 
     public static Pagamento of(PagamentoDTO pagamentoDTO) {

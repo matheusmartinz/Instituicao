@@ -14,6 +14,8 @@ public class PagamentoRestController {
     private MensalidadeService mensalidadeService;
     @Autowired
     private PagamentoService pagamentoService;
+    @Autowired
+    private FinanceiroService financeiroService;
 
     @PostMapping("/{uuidAluno}")
     public ResponseEntity<MensalidadeDTO> pagamento(@PathVariable UUID uuidAluno, @RequestBody MensalidadeDTO mensalidadeDTO) {
@@ -23,9 +25,8 @@ public class PagamentoRestController {
     }
 
     @PostMapping("/testepagamento/{uuidAluno}")
-    public ResponseEntity<PagamentoDTO> createPagamento(@RequestBody FinanceiroDTO financeiroDTO, @PathVariable UUID uuidAluno){
-        MensalidadeDTO mensalidadeConsultada = mensalidadeService.consultaMensalidade(financeiroDTO, uuidAluno);
-        PagamentoDTO pagamentoDTORealizado = pagamentoService.pagarMensalidade(mensalidadeConsultada, uuidAluno, algumDTO);
-        return ResponseEntity.ok().body(pagamentoDTORealizado);
+    public ResponseEntity<FinanceiroDTO> createPagamento(@RequestBody FinanceiroDTO financeiroDTO){
+        FinanceiroDTO toReturnPagamento = financeiroService.pagarMensalidade(financeiroDTO);
+        return ResponseEntity.ok().body(toReturnPagamento);
     }
 }

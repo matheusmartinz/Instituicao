@@ -37,7 +37,7 @@ public class MensalidadeDTO extends EntidadeIdUUIDDTO {
     }
 
     public MensalidadeDTO(FinanceiroDTO financeiroDTO) {
-        this.setValorPagamento(financeiroDTO.getValorPago());
+        this.setValorPagamento(financeiroDTO.getMensalidadeDTO().getValorPagamento());
     }
 
     public static MensalidadeDTO of(Mensalidade mensalidade) {

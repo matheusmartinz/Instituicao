@@ -3,14 +3,26 @@ package com.example.project.study.domain.model.instituicao.financeiro;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.UUID;
-
 @Getter
 @Setter
-public class FinanceiroDTO extends EntidadeIdUUIDDTO{
+public class FinanceiroDTO {
     private PagamentoDTO pagamentoDTO;
     private MensalidadeDTO mensalidadeDTO;
 
+    public FinanceiroDTO(MensalidadeDTO mensalidadeDTO) {
+        this.mensalidadeDTO = mensalidadeDTO;
+        this.pagamentoDTO = new PagamentoDTO();
+    }
+
+    public FinanceiroDTO(Pagamento pagamento) {
+       this.pagamentoDTO = PagamentoDTO.of(pagamento);
+    }
+
+    public static FinanceiroDTO of(MensalidadeDTO mensalidadeDTO) {
+        return new FinanceiroDTO(mensalidadeDTO);
+    }
+
+    public static FinanceiroDTO of(Pagamento pagamento) {
+        return new FinanceiroDTO(pagamento);
+    }
 }

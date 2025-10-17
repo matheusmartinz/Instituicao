@@ -71,20 +71,19 @@ public class FinanceiroServiceIT extends AbstractIntegrationIT {
 
         MensalidadeDTO mensalidadeCreatedDTO = mensalidadeService.createBoleto(alunoFounded.getUuid());
 
-        FinanceiroDTO financeiroDTO = new FinanceiroDTO();
-        PagamentoDTO pagamentoDTO = financeiroDTO.getPagamentoDTO();
-        MensalidadeDTO mensalidadeDTOOfFinanceiro = financeiroDTO.getMensalidadeDTO();
-        mensalidadeDTOOfFinanceiro.setAlunoFK(alunoSaved.getUuid());
-        pagamentoDTO.setMensalidadeFK(mensalidadeCreatedDTO.getUuid());
-        pagamentoDTO.setFormaPagamento(FormaPagamento.PIX);
+        //MENSALIDADE CRIADA
 
-         PagamentoDTO toReturnPagamentoDTO =  financeiroService.pagarMensalidade(financeiroDTO);
+        FinanceiroDTO financeiroDTO = FinanceiroDTO.of(mensalidadeCreatedDTO);
+        financeiroDTO.getPagamentoDTO().setFormaPagamento(FormaPagamento.PIX);
+        financeiroDTO.getPagamentoDTO().setMensalidadeFK(mensalidadeCreatedDTO.getUuid());
+
+         FinanceiroDTO toReturnPagamentoDTO =  financeiroService.pagarMensalidade(financeiroDTO);
 
         SoftAssertions.assertSoftly(acertaFofo -> {
-            acertaFofo.assertThat(toReturnPagamentoDTO.getStatusPagamento()).isEqualTo(StatusPagamento.PAGO);
-            acertaFofo.assertThat(toReturnPagamentoDTO.getDataPagamento()).isEqualTo(LocalDate.now());
-            acertaFofo.assertThat(toReturnPagamentoDTO.getFormaPagamento()).isEqualTo(FormaPagamento.PIX);
-            acertaFofo.assertThat(toReturnPagamentoDTO.getValorPago()).isEqualTo(BigDecimal.valueOf(720).setScale(2, RoundingMode.HALF_UP));
+            acertaFofo.assertThat(toReturnPagamentoDTO.getPagamentoDTO().getStatusPagamento()).isEqualTo(StatusPagamento.PAGO);
+            acertaFofo.assertThat(toReturnPagamentoDTO.getMensalidadeDTO().getDataPagamento()).isEqualTo(LocalDate.now());
+            acertaFofo.assertThat(toReturnPagamentoDTO.getPagamentoDTO().getFormaPagamento()).isEqualTo(FormaPagamento.PIX);
+            acertaFofo.assertThat(toReturnPagamentoDTO.getPagamentoDTO().getValorPago()).isEqualTo(BigDecimal.valueOf(720).setScale(2, RoundingMode.HALF_UP));
         });
     }
 }

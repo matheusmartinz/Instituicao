@@ -24,9 +24,21 @@ public class PagamentoDTO extends EntidadeIdUUIDDTO{
         this.setFormaPagamento(pagamento.getFormaPagamento());
     }
 
+    public PagamentoDTO(FinanceiroDTO financeiroDTO) {
+        this.setStatusPagamento(financeiroDTO.getPagamentoDTO().getStatusPagamento());
+        this.setMensalidadeFK(financeiroDTO.getPagamentoDTO().getMensalidadeFK());
+        this.setDataPagamento(financeiroDTO.getPagamentoDTO().getDataPagamento());
+        this.setValorPago(financeiroDTO.getPagamentoDTO().getValorPago());
+        this.setFormaPagamento(financeiroDTO.getPagamentoDTO().getFormaPagamento());
+    }
+
     public static PagamentoDTO of(Pagamento pagamento) {
         return new PagamentoDTO(pagamento);
     }
 
     public PagamentoDTO(){}
+
+    public static PagamentoDTO of(FinanceiroDTO financeiroDTO) {
+        return new PagamentoDTO(financeiroDTO);
+    }
 }

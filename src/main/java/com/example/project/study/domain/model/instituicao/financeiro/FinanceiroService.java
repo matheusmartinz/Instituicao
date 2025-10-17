@@ -24,6 +24,8 @@ public class FinanceiroService extends EntidadeService<Pagamento> {
     private final AlunoValidation alunoValidation;
     @Autowired
     MensalidadeValidation mensalidadeValidation;
+    @Autowired
+    PagamentoService pagamentoService;
 
     @Override
     protected JpaRepository<Pagamento, Long> repository() {
@@ -31,15 +33,15 @@ public class FinanceiroService extends EntidadeService<Pagamento> {
     }
 
 
-    public PagamentoDTO pagarMensalidade(FinanceiroDTO financeiroDTO) {
+    public FinanceiroDTO pagarMensalidade(FinanceiroDTO financeiroDTO) {
 
-        Mensalidade mensalidadeFounded =  mensalidadeRepository.findByUuid(financeiroDTO.getMensalidadeDTO().getUuid());
+        Mensalidade mensalidadeFounded = mensalidadeRepository.findByUuid(financeiroDTO.getMensalidadeDTO().getUuid());
         mensalidadeValidation.checkIsNull(mensalidadeFounded);
 
-        MensalidadeDTO mensalidadeDTO = MensalidadeDTO.of(financeiroDTO);
+        mensalidadeFounded.updateValorPagamentoEmDia(mensalidadeService.consultaMensalidade(financeiroDTO.getMensalidadeDTO(), financeiroDTO.getMensalidadeDTO().getAlunoFK()));
 
-        mensalidadeFounded.updateValorPagamentoEmDia(mensalidadeService.consultaMensalidade(mensalidadeDTO, financeiroDTO.getMensalidadeDTO().getAlunoFK()));
+        Pagamento pagamentoDTOCreated = pagamentoService.pagarMensalidade(financeiroDTO);
 
-        return PagamentoDTO.of(super.save(Pagamento.of(financeiroDTO)));
+        return FinanceiroDTO.of(pagamentoDTOCreated, mensalidadeFounded);
     }
 }
