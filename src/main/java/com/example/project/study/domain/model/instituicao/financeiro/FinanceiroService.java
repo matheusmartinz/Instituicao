@@ -1,8 +1,6 @@
 package com.example.project.study.domain.model.instituicao.financeiro;
 
 import com.example.project.study.domain.model.empresa.EntidadeService;
-import com.example.project.study.domain.model.instituicao.escola.pessoa.PessoaRepository;
-import com.example.project.study.domain.model.instituicao.escola.pessoa.aluno.AlunoValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,13 +17,9 @@ public class FinanceiroService extends EntidadeService<Pagamento> {
     @Autowired
     private final MensalidadeRepository mensalidadeRepository;
     @Autowired
-    private final PessoaRepository pessoaRepository;
-    @Autowired
-    private final AlunoValidation alunoValidation;
-    @Autowired
     MensalidadeValidation mensalidadeValidation;
     @Autowired
-    PagamentoService pagamentoService;
+    PagamentoValidation pagamentoValidation;
 
     @Override
     protected JpaRepository<Pagamento, Long> repository() {
@@ -42,7 +36,8 @@ public class FinanceiroService extends EntidadeService<Pagamento> {
 
         mensalidadeFounded.updateStatusPagamentoBoleto(financeiroDTO.getMensalidadeDTO());
 
-        Pagamento pagamentoSalvo = super.save(Pagamento.of(financeiroDTO));
+        pagamentoValidation.checkIsNull(financeiroDTO.getPagamentoDTO());
+        Pagamento pagamentoSalvo = super.save(Pagamento.of(financeiroDTO.getPagamentoDTO()));
 
         FinanceiroDTO financeiroDTOResponse = FinanceiroDTO.of(pagamentoSalvo);
         financeiroDTOResponse.setMensalidadeDTO(MensalidadeDTO.of(mensalidadeFounded));

@@ -15,6 +15,9 @@ import com.example.project.study.domain.model.instituicao.escola.pessoa.aluno.Al
 import com.example.project.study.domain.model.instituicao.escola.sala.SalaDTO;
 import com.example.project.study.domain.model.instituicao.escola.sala.SalaService;
 import com.example.project.study.domain.model.instituicao.financeiro.*;
+import com.example.project.study.exceptions.ConditionFailedException;
+import com.example.project.study.exceptions.EntidadeNaoEncontradaException;
+import jakarta.persistence.EntityNotFoundException;
 import org.assertj.core.api.SoftAssertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
@@ -22,6 +25,7 @@ import org.testng.annotations.Test;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class FinanceiroServiceIT extends AbstractIntegrationIT {
     @Autowired
@@ -36,6 +40,10 @@ public class FinanceiroServiceIT extends AbstractIntegrationIT {
     private PessoaRepository pessoaRepository;
     @Autowired
     private MensalidadeService mensalidadeService;
+    @Autowired
+    private PagamentoRepository pagamentoRepository;
+    @Autowired
+    private PagamentoValidation pagamentoValidation;
 
     private EscolaDTO getEscolaDTO() {
         EnderecoDTO maringa = EnderecoDTODataProvider.ofMaringa();
@@ -73,17 +81,73 @@ public class FinanceiroServiceIT extends AbstractIntegrationIT {
 
         //MENSALIDADE CRIADA
 
-        FinanceiroDTO financeiroDTO = FinanceiroDTO.of(mensalidadeCreatedDTO);
-        financeiroDTO.getPagamentoDTO().setFormaPagamento(FormaPagamento.PIX);
-        financeiroDTO.getPagamentoDTO().setMensalidadeFK(mensalidadeCreatedDTO.getUuid());
+        PagamentoDTO pagamentoDTO = new PagamentoDTO();
+        pagamentoDTO.setFormaPagamento(FormaPagamento.PIX);
+        pagamentoDTO.setMensalidadeFK(mensalidadeCreatedDTO.getUuid());
 
+        FinanceiroDTO financeiroDTO = new FinanceiroDTO();
+        financeiroDTO.setPagamentoDTO(pagamentoDTO);
+        financeiroDTO.setMensalidadeDTO(mensalidadeCreatedDTO);
+
+        long before = pagamentoRepository.count();
          FinanceiroDTO toReturnPagamentoDTO =  financeiroService.pagarMensalidade(financeiroDTO);
+         long after = pagamentoRepository.count();
 
         SoftAssertions.assertSoftly(acertaFofo -> {
             acertaFofo.assertThat(toReturnPagamentoDTO.getPagamentoDTO().getStatusPagamento()).isEqualTo(StatusPagamento.PAGO);
             acertaFofo.assertThat(toReturnPagamentoDTO.getMensalidadeDTO().getDataPagamento()).isEqualTo(LocalDate.now());
             acertaFofo.assertThat(toReturnPagamentoDTO.getPagamentoDTO().getFormaPagamento()).isEqualTo(FormaPagamento.PIX);
             acertaFofo.assertThat(toReturnPagamentoDTO.getPagamentoDTO().getValorPago()).isEqualTo(BigDecimal.valueOf(720).setScale(2, RoundingMode.HALF_UP));
+            acertaFofo.assertThat(toReturnPagamentoDTO.getMensalidadeDTO().getUuid()).isEqualTo(mensalidadeCreatedDTO.getUuid());
+            acertaFofo.assertThat(after).isEqualTo(before + 1);
         });
     }
+
+    @Test(expectedExceptions = EntidadeNaoEncontradaException.class,
+    expectedExceptionsMessageRegExp = "Mensalidade deste aluno não encontrada.")
+    public void mensalidadeDTOIsNull(){
+        EscolaDTO createdEscola = getEscolaDTO();
+
+        AlunoDTO alunoDTO = createGenericAlunoDTONotIsento();
+
+        AlunoDTO alunoSaved = alunoService.createAluno(alunoDTO, createdEscola.getUuid());
+        Pessoa alunoFounded = pessoaRepository.findByUuid(alunoSaved.getUuid());
+
+        MensalidadeDTO mensalidadeCreatedDTO = mensalidadeService.createBoleto(alunoFounded.getUuid());
+        mensalidadeCreatedDTO.setUuid(null);
+
+        PagamentoDTO pagamentoDTO = new PagamentoDTO();
+        pagamentoDTO.setFormaPagamento(FormaPagamento.PIX);
+        pagamentoDTO.setMensalidadeFK(mensalidadeCreatedDTO.getUuid());
+
+        FinanceiroDTO financeiroDTO = new FinanceiroDTO();
+        financeiroDTO.setPagamentoDTO(pagamentoDTO);
+        financeiroDTO.setMensalidadeDTO(mensalidadeCreatedDTO);
+
+        financeiroService.pagarMensalidade(financeiroDTO);
+    }
+
+    @Test(expectedExceptions = ConditionFailedException.class,
+    expectedExceptionsMessageRegExp = "Obrigatório informar mensalidade a ser paga.")
+    public void MensalidadeInPagamentoDTOIsNull(){
+        EscolaDTO createdEscola = getEscolaDTO();
+
+        AlunoDTO alunoDTO = createGenericAlunoDTONotIsento();
+
+        AlunoDTO alunoSaved = alunoService.createAluno(alunoDTO, createdEscola.getUuid());
+        Pessoa alunoFounded = pessoaRepository.findByUuid(alunoSaved.getUuid());
+
+        MensalidadeDTO mensalidadeCreatedDTO = mensalidadeService.createBoleto(alunoFounded.getUuid());
+
+        PagamentoDTO pagamentoDTO = new PagamentoDTO();
+        pagamentoDTO.setFormaPagamento(FormaPagamento.PIX);
+        pagamentoDTO.setMensalidadeFK(null);
+
+        FinanceiroDTO financeiroDTO = new FinanceiroDTO();
+        financeiroDTO.setPagamentoDTO(pagamentoDTO);
+        financeiroDTO.setMensalidadeDTO(mensalidadeCreatedDTO);
+
+        financeiroService.pagarMensalidade(financeiroDTO);
+    }
+
 }

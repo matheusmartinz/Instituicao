@@ -12,12 +12,12 @@ public class PagamentoService extends EntidadeService<Pagamento> {
     private final PagamentoRepository pagamentoRepository;
 
 
-    public Pagamento pagarMensalidade(FinanceiroDTO financeiroDTO) {
+/*    public Pagamento pagarMensalidade(FinanceiroDTO financeiroDTO) {
         Mensalidade mensalidade = mensalidadeRepository.findByUuid(financeiroDTO.getMensalidadeDTO().getUuid());
         mensalidade.updateValorPagamentoEmDia(financeiroDTO.getMensalidadeDTO());
 
         return super.save(Pagamento.of(financeiroDTO));
-    }
+    }*/
 
     @Override
     protected JpaRepository<Pagamento, Long> repository() {

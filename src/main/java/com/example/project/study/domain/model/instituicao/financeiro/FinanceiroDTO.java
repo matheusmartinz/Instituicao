@@ -11,12 +11,13 @@ public class FinanceiroDTO {
 
     public FinanceiroDTO(MensalidadeDTO mensalidadeDTO) {
         this.mensalidadeDTO = mensalidadeDTO;
-        this.pagamentoDTO = new PagamentoDTO();
     }
 
     public FinanceiroDTO(Pagamento pagamento) {
        this.pagamentoDTO = PagamentoDTO.of(pagamento);
     }
+
+    public FinanceiroDTO() {}
 
     public static FinanceiroDTO of(MensalidadeDTO mensalidadeDTO) {
         return new FinanceiroDTO(mensalidadeDTO);

@@ -22,6 +22,8 @@ public class PagamentoDTO extends EntidadeIdUUIDDTO{
         this.setDataPagamento(pagamento.getDataPagamento());
         this.setValorPago(pagamento.getValorPago());
         this.setFormaPagamento(pagamento.getFormaPagamento());
+        this.setUuid(pagamento.getUuid());
+        this.setId(pagamento.getId());
     }
 
     public PagamentoDTO(FinanceiroDTO financeiroDTO) {
