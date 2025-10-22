@@ -1,6 +1,7 @@
 package com.example.project.study.domain.model.instituicao.financeiro;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +25,15 @@ public class PagamentoRestController {
         return ResponseEntity.ok(mensalidadeDTOPaga);
     }
 
-    @PostMapping("/testepagamento/{uuidAluno}")
+    @PostMapping
     public ResponseEntity<FinanceiroDTO> createPagamento(@RequestBody FinanceiroDTO financeiroDTO){
         FinanceiroDTO toReturnPagamento = financeiroService.pagarMensalidade(financeiroDTO);
         return ResponseEntity.ok().body(toReturnPagamento);
+    }
+
+    @DeleteMapping("/{uuidPagamento}")
+    public ResponseEntity<Void> deletePagamento(@PathVariable UUID uuidPagamento){
+        financeiroService.deletePagamento(uuidPagamento);
+        return ResponseEntity.ok().build();
     }
 }

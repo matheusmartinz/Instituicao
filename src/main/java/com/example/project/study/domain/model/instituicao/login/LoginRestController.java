@@ -32,7 +32,7 @@ public class LoginRestController extends SuperRestController {
 //    ) {
 //        try {
 //            ObjectMapper objectMapper = new ObjectMapper();
-//            LoginDTO loginDTO = objectMapper.readValue(loginJson, LoginDTO.class);
+//            LoginDTO loginDTO = object Mapper.readValue(loginJson, LoginDTO.class);
 //
 //            LoginDTO toReturn = loginService.createLogin(loginDTO, imagemFile);
 //            return ResponseEntity.status(HttpStatus.CREATED).body(toReturn);

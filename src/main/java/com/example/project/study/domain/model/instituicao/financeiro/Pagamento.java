@@ -22,7 +22,7 @@ public class Pagamento extends EntidadeIdUUID {
     private FormaPagamento formaPagamento;
 
     public Pagamento(PagamentoDTO pagamentoDTO) {
-        this.setStatusPagamento(StatusPagamento); //COLOCAR OS SETS AQUI DO DTO
+        this.setStatusPagamento(pagamentoDTO.getStatusPagamento());
         this.setMensalidadeFK(pagamentoDTO.getMensalidadeFK());
         this.setDataPagamento(pagamentoDTO.getDataPagamento());
         this.setValorPago(pagamentoDTO.getValorPago());
@@ -32,6 +32,4 @@ public class Pagamento extends EntidadeIdUUID {
     public static Pagamento of(PagamentoDTO pagamentoDTO) {
         return new Pagamento(pagamentoDTO);
     }
-
-
 }

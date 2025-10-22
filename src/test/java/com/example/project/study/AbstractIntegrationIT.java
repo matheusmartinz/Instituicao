@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.testng.annotations.BeforeMethod;
 
 @SpringBootTest(classes = StudyApplication.class)
 @ActiveProfiles("test")
@@ -28,7 +29,7 @@ public class AbstractIntegrationIT extends AbstractTransactionalTestNGSpringCont
     private MockMvc mvc;
 
     @SneakyThrows
-    @BeforeEach
+    @BeforeMethod
     protected void beforeMethod() {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
     }
@@ -54,7 +55,6 @@ public class AbstractIntegrationIT extends AbstractTransactionalTestNGSpringCont
         if (content != null) {
             requestBuilder = requestBuilder.content(content);
         }
-
         return mvc.perform(requestBuilder).andDo(result -> {
             if (result.getResolvedException() != null) {
                 result.getResolvedException().printStackTrace();

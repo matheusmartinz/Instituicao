@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class FinanceiroService extends EntidadeService<Pagamento> {
@@ -17,9 +19,9 @@ public class FinanceiroService extends EntidadeService<Pagamento> {
     @Autowired
     private final MensalidadeRepository mensalidadeRepository;
     @Autowired
-    MensalidadeValidation mensalidadeValidation;
+    private final MensalidadeValidation mensalidadeValidation;
     @Autowired
-    PagamentoValidation pagamentoValidation;
+    private final PagamentoValidation pagamentoValidation;
 
     @Override
     protected JpaRepository<Pagamento, Long> repository() {
@@ -37,11 +39,18 @@ public class FinanceiroService extends EntidadeService<Pagamento> {
         mensalidadeFounded.updateStatusPagamentoBoleto(financeiroDTO.getMensalidadeDTO());
 
         pagamentoValidation.checkIsNull(financeiroDTO.getPagamentoDTO());
+
+        financeiroDTO.updateStatusPagamento();
         Pagamento pagamentoSalvo = super.save(Pagamento.of(financeiroDTO.getPagamentoDTO()));
 
         FinanceiroDTO financeiroDTOResponse = FinanceiroDTO.of(pagamentoSalvo);
         financeiroDTOResponse.setMensalidadeDTO(MensalidadeDTO.of(mensalidadeFounded));
 
         return financeiroDTOResponse;
+    }
+
+    public void deletePagamento(UUID uuidPagamento) {
+        pagamentoValidation.checkEntity(pagamentoRepository.findByUuid(uuidPagamento));
+        super.delete(pagamentoRepository.findByUuid(uuidPagamento));
     }
 }

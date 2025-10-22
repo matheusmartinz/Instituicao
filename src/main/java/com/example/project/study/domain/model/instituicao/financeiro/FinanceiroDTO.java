@@ -3,6 +3,8 @@ package com.example.project.study.domain.model.instituicao.financeiro;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 public class FinanceiroDTO {
@@ -25,5 +27,11 @@ public class FinanceiroDTO {
 
     public static FinanceiroDTO of(Pagamento pagamento) {
         return new FinanceiroDTO(pagamento);
+    }
+
+    public void updateStatusPagamento() {
+        this.getPagamentoDTO().setStatusPagamento(StatusPagamento.PAGO);
+        this.getPagamentoDTO().setDataPagamento(LocalDate.now());
+        this.getPagamentoDTO().setValorPago(this.getMensalidadeDTO().getValorPagamento());
     }
 }
