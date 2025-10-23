@@ -29,9 +29,5 @@ public class FinanceiroDTO {
         return new FinanceiroDTO(pagamento);
     }
 
-    public void updateStatusPagamento() {
-        this.getPagamentoDTO().setStatusPagamento(StatusPagamento.PAGO);
-        this.getPagamentoDTO().setDataPagamento(LocalDate.now());
-        this.getPagamentoDTO().setValorPago(this.getMensalidadeDTO().getValorPagamento());
-    }
+
 }

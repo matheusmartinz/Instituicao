@@ -192,7 +192,7 @@ public class FinanceiroServiceIT extends AbstractIntegrationIT {
     }
 
     @Test(expectedExceptions = EntidadeNaoEncontradaException.class,
-            expectedExceptionsMessageRegExp = "Obrigatório informar o pagamento que deseja excluir.")
+            expectedExceptionsMessageRegExp = "Pagamento não encontrado.")
     public void deletePagamentoUUIDNull() {
         EscolaDTO createdEscola = getEscolaDTO();
 

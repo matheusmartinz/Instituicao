@@ -25,6 +25,7 @@ import org.testng.annotations.Test;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -135,8 +136,7 @@ public class PagamentoRestControllerIT extends AbstractIntegrationIT {
         });
     }
 
-    @Test(expectedExceptions = EntidadeNaoEncontradaException.class,
-            expectedExceptionsMessageRegExp = "Pagamento não encontrado.")
+    @Test
     @SneakyThrows
     public void restControllerDeletePagamentoUUIDNull() {
         EscolaDTO createdEscola = getEscolaDTO();
@@ -154,8 +154,22 @@ public class PagamentoRestControllerIT extends AbstractIntegrationIT {
 
         UUID uuidFake = UUID.randomUUID();
 
-        deleteRequest(BASE_URL + "/" + uuidFake, status().isOk()).andExpect(result -> {
-            Assertions.assertThat
+         String contentAsString = deleteRequest(BASE_URL + "/" + uuidFake, status().isBadRequest())
+                .andReturn().getResponse().getContentAsString();
+
+        Assertions.assertThat(contentAsString).contains("Pagamento não encontrado.");
+
+        System.out.println();
+    }
+
+    @Test
+    @SneakyThrows
+    public void restControllerGetAllPagamentos() {
+        getRequest(BASE_URL, status().isOk()).andReturn().getResponse().getContentAsString();
+        List<Pagamento> pagamento = pagamentoRepository.findAll();
+
+        SoftAssertions.assertSoftly(acertaFofo -> {
+            acertaFofo.assertThat(pagamento).hasSize(1);
         });
     }
 }

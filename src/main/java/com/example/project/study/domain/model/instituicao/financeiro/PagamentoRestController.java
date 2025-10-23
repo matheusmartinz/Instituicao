@@ -12,27 +12,26 @@ import java.util.UUID;
 public class PagamentoRestController {
 
     @Autowired
-    private MensalidadeService mensalidadeService;
-    @Autowired
-    private PagamentoService pagamentoService;
-    @Autowired
     private FinanceiroService financeiroService;
 
-    @PostMapping("/{uuidAluno}")
-    public ResponseEntity<MensalidadeDTO> pagamento(@PathVariable UUID uuidAluno, @RequestBody MensalidadeDTO mensalidadeDTO) {
-        MensalidadeDTO mensalidadeDTOConsultada = mensalidadeService.consultaMensalidade(mensalidadeDTO, uuidAluno);
-        MensalidadeDTO mensalidadeDTOPaga = mensalidadeService.pagarBoleto(mensalidadeDTOConsultada, uuidAluno);
-        return ResponseEntity.ok(mensalidadeDTOPaga);
+    @GetMapping
+    public ResponseEntity<Void> getAllPagamentos() {
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PostMapping
-    public ResponseEntity<FinanceiroDTO> createPagamento(@RequestBody FinanceiroDTO financeiroDTO){
-        FinanceiroDTO toReturnPagamento = financeiroService.pagarMensalidade(financeiroDTO);
-        return ResponseEntity.ok().body(toReturnPagamento);
+    @PostMapping("/{uuidMensalidade}")
+    public ResponseEntity<PagamentoDTO> pagamento(@PathVariable UUID uuidMensalidade, @RequestBody PagamentoDTO pagamentoDTO) {
+        return ResponseEntity.ok().body(financeiroService.pagarMensalidade(pagamentoDTO, uuidMensalidade));
     }
+
+//    @PostMapping
+//    public ResponseEntity<FinanceiroDTO> createPagamento(@RequestBody FinanceiroDTO financeiroDTO) {
+//        FinanceiroDTO toReturnPagamento = financeiroService.pagarMensalidade(financeiroDTO);
+//        return ResponseEntity.ok().body(toReturnPagamento);
+//    }
 
     @DeleteMapping("/{uuidPagamento}")
-    public ResponseEntity<Void> deletePagamento(@PathVariable UUID uuidPagamento){
+    public ResponseEntity<Void> deletePagamento(@PathVariable UUID uuidPagamento) {
         financeiroService.deletePagamento(uuidPagamento);
         return ResponseEntity.ok().build();
     }

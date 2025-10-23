@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface MensalidadeRepository extends JpaRepository<Mensalidade, Long> {
     Mensalidade findByUuid(UUID uuidMensalidade);
 
+    UUID uuid(UUID uuid);
 }

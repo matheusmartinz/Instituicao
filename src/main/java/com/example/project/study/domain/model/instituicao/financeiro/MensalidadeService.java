@@ -30,17 +30,6 @@ public class MensalidadeService extends EntidadeService<Mensalidade> {
         return MensalidadeDTO.of(super.save(Mensalidade.of(mensalidadeDTO, aluno.getUuid())));
     }
 
-
-    public MensalidadeDTO pagarBoleto(MensalidadeDTO mensalidadeDTO, UUID aluno) {
-        Pessoa alunoPagar = pessoaRepository.findByUuid(aluno);
-        alunoValidation.validateAluno(alunoPagar);
-
-        Mensalidade mensalidade = mensalidadeRepository.findByUuid(mensalidadeDTO.getUuid());
-        mensalidade.updateStatusPagamentoBoleto(mensalidadeDTO);
-
-        return MensalidadeDTO.of(super.save(mensalidade));
-    }
-
     public MensalidadeDTO consultaMensalidade(MensalidadeDTO mensalidadeDTO, UUID aluno) {
         Pessoa alunoConsultar = pessoaRepository.findByUuid(aluno);
         alunoValidation.validateAluno(alunoConsultar);

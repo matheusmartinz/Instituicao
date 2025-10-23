@@ -43,4 +43,10 @@ public class PagamentoDTO extends EntidadeIdUUIDDTO{
     public static PagamentoDTO of(FinanceiroDTO financeiroDTO) {
         return new PagamentoDTO(financeiroDTO);
     }
+
+    public void updateStatusPagamento(MensalidadeDTO mensalidadeDTO) {
+        this.setStatusPagamento(StatusPagamento.PAGO);
+        this.setDataPagamento(LocalDate.now());
+        this.setValorPago(mensalidadeDTO.getValorPagamento());
+    }
 }

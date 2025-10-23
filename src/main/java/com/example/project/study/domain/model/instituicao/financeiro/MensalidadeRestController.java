@@ -22,8 +22,7 @@ public class MensalidadeRestController {
 
     @GetMapping
     public ResponseEntity<List<MensalidadeDTO>> findMensalidade() {
-        List<MensalidadeDTO> toReturnFounded = mensalidadeService.findAll();
-        return ResponseEntity.ok(toReturnFounded);
+        return ResponseEntity.ok(mensalidadeService.findAll());
     }
 
     @GetMapping("/{uuidBoleto}")

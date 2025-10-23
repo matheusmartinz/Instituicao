@@ -29,24 +29,38 @@ public class FinanceiroService extends EntidadeService<Pagamento> {
     }
 
 
-    public FinanceiroDTO pagarMensalidade(FinanceiroDTO financeiroDTO) {
+//    public FinanceiroDTO pagarMensalidade(FinanceiroDTO financeiroDTO) {
+//
+//        Mensalidade mensalidadeFounded = mensalidadeRepository.findByUuid(financeiroDTO.getMensalidadeDTO().getUuid());
+//        mensalidadeValidation.checkIsNull(mensalidadeFounded);
+//
+//        mensalidadeFounded.updateValorPagamentoEmDia(mensalidadeService.consultaMensalidade(financeiroDTO.getMensalidadeDTO(), financeiroDTO.getMensalidadeDTO().getAlunoFK()));
+//
+//        mensalidadeFounded.updateStatusPagamentoBoleto(financeiroDTO.getMensalidadeDTO());
+//
+//        pagamentoValidation.checkIsNull(financeiroDTO.getPagamentoDTO());
+//
+//        financeiroDTO.updateStatusPagamento();
+//        Pagamento pagamentoSalvo = super.save(Pagamento.of(financeiroDTO.getPagamentoDTO()));
+//
+//        FinanceiroDTO financeiroDTOResponse = FinanceiroDTO.of(pagamentoSalvo);
+//        financeiroDTOResponse.setMensalidadeDTO(MensalidadeDTO.of(mensalidadeFounded));
+//
+//        return financeiroDTOResponse;
+//    }
 
-        Mensalidade mensalidadeFounded = mensalidadeRepository.findByUuid(financeiroDTO.getMensalidadeDTO().getUuid());
-        mensalidadeValidation.checkIsNull(mensalidadeFounded);
+    public PagamentoDTO pagarMensalidade(PagamentoDTO pagamentoDTO, UUID uuidMensalidade) {
+        Mensalidade mensalidade = mensalidadeRepository.findByUuid(uuidMensalidade);
+        mensalidadeValidation.checkIsNull(mensalidade);
 
-        mensalidadeFounded.updateValorPagamentoEmDia(mensalidadeService.consultaMensalidade(financeiroDTO.getMensalidadeDTO(), financeiroDTO.getMensalidadeDTO().getAlunoFK()));
+        MensalidadeDTO mensalidadeDTO = MensalidadeDTO.of(mensalidade);
+        mensalidadeService.consultaMensalidade(mensalidadeDTO, mensalidade.getAlunoFK());
+        mensalidade.updateValorPagamento(mensalidadeDTO);
+        mensalidade.updateStatusPagamentoBoleto(mensalidadeDTO);
 
-        mensalidadeFounded.updateStatusPagamentoBoleto(financeiroDTO.getMensalidadeDTO());
+        pagamentoDTO.updateStatusPagamento(mensalidadeDTO);
 
-        pagamentoValidation.checkIsNull(financeiroDTO.getPagamentoDTO());
-
-        financeiroDTO.updateStatusPagamento();
-        Pagamento pagamentoSalvo = super.save(Pagamento.of(financeiroDTO.getPagamentoDTO()));
-
-        FinanceiroDTO financeiroDTOResponse = FinanceiroDTO.of(pagamentoSalvo);
-        financeiroDTOResponse.setMensalidadeDTO(MensalidadeDTO.of(mensalidadeFounded));
-
-        return financeiroDTOResponse;
+        return PagamentoDTO.of(super.save(Pagamento.of(pagamentoDTO)));
     }
 
     public void deletePagamento(UUID uuidPagamento) {
