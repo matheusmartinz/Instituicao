@@ -39,7 +39,6 @@ public class MensalidadeService extends EntidadeService<Mensalidade> {
         mensalidadeValidation.checkIsNull(mensalidadeConsulta);
         mensalidadeValidation.isVencido(mensalidadeDTO, mensalidadeConsulta);
         mensalidadeValidation.isPago(mensalidadeConsulta);
-        mensalidadeValidation.isEmDia(mensalidadeDTO, mensalidadeConsulta);
         return mensalidadeDTO;
     }
 

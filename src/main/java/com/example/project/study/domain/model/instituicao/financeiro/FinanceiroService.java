@@ -60,7 +60,7 @@ public class FinanceiroService extends EntidadeService<Pagamento> {
 
         pagamentoDTO.updateStatusPagamento(mensalidadeDTO);
 
-        return PagamentoDTO.of(super.save(Pagamento.of(pagamentoDTO)));
+        return PagamentoDTO.of(super.save(Pagamento.of(pagamentoDTO, uuidMensalidade)));
     }
 
     public void deletePagamento(UUID uuidPagamento) {

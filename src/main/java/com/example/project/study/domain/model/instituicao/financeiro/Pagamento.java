@@ -21,15 +21,15 @@ public class Pagamento extends EntidadeIdUUID {
     private BigDecimal valorPago;
     private FormaPagamento formaPagamento;
 
-    public Pagamento(PagamentoDTO pagamentoDTO) {
+    public Pagamento(PagamentoDTO pagamentoDTO, UUID uuidMensalidadeFK) {
         this.setStatusPagamento(pagamentoDTO.getStatusPagamento());
-        this.setMensalidadeFK(pagamentoDTO.getMensalidadeFK());
+        this.setMensalidadeFK(uuidMensalidadeFK);
         this.setDataPagamento(pagamentoDTO.getDataPagamento());
         this.setValorPago(pagamentoDTO.getValorPago());
         this.setFormaPagamento(pagamentoDTO.getFormaPagamento());
     }
 
-    public static Pagamento of(PagamentoDTO pagamentoDTO) {
-        return new Pagamento(pagamentoDTO);
+    public static Pagamento of(PagamentoDTO pagamentoDTO, UUID uuidMensalidadeFK) {
+        return new Pagamento(pagamentoDTO, uuidMensalidadeFK);
     }
 }

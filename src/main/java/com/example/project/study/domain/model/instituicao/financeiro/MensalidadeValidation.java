@@ -44,10 +44,4 @@ public class MensalidadeValidation {
             mensalidadeDTO.setValorPagamento(mensalidade.updateValorPagamento(mensalidadeDTO));
         }
     }
-
-    public void isEmDia(MensalidadeDTO mensalidadeDTO, Mensalidade mensalidade) {
-        if (mensalidade.isEmDia()){
-            mensalidadeDTO.setValorPagamento(mensalidade.updateValorPagamentoEmDia(mensalidadeDTO));
-        }
-    }
 }

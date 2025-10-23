@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Setter
 @Getter
-public class PagamentoDTO extends EntidadeIdUUIDDTO{
+public class PagamentoDTO extends EntidadeIdUUIDDTO {
     private StatusPagamento statusPagamento;
     private UUID mensalidadeFK;
     private LocalDate dataPagamento;
@@ -26,26 +26,15 @@ public class PagamentoDTO extends EntidadeIdUUIDDTO{
         this.setId(pagamento.getId());
     }
 
-    public PagamentoDTO(FinanceiroDTO financeiroDTO) {
-        this.setStatusPagamento(financeiroDTO.getPagamentoDTO().getStatusPagamento());
-        this.setMensalidadeFK(financeiroDTO.getPagamentoDTO().getMensalidadeFK());
-        this.setDataPagamento(financeiroDTO.getPagamentoDTO().getDataPagamento());
-        this.setValorPago(financeiroDTO.getPagamentoDTO().getValorPago());
-        this.setFormaPagamento(financeiroDTO.getPagamentoDTO().getFormaPagamento());
-    }
-
     public static PagamentoDTO of(Pagamento pagamento) {
         return new PagamentoDTO(pagamento);
     }
 
-    public PagamentoDTO(){}
-
-    public static PagamentoDTO of(FinanceiroDTO financeiroDTO) {
-        return new PagamentoDTO(financeiroDTO);
+    public PagamentoDTO() {
     }
 
     public void updateStatusPagamento(MensalidadeDTO mensalidadeDTO) {
-        this.setStatusPagamento(StatusPagamento.PAGO);
+        this.setStatusPagamento(StatusPagamento.CONCLUIDO);
         this.setDataPagamento(LocalDate.now());
         this.setValorPago(mensalidadeDTO.getValorPagamento());
     }
