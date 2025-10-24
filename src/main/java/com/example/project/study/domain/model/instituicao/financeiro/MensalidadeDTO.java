@@ -21,6 +21,8 @@ public class MensalidadeDTO extends EntidadeIdUUIDDTO {
     private BigDecimal valorPago = BigDecimal.ZERO;
     private LocalDate dataPagamento;
 
+    private UUID pagamentoFK;
+
     private MensalidadeDTO(Mensalidade mensalidade) {
         super.setId(mensalidade.getId());
         super.setUuid(mensalidade.getUuid());
@@ -34,6 +36,7 @@ public class MensalidadeDTO extends EntidadeIdUUIDDTO {
         this.setJuros(mensalidade.getJuros());
         this.setMulta(mensalidade.getMulta());
         this.setDataPagamento(mensalidade.getDataPagamento());
+        this.setPagamentoFK(mensalidade.getPagamentoFK());
     }
 
     public MensalidadeDTO(FinanceiroDTO financeiroDTO) {

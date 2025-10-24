@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 
 public class FinanceiroServiceIT extends AbstractIntegrationIT {
     @Autowired
@@ -39,6 +40,8 @@ public class FinanceiroServiceIT extends AbstractIntegrationIT {
     private MensalidadeService mensalidadeService;
     @Autowired
     private PagamentoRepository pagamentoRepository;
+    @Autowired
+    private MensalidadeRepository mensalidadeRepository;
 
     private EscolaDTO getEscolaDTO() {
         EnderecoDTO maringa = EnderecoDTODataProvider.ofMaringa();
@@ -102,10 +105,21 @@ public class FinanceiroServiceIT extends AbstractIntegrationIT {
         PagamentoDTO toReturnPagamentoDTO = financeiroService.pagarMensalidade(pagamentoDTO, mensalidadeCreatedDTO.getUuid());
         long after = pagamentoRepository.count();
 
+        long beforeMensalidade = mensalidadeRepository.count();
+        Mensalidade mensalidade = mensalidadeRepository.findByUuid(mensalidadeCreatedDTO.getUuid());
+        long afterMensalidade = mensalidadeRepository.count();
+
         SoftAssertions.assertSoftly(acertaFofo -> {
-            acertaFofo.assertThat(toReturnPagamentoDTO.getValorPago()).isEqualTo(BigDecimal.valueOf(720).setScale(2, RoundingMode.HALF_UP));
+            acertaFofo.assertThat(mensalidade.getDataPagamento()).isEqualTo(LocalDate.now());
+            acertaFofo.assertThat(mensalidade.getValorPago()).isEqualTo(BigDecimal.valueOf(720).setScale(2, RoundingMode.HALF_UP));
+            acertaFofo.assertThat(mensalidade.getStatusPagamento()).isEqualTo(StatusPagamento.PAGO);
+            acertaFofo.assertThat(afterMensalidade).isEqualTo(beforeMensalidade);
+        });
+
+        SoftAssertions.assertSoftly(acertaFofo -> {
+            acertaFofo.assertThat(toReturnPagamentoDTO.getValorPago()).isEqualTo(BigDecimal.valueOf(855).setScale(2, RoundingMode.HALF_UP));
             acertaFofo.assertThat(toReturnPagamentoDTO.getStatusPagamento()).isEqualTo(StatusPagamento.CONCLUIDO);
-            acertaFofo.assertThat(toReturnPagamentoDTO.getUuid()).isEqualTo(mensalidadeCreatedDTO.getUuid());
+            acertaFofo.assertThat(toReturnPagamentoDTO.getMensalidadeFK()).isEqualTo(mensalidadeCreatedDTO.getUuid());
             acertaFofo.assertThat(after).isEqualTo(before + 1);
         });
     }

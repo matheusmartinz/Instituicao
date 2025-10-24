@@ -43,5 +43,8 @@ public class MensalidadeValidation {
         if (mensalidade.isVencido()) {
             mensalidadeDTO.setValorPagamento(mensalidade.updateValorPagamento(mensalidadeDTO));
         }
+        else if (mensalidade.isEmDia()){
+            mensalidadeDTO.setValorPagamento(mensalidade.updateValorPagamento(mensalidadeDTO));
+        }
     }
 }

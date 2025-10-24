@@ -33,9 +33,10 @@ public class PagamentoDTO extends EntidadeIdUUIDDTO {
     public PagamentoDTO() {
     }
 
-    public void updateStatusPagamento(MensalidadeDTO mensalidadeDTO) {
+    public void registerPagamento(MensalidadeDTO mensalidadeDTO) {
         this.setStatusPagamento(StatusPagamento.CONCLUIDO);
         this.setDataPagamento(LocalDate.now());
         this.setValorPago(mensalidadeDTO.getValorPagamento());
+        this.setMensalidadeFK(mensalidadeDTO.getUuid());
     }
 }

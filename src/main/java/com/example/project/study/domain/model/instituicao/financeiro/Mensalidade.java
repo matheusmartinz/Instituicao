@@ -30,7 +30,7 @@ public class Mensalidade extends EntidadeIdUUID {
     private LocalDate dataPagamento;
     private BigDecimal valorPago;
 
-    private UUID formaPagamentoFK;
+    private UUID pagamentoFK;
 
     private Mensalidade(MensalidadeDTO mensalidadeDTO, UUID alunoUUID) {
         this.setDataEmissao(mensalidadeDTO.getDataEmissao());

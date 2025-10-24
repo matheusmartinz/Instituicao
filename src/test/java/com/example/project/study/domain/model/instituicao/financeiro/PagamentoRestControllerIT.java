@@ -16,6 +16,7 @@ import com.example.project.study.domain.model.instituicao.escola.sala.SalaDTO;
 import com.example.project.study.domain.model.instituicao.escola.sala.SalaService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.SneakyThrows;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
@@ -24,6 +25,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -64,17 +66,6 @@ public class PagamentoRestControllerIT extends AbstractIntegrationIT {
                 EnderecoDTODataProvider.ofMaringa(), "matheus@gmail.com", null, Boolean.FALSE);
     }
 
-    private static FinanceiroDTO getGenericFinanceiroDTO(MensalidadeDTO mensalidadeCreatedDTO) {
-        PagamentoDTO pagamentoDTO = new PagamentoDTO();
-        pagamentoDTO.setFormaPagamento(FormaPagamento.PIX);
-        pagamentoDTO.setMensalidadeFK(mensalidadeCreatedDTO.getUuid());
-
-        FinanceiroDTO financeiroDTO = new FinanceiroDTO();
-        financeiroDTO.setPagamentoDTO(pagamentoDTO);
-        financeiroDTO.setMensalidadeDTO(mensalidadeCreatedDTO);
-        return financeiroDTO;
-    }
-
     @Test
     @SneakyThrows
     public void restControllerPostPagamento() {
@@ -87,77 +78,80 @@ public class PagamentoRestControllerIT extends AbstractIntegrationIT {
 
         MensalidadeDTO mensalidadeCreatedDTO = mensalidadeService.createBoleto(alunoFounded.getUuid());
 
-        FinanceiroDTO financeiroDTO = getGenericFinanceiroDTO(mensalidadeCreatedDTO);
+        PagamentoDTO pagamentoDTO = new PagamentoDTO();
+        pagamentoDTO.setFormaPagamento(FormaPagamento.PIX);
 
-        String content = objectMapper.writeValueAsString(financeiroDTO);
+        String content = objectMapper.writeValueAsString(pagamentoDTO);
 
-        String contentAsString = postRequest("/pagamento", content, status().isOk()).andReturn().getResponse().getContentAsString();
+        String contentAsString = postRequest(BASE_URL + "/" + mensalidadeCreatedDTO.getUuid(), content, status().isOk()).andReturn().getResponse().getContentAsString();
 
-        FinanceiroDTO toReturnResponseFinanceiroDTO = objectMapper.readValue(contentAsString, new TypeReference<FinanceiroDTO>() {
+        PagamentoDTO toReturnResponsePagamentoDTO = objectMapper.readValue(contentAsString, new TypeReference<PagamentoDTO>() {
         });
 
         SoftAssertions.assertSoftly(acertaFofo -> {
-            acertaFofo.assertThat(toReturnResponseFinanceiroDTO.getPagamentoDTO().getStatusPagamento()).isEqualTo(StatusPagamento.PAGO);
-            acertaFofo.assertThat(toReturnResponseFinanceiroDTO.getMensalidadeDTO().getDataPagamento()).isEqualTo(LocalDate.now());
-            acertaFofo.assertThat(toReturnResponseFinanceiroDTO.getPagamentoDTO().getFormaPagamento()).isEqualTo(FormaPagamento.PIX);
-            acertaFofo.assertThat(toReturnResponseFinanceiroDTO.getPagamentoDTO().getValorPago()).isEqualTo(BigDecimal.valueOf(720).setScale(2, RoundingMode.HALF_UP));
-            acertaFofo.assertThat(pagamentoRepository.count()).isEqualTo(1);
+            acertaFofo.assertThat(toReturnResponsePagamentoDTO.getStatusPagamento()).isEqualTo(StatusPagamento.CONCLUIDO);
+            acertaFofo.assertThat(toReturnResponsePagamentoDTO.getDataPagamento()).isEqualTo(LocalDate.now());
+            acertaFofo.assertThat(toReturnResponsePagamentoDTO.getFormaPagamento()).isEqualTo(FormaPagamento.PIX);
+            acertaFofo.assertThat(toReturnResponsePagamentoDTO.getValorPago()).isEqualTo(BigDecimal.valueOf(720).setScale(2, RoundingMode.HALF_UP));
+            acertaFofo.assertThat(pagamentoRepository.count()).isEqualTo(2);
             acertaFofo.assertThat(mensalidadeCreatedDTO.getValorPagamento()).isEqualTo(BigDecimal.valueOf(800).setScale(2, RoundingMode.HALF_UP));
         });
     }
 
-//    @Test
-//    @SneakyThrows
-//    public void restControllerDeletePagamento() {
-//        EscolaDTO createdEscola = getEscolaDTO();
-//
-//        AlunoDTO alunoDTO = createGenericAlunoDTONotIsento();
-//
-//        AlunoDTO alunoSaved = alunoService.createAluno(alunoDTO, createdEscola.getUuid());
-//        Pessoa alunoFounded = pessoaRepository.findByUuid(alunoSaved.getUuid());
-//
-//        MensalidadeDTO mensalidadeCreatedDTO = mensalidadeService.createBoleto(alunoFounded.getUuid());
-//
-//        FinanceiroDTO financeiroDTO = getGenericFinanceiroDTO(mensalidadeCreatedDTO);
-//
-//        FinanceiroDTO pagamentoCreated = financeiroService.pagarMensalidade(financeiroDTO);
-//
-//        long beforeDeleted = pagamentoRepository.count();
-//        deleteRequest(BASE_URL + "/" + pagamentoCreated.getPagamentoDTO().getUuid(), status().isOk())
-//                .andReturn().getResponse().getContentAsString();
-//        long afterDeleted = pagamentoRepository.count();
-//
-//        SoftAssertions.assertSoftly(acertaFofo -> {
-//            acertaFofo.assertThat(beforeDeleted).isEqualTo(1);
-//            acertaFofo.assertThat(afterDeleted).isEqualTo(0);
-//        });
-//    }
+    @Test
+    @SneakyThrows
+    public void restControllerDeletePagamento() {
+        EscolaDTO createdEscola = getEscolaDTO();
 
-//    @Test
-//    @SneakyThrows
-//    public void restControllerDeletePagamentoUUIDNull() {
-//        EscolaDTO createdEscola = getEscolaDTO();
-//
-//        AlunoDTO alunoDTO = createGenericAlunoDTONotIsento();
-//
-//        AlunoDTO alunoSaved = alunoService.createAluno(alunoDTO, createdEscola.getUuid());
-//        Pessoa alunoFounded = pessoaRepository.findByUuid(alunoSaved.getUuid());
-//
-//        MensalidadeDTO mensalidadeCreatedDTO = mensalidadeService.createBoleto(alunoFounded.getUuid());
-//
-//        FinanceiroDTO financeiroDTO = getGenericFinanceiroDTO(mensalidadeCreatedDTO);
-//
-//        financeiroService.pagarMensalidade(financeiroDTO);
-//
-//        UUID uuidFake = UUID.randomUUID();
-//
-//         String contentAsString = deleteRequest(BASE_URL + "/" + uuidFake, status().isBadRequest())
-//                .andReturn().getResponse().getContentAsString();
-//
-//        Assertions.assertThat(contentAsString).contains("Pagamento não encontrado.");
-//
-//        System.out.println();
-//    }
+        AlunoDTO alunoDTO = createGenericAlunoDTONotIsento();
+
+        AlunoDTO alunoSaved = alunoService.createAluno(alunoDTO, createdEscola.getUuid());
+        Pessoa alunoFounded = pessoaRepository.findByUuid(alunoSaved.getUuid());
+
+        MensalidadeDTO mensalidadeCreatedDTO = mensalidadeService.createBoleto(alunoFounded.getUuid());
+
+        PagamentoDTO pagamentoDTO = new PagamentoDTO();
+        pagamentoDTO.setFormaPagamento(FormaPagamento.PIX);
+
+        PagamentoDTO pagamentoCreated = financeiroService.pagarMensalidade(pagamentoDTO, mensalidadeCreatedDTO.getUuid());
+
+        long beforeDeleted = pagamentoRepository.count();
+        deleteRequest(BASE_URL + "/" + pagamentoCreated.getUuid(), status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        long afterDeleted = pagamentoRepository.count();
+
+        SoftAssertions.assertSoftly(acertaFofo -> {
+            acertaFofo.assertThat(beforeDeleted).isEqualTo(2);
+            acertaFofo.assertThat(afterDeleted).isEqualTo(1);
+        });
+    }
+
+    @Test
+    @SneakyThrows
+    public void restControllerDeletePagamentoUUIDNull() {
+        EscolaDTO createdEscola = getEscolaDTO();
+
+        AlunoDTO alunoDTO = createGenericAlunoDTONotIsento();
+
+        AlunoDTO alunoSaved = alunoService.createAluno(alunoDTO, createdEscola.getUuid());
+        Pessoa alunoFounded = pessoaRepository.findByUuid(alunoSaved.getUuid());
+
+        MensalidadeDTO mensalidadeCreatedDTO = mensalidadeService.createBoleto(alunoFounded.getUuid());
+
+        PagamentoDTO pagamentoDTO = new PagamentoDTO();
+        pagamentoDTO.setFormaPagamento(FormaPagamento.PIX);
+
+        financeiroService.pagarMensalidade(pagamentoDTO, mensalidadeCreatedDTO.getUuid());
+
+        UUID uuidFake = UUID.randomUUID();
+
+        String contentAsString = deleteRequest(BASE_URL + "/" + uuidFake, status().isBadRequest())
+                .andReturn().getResponse().getContentAsString();
+
+        Assertions.assertThat(contentAsString).contains("Pagamento não encontrado.");
+
+        System.out.println();
+    }
 
     @Test
     @SneakyThrows

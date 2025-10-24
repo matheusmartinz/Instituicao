@@ -18,6 +18,7 @@ import lombok.SneakyThrows;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.testng.annotations.BeforeMethod;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -55,7 +56,7 @@ class MensalidadeRestControllerIT extends AbstractIntegrationIT {
 
         AlunoDTO aluno = alunoService.createAluno(alunoDTO, escola.getUuid());
 
-        String contentAsString = postRequest(BASE_URL + "/" + aluno.getUuid(), null, status().isOk())
+        String contentAsString = postRequest(BASE_URL + "/" + aluno.getUuid(), "", status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
         MensalidadeDTO mensalidadeDTOCreated = objectMapper.readValue(contentAsString, new TypeReference<MensalidadeDTO>() {
@@ -65,7 +66,7 @@ class MensalidadeRestControllerIT extends AbstractIntegrationIT {
             s.assertThat(mensalidadeDTOCreated.getUuid()).isNotNull();
             s.assertThat(mensalidadeDTOCreated.getDataEmissao()).isEqualTo(LocalDate.now());
             s.assertThat(mensalidadeDTOCreated.getDataVencimento()).isEqualTo(LocalDate.now().plusMonths(1L));
-            s.assertThat(mensalidadeDTOCreated.getValorPagamento()).isEqualTo(BigDecimal.valueOf(800.00));
+            s.assertThat(mensalidadeDTOCreated.getValorPagamento()).isEqualTo(BigDecimal.valueOf(800).setScale(2, BigDecimal.ROUND_HALF_UP));
         });
     }
 
@@ -99,7 +100,7 @@ class MensalidadeRestControllerIT extends AbstractIntegrationIT {
         SoftAssertions.assertSoftly(acertaFofo -> {
             acertaFofo.assertThat(toReturnMensalidade.getUuid()).isEqualTo(boletoCreated.getUuid());
             acertaFofo.assertThat(toReturnMensalidade.getAlunoFK()).isEqualTo(boletoCreated.getAlunoFK());
-            acertaFofo.assertThat(toReturnMensalidade.getValorPagamento()).isEqualTo(BigDecimal.valueOf(800.00));
+            acertaFofo.assertThat(toReturnMensalidade.getValorPagamento()).isEqualTo(BigDecimal.valueOf(800).setScale(2, BigDecimal.ROUND_HALF_UP));
         });
     }
 
@@ -164,7 +165,7 @@ class MensalidadeRestControllerIT extends AbstractIntegrationIT {
         MensalidadeDTO mensalidadeCreated = mensalidadeService.createBoleto(aluno.getUuid());
 
         SoftAssertions.assertSoftly(s -> {
-            s.assertThat(mensalidadeCreated.getValorPagamento()).isEqualTo(BigDecimal.valueOf(800.00));
+            s.assertThat(mensalidadeCreated.getValorPagamento()).isEqualTo(BigDecimal.valueOf(800).setScale(2, BigDecimal.ROUND_HALF_UP));
             s.assertThat(mensalidadeCreated.getAlunoFK()).isEqualTo(aluno.getUuid());
             s.assertThat(mensalidadeCreated.getDataEmissao()).isEqualTo(LocalDate.now());
             s.assertThat(mensalidadeCreated.getDataVencimento()).isEqualTo(LocalDate.now().plusMonths(1L));

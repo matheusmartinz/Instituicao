@@ -54,13 +54,14 @@ public class FinanceiroService extends EntidadeService<Pagamento> {
         mensalidadeValidation.checkIsNull(mensalidade);
 
         MensalidadeDTO mensalidadeDTO = MensalidadeDTO.of(mensalidade);
-        mensalidadeService.consultaMensalidade(mensalidadeDTO, mensalidade.getAlunoFK());
-        mensalidade.updateValorPagamento(mensalidadeDTO);
+
+        mensalidade.updateValorPagamento(mensalidadeService.consultaMensalidade(mensalidadeDTO));
         mensalidade.updateStatusPagamentoBoleto(mensalidadeDTO);
 
-        pagamentoDTO.updateStatusPagamento(mensalidadeDTO);
-
-        return PagamentoDTO.of(super.save(Pagamento.of(pagamentoDTO, uuidMensalidade)));
+        pagamentoDTO.registerPagamento(mensalidadeDTO);
+        Pagamento savePagamento = super.save(Pagamento.of(pagamentoDTO));
+        mensalidade.setPagamentoFK(savePagamento.getUuid());
+        return PagamentoDTO.of(savePagamento);
     }
 
     public void deletePagamento(UUID uuidPagamento) {
